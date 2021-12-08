@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        response.setContentType("text/plain");
+        request.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
         // Get servlet context
@@ -86,7 +86,7 @@ public class LoginServlet extends HttpServlet {
             ServletContext servletContext = getServletContext();
             final WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
             webContext.setVariable("welcomeMsg", "Welcome back, " + user.getUsername());
-            path = "/home.html";	//Re-direct to login page again
+            path = "/home";	//Re-direct to login page again
             templateEngine.process(path, webContext, response.getWriter());
         }
         out.close();
