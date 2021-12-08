@@ -15,8 +15,13 @@ public class UserEntity {
     @Column(name = "id", nullable = false)
     private int id;
 
+    @Column(name = "username", nullable = false, length=64)
     private String username;
+
+    @Column(name = "password", nullable = false, length=64)
     private String password;
+
+    @Column(name = "isInsolvent", nullable = false)
     private boolean isInsolvent;
 
 
@@ -43,5 +48,21 @@ public class UserEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isInsolvent() {
+        return isInsolvent;
+    }
+
+    public void setInsolvent(boolean insolvent) {
+        isInsolvent = insolvent;
     }
 }
