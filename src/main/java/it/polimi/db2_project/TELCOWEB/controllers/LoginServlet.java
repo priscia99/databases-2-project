@@ -12,9 +12,14 @@ import javax.servlet.UnavailableException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+
+
 @WebServlet(name = "helloServlet", value = "/perform-login")
 public class LoginServlet extends HttpServlet {
     private Connection connection = null;
+    private TemplateEngine templateEngine;
 
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
@@ -58,13 +63,21 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
+        String path;
         // Check if user exists
-        if(user == null){
-            // Username or password incorrect
-            out.println("Incorrect username or password!");
-        }else{
-            // User successfully logged
-            out.println("Welcome, " + user.getUsername() + "!");
+        if(user == null) {
+            // Username or password incorrect -> return to login page
+            ServletContext servletContext = getServletContext();
+            final WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
+            webContext.setVariable("loginInfoMsg", "Incorrect username or password. Try again.");
+            path = "/index.html";	//Re-direct to login page again
+            templateEngine.process(path, webContext, response.getWriter());
+        }
+        else{
+            // User is an actual object -> user authenticated successfully
+            request.getSession().setAttribute("welcomeMsg", "Welcome, " + user.getUsername());	// Create a new session giving the user object as an attribute
+            path = getServletContext().getContextPath() + "/home.html";	// Re-direct to home page
+            response.sendRedirect(path);
         }
         out.close();
     }
