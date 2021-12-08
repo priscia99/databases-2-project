@@ -83,11 +83,9 @@ public class LoginServlet extends HttpServlet {
         }
         else{
             // User is an actual object -> user authenticated successfully
-            ServletContext servletContext = getServletContext();
-            final WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
-            webContext.setVariable("welcomeMsg", "Welcome back, " + user.getUsername());
-            path = "/home";	//Re-direct to login page again
-            templateEngine.process(path, webContext, response.getWriter());
+            request.getSession().setAttribute("user", user);	// Create a new session giving the user object as an attribute
+            path = getServletContext().getContextPath() + "/home";	// Re-direct to home page
+            response.sendRedirect(path);
         }
         out.close();
     }
