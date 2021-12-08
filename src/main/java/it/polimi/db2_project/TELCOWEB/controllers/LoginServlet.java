@@ -14,6 +14,8 @@ import javax.servlet.annotation.*;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 
 @WebServlet(name = "helloServlet", value = "/perform-login")
@@ -23,6 +25,12 @@ public class LoginServlet extends HttpServlet {
 
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
+        ServletContext servletContext = getServletContext();
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        this.templateEngine = new TemplateEngine();
+        this.templateEngine.setTemplateResolver(templateResolver);
+        templateResolver.setSuffix(".html");
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -75,9 +83,11 @@ public class LoginServlet extends HttpServlet {
         }
         else{
             // User is an actual object -> user authenticated successfully
-            request.getSession().setAttribute("welcomeMsg", "Welcome, " + user.getUsername());	// Create a new session giving the user object as an attribute
-            path = getServletContext().getContextPath() + "/home.html";	// Re-direct to home page
-            response.sendRedirect(path);
+            ServletContext servletContext = getServletContext();
+            final WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
+            webContext.setVariable("welcomeMsg", "Welcome back, " + user.getUsername());
+            path = "/home.html";	//Re-direct to login page again
+            templateEngine.process(path, webContext, response.getWriter());
         }
         out.close();
     }
