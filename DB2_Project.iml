@@ -19,7 +19,8 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
-          <factory-entry name="default" value="42cb9cce-d8d0-4e69-9fec-f9548349eb2e" />
+          <factory-entry name="TELCOEJB" value="e5cafc1f-1a3a-414b-9021-099b8ff50bf9" />
+          <factory-entry name="default" value="e5cafc1f-1a3a-414b-9021-099b8ff50bf9" />
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
