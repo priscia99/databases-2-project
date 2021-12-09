@@ -11,10 +11,6 @@ import javax.persistence.*;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
-
     @Column(name = "username", nullable = false, length=64)
     private String username;
 
