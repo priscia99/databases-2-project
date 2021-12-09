@@ -8,7 +8,6 @@
           <element id="jpa-descriptors" facet="DB2_Project/jpa/JPA" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="application" name="mysql-connector-java-8.0.23" />
           <element id="library" level="project" name="Maven: org.thymeleaf:thymeleaf:3.0.11.RELEASE" />
           <element id="library" level="project" name="Maven: ognl:ognl:3.1.12" />
           <element id="library" level="project" name="Maven: org.javassist:javassist:3.20.0-GA" />
