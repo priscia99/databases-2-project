@@ -25,7 +25,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 public class LoginServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
-    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/UserService")
     private UserService userService;
 
     public void init() throws UnavailableException {
@@ -48,18 +48,23 @@ public class LoginServlet extends HttpServlet {
         // Get servlet context
         ServletContext context = getServletContext();
 
-        // Initialize variables
-        String username = null;
-        String password = null;
+        // Retrieve username and password from request
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        if(username == null || username.isEmpty() || password == null || password.isEmpty()){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty parameters");
+            return;
+        }
 
         // Create user entity object
-        UserEntity user = null;
+        UserEntity user;
 
         try{
             user = userService.checkCredentials(username, password);
         }
         catch(NonUniqueResultException | CredentialsException e){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
         }
 
         String path = null;
