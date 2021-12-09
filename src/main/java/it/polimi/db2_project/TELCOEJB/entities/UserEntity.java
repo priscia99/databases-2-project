@@ -24,18 +24,9 @@ public class UserEntity {
     public UserEntity(){}
 
     public UserEntity(int id, String username, String password, boolean isInsolvent){
-        this.id = id;
         this.username = username;
         this.password = password;
         this.isInsolvent = isInsolvent;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getUsername() {
