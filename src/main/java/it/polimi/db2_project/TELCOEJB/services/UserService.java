@@ -19,7 +19,7 @@ public class UserService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
-    public UserService(Connection connection){
+    public UserService(){
     }
 
     public UserEntity checkCredentials(String username, String password) throws NonUniqueResultException, CredentialsException{
