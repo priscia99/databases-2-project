@@ -3,7 +3,7 @@ package it.polimi.db2_project.TELCOEJB.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 
 @NamedQueries({
         @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.username = :username AND u.password = :password")
