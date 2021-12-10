@@ -19,7 +19,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
-          <factory-entry name="TELCOEJB" value="e5cafc1f-1a3a-414b-9021-099b8ff50bf9" />
+          <factory-entry name="TELCOEJB" value="230d406f-b8b9-4a2c-aaa3-ed568f9013e6" />
           <factory-entry name="default" value="e5cafc1f-1a3a-414b-9021-099b8ff50bf9" />
         </datasource-mapping>
         <naming-strategy-map />

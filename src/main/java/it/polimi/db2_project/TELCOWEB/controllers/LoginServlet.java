@@ -83,49 +83,6 @@ public class LoginServlet extends HttpServlet {
         }
 
         out.close();
-        /*
-        try{
-            // Retrieve username and password from request
-            username = request.getParameter("username");
-            password = request.getParameter("password");
-            if(username == null || username.isEmpty() || password == null || password.isEmpty()){
-                throw new Exception("Missing or empty parameters");
-            }
-        }catch (Exception e){
-            out.println(e.getMessage());
-            out.close();
-            return;
-        }
-
-        // Perform user authentication using DAO
-        UserService userDAO = new UserService(connection);
-        UserEntity user = null;
-        try{
-            user = userDAO.performLogin(username, password);
-        }catch (SQLException e){
-            out.println("Error while checking credentials, try again.");
-            return;
-        }
-
-        String path;
-        // Check if user exists
-        if(user == null) {
-            // Username or password incorrect -> return to login page
-            ServletContext servletContext = getServletContext();
-            final WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
-            webContext.setVariable("loginInfoMsg", "Incorrect username or password. Try again.");
-            path = "/index.html";	//Re-direct to login page again
-            templateEngine.process(path, webContext, response.getWriter());
-        }
-        else{
-            // User is an actual object -> user authenticated successfully
-            request.getSession().setAttribute("user", user);	// Create a new session giving the user object as an attribute
-            path = getServletContext().getContextPath() + "/home";	// Re-direct to home page
-            response.sendRedirect(path);
-        }
-        out.close();
-
-         */
     }
 
     public void destroy() {

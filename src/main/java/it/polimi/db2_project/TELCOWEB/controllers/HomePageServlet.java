@@ -38,7 +38,7 @@ public class HomePageServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        // set request encoding to match the project character encoding (utf-8)
+// set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
 
         // If the user is not logged in (not present in session) redirect to the login
@@ -57,7 +57,6 @@ public class HomePageServlet extends HttpServlet {
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("user", user);
         templateEngine.process(path, context, response.getWriter());
-
     }
 
     public void destroy() {
