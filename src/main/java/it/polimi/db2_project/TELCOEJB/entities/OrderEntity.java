@@ -1,7 +1,5 @@
 package it.polimi.db2_project.TELCOEJB.entities;
 
-package it.polimi.db2_project.TELCOEJB.entities;
-
 import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 
 import javax.persistence.*;

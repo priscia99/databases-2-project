@@ -1,6 +1,7 @@
 package it.polimi.db2_project.TELCOEJB.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -17,13 +18,17 @@ public class OptionalProductEntity {
     @Column(name = "MonthlyFee", nullable = false)
     private int monthlyFee;
 
+    @ManyToMany(mappedBy = "optionalProducts", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    List<OrderEntity> orderEntities ;
+
     public OptionalProductEntity() {
     }
 
-    public OptionalProductEntity(int productId, String name, int monthlyFee) {
+    public OptionalProductEntity(int productId, String name, int monthlyFee, List<OrderEntity> orderEntities) {
         this.productId = productId;
         this.name = name;
         this.monthlyFee = monthlyFee;
+        this.orderEntities = orderEntities;
     }
 
     public int getProductId() {
@@ -48,5 +53,13 @@ public class OptionalProductEntity {
 
     public void setMonthlyFee(int monthlyFee) {
         this.monthlyFee = monthlyFee;
+    }
+
+    public List<OrderEntity> getOrderEntities() {
+        return orderEntities;
+    }
+
+    public void setOrderEntities(List<OrderEntity> orderEntities) {
+        this.orderEntities = orderEntities;
     }
 }
