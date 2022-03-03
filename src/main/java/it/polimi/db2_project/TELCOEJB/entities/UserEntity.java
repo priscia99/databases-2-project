@@ -20,6 +20,9 @@ public class UserEntity {
     @Column(name = "isInsolvent", nullable = false)
     private boolean isInsolvent;
 
+    @OneToOne(mappedBy = "relatedUser")
+    private AlertEntity alert;
+
 
     public UserEntity(){}
 
