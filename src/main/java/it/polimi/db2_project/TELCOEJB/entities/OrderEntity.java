@@ -39,7 +39,11 @@ public class OrderEntity {
     List<OptionalProductEntity> optionalProducts ;
 
     @ManyToOne
-    @JoinColumn(name = "servicePackage")
+    @JoinColumns({
+            @JoinColumn(name = "packageID", referencedColumnName = "packageID"),
+            @JoinColumn(name = "validityPeriod", referencedColumnName = "validityPeriod"),
+            @JoinColumn(name = "monthlyFee", referencedColumnName = "monthlyFee")
+    })
     ServicePackageEntity servicePackage;
 
 
