@@ -7,28 +7,29 @@ import javax.persistence.*;
 public class ServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ServiceId", nullable = false)
+    @Column(name = "serviceId", nullable = false)
     private int serviceId;
 
-    @Column(name = "ServiceType", nullable = false, length =20)
+    @Column(name = "serviceType", nullable = false)
+    @Enumerated(EnumType.STRING)
     private String serviceType;
 
-    @Column(name = "IncludedMinutes", nullable = true)
+    @Column(name = "includedMinutes", nullable = true)
     private int IncludedMinutes;
 
-    @Column(name = "FeeMinutes", nullable = true)
+    @Column(name = "feeMinutes", nullable = true)
     private int FeeMinutes;
 
-    @Column(name = "IncludedSMS", nullable = true)
+    @Column(name = "includedSms", nullable = true)
     private int IncludedSMS;
 
-    @Column(name = "FeeSMS", nullable = true)
+    @Column(name = "feeSms", nullable = true)
     private int FeeSMS;
 
-    @Column(name = "IncludedGB", nullable = true)
+    @Column(name = "includedGb", nullable = true)
     private int IncludedGB;
 
-    @Column(name = "FeeGB", nullable = true)
+    @Column(name = "feeGb", nullable = true)
     private int FeeGB;
 
     public ServiceEntity() {
