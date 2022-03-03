@@ -26,7 +26,7 @@ public class OrderEntity {
 
     @Column(name = "endTime", nullable = false)
     private Timestamp endTime;
-
+    //todo modificare enum
     @Column(name = "orderState", nullable = false)
     private OrderState orderState;
 
