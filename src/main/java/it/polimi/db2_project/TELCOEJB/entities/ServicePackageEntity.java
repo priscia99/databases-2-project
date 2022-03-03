@@ -4,11 +4,11 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "service")
+@Table(name = "servicepackage")
 public class ServicePackageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id", nullable = false)
+    @Column(name = "serviceId", nullable = false)
     private int id;
 
     @Column(name = "ValidityPeriod", nullable = false)
