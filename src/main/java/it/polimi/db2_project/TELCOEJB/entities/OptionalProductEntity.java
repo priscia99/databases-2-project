@@ -9,13 +9,13 @@ import java.util.List;
 public class OptionalProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ProductId", nullable = false)
+    @Column(name = "productID", nullable = false)
     private int productId;
 
-    @Column(name = "Name", nullable = false, length =25)
+    @Column(name = "name", nullable = false, length =25)
     private String name;
 
-    @Column(name = "MonthlyFee", nullable = false)
+    @Column(name = "monthlyFee", nullable = false)
     private int monthlyFee;
 
     @ManyToMany(mappedBy = "optionalProducts", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
