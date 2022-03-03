@@ -37,10 +37,14 @@ public class OrderEntity {
     @ManyToMany(fetch = FetchType.EAGER )
     List<OptionalProductEntity> optionalProducts ;
 
+    @ManyToOne
+    @JoinColumn(name = "servicePackage")
+    ServicePackageEntity servicePackage;
+
 
     public OrderEntity(){}
 
-    public OrderEntity(String orderId, Timestamp creationDateTime, float totalFee, Timestamp startTime, Timestamp endTime, OrderState orderState, UserEntity user, List<OptionalProductEntity> optionalProducts) {
+    public OrderEntity(String orderId, Timestamp creationDateTime, float totalFee, Timestamp startTime, Timestamp endTime, OrderState orderState, UserEntity user, List<OptionalProductEntity> optionalProducts, ServicePackageEntity servicePackage) {
         this.orderId = orderId;
         this.creationDateTime = creationDateTime;
         this.totalFee = totalFee;
@@ -49,6 +53,7 @@ public class OrderEntity {
         this.orderState = orderState;
         this.user = user;
         this.optionalProducts = optionalProducts;
+        this.servicePackage = servicePackage;
     }
 
     public String getOrderId() {
@@ -113,5 +118,13 @@ public class OrderEntity {
 
     public void setOptionalProducts(List<OptionalProductEntity> optionalProducts) {
         this.optionalProducts = optionalProducts;
+    }
+
+    public ServicePackageEntity getServicePackage() {
+        return servicePackage;
+    }
+
+    public void setServicePackage(ServicePackageEntity servicePackage) {
+        this.servicePackage = servicePackage;
     }
 }

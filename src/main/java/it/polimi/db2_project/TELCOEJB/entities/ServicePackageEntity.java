@@ -1,5 +1,6 @@
 package it.polimi.db2_project.TELCOEJB.entities;
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -18,6 +19,9 @@ public class ServicePackageEntity {
 
     @Column(name = "Name", nullable = false, length =45)
     private String name;
+
+    @OneToMany(mappedBy = "servicePackage", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST} )
+    List<OrderEntity> orderEntities ;
 
     //todo da modificare
     @Column(name = "ServiceId", nullable = false)
