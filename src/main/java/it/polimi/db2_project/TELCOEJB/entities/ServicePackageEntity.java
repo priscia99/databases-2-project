@@ -23,7 +23,7 @@ public class ServicePackageEntity {
     @OneToMany(mappedBy = "servicePackage", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST} )
     List<OrderEntity> orderEntities ;
 
-    //todo da modificare
-    @Column(name = "ServiceId", nullable = false)
-    private int serviceId;
+    @ManyToMany(fetch = FetchType.EAGER )
+    List<ServiceEntity> services;
+
 }
