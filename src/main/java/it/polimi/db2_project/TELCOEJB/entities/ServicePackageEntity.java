@@ -8,8 +8,8 @@ import java.util.List;
 public class ServicePackageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "serviceId", nullable = false)
-    private int id;
+    @Column(name = "packageId", nullable = false)
+    private int packageId;
 
     @Column(name = "ValidityPeriod", nullable = false)
     private int validityPeriod;
