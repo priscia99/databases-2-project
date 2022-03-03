@@ -4,7 +4,7 @@ import java.util.List;
 
 
 @Entity
-//@IdClass(ServicePackageEntityPK.class)
+@IdClass(ServicePackageEntityPK.class)
 @Table(name = "servicepackage")
 public class ServicePackageEntity {
 
