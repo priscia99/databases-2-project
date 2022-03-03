@@ -4,17 +4,20 @@ import java.util.List;
 
 
 @Entity
+//@IdClass(ServicePackageEntityPK.class)
 @Table(name = "servicepackage")
 public class ServicePackageEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "packageId", nullable = false)
+    @Column(name = "packageId")
     private int packageId;
 
-    @Column(name = "ValidityPeriod", nullable = false)
+    @Id
+    @Column(name = "validityPeriod")
     private int validityPeriod;
 
-    @Column(name = "MonthlyFee", nullable = false)
+    @Id
+    @Column(name = "monthlyFee")
     private float monthlyFee;
 
     @Column(name = "Name", nullable = false, length =64)
