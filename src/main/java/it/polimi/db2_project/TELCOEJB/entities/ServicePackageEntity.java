@@ -15,9 +15,9 @@ public class ServicePackageEntity {
     private int validityPeriod;
 
     @Column(name = "MonthlyFee", nullable = false)
-    private int monthlyFee;
+    private float monthlyFee;
 
-    @Column(name = "Name", nullable = false, length =45)
+    @Column(name = "Name", nullable = false, length =64)
     private String name;
 
     @OneToMany(mappedBy = "servicePackage", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST} )
