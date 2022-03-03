@@ -29,4 +29,64 @@ public class ServicePackageEntity {
     @ManyToMany(fetch = FetchType.EAGER )
     List<ServiceEntity> services;
 
+    public ServicePackageEntity() {
+    }
+
+    public ServicePackageEntity(int packageId, int validityPeriod, float monthlyFee, String name, List<OrderEntity> orderEntities, List<ServiceEntity> services) {
+        this.packageId = packageId;
+        this.validityPeriod = validityPeriod;
+        this.monthlyFee = monthlyFee;
+        this.name = name;
+        this.orderEntities = orderEntities;
+        this.services = services;
+    }
+
+    public int getPackageId() {
+        return packageId;
+    }
+
+    public void setPackageId(int packageId) {
+        this.packageId = packageId;
+    }
+
+    public int getValidityPeriod() {
+        return validityPeriod;
+    }
+
+    public void setValidityPeriod(int validityPeriod) {
+        this.validityPeriod = validityPeriod;
+    }
+
+    public float getMonthlyFee() {
+        return monthlyFee;
+    }
+
+    public void setMonthlyFee(float monthlyFee) {
+        this.monthlyFee = monthlyFee;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<OrderEntity> getOrderEntities() {
+        return orderEntities;
+    }
+
+    public void setOrderEntities(List<OrderEntity> orderEntities) {
+        this.orderEntities = orderEntities;
+    }
+
+    public List<ServiceEntity> getServices() {
+        return services;
+    }
+
+    public void setServices(List<ServiceEntity> services) {
+        this.services = services;
+    }
+
 }

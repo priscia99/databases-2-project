@@ -1,4 +1,6 @@
 package it.polimi.db2_project.TELCOEJB.entities;
+import it.polimi.db2_project.TELCOEJB.enums.ServiceType;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class ServiceEntity {
 
     @Column(name = "serviceType", nullable = false)
     @Enumerated(EnumType.STRING)
-    private String serviceType;
+    private ServiceType serviceType;
 
     @Column(name = "includedMinutes", nullable = true)
     private int IncludedMinutes;
