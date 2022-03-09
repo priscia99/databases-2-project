@@ -18,6 +18,9 @@ public class UserEntity {
     @Column(name = "password", nullable = false, length=64)
     private String password;
 
+    @Column(name = "email", nullable = false, length=64)
+    private String email;
+
     @Column(name = "isInsolvent", nullable = false)
     private boolean isInsolvent;
 
@@ -29,12 +32,11 @@ public class UserEntity {
 
     public UserEntity(){}
 
-    public UserEntity(String username, String password, boolean isInsolvent, AlertEntity alert, List<OrderEntity> orderEntities) {
+    public UserEntity(String username, String password, String email) {
         this.username = username;
         this.password = password;
-        this.isInsolvent = isInsolvent;
-        this.alert = alert;
-        this.orderEntities = orderEntities;
+        this.email = email;
+        this.isInsolvent = false;
     }
 
     public String getUsername() {
@@ -51,6 +53,14 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public boolean isInsolvent() {

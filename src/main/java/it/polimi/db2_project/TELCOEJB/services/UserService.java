@@ -2,6 +2,7 @@ package it.polimi.db2_project.TELCOEJB.services;
 
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
+import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
 
 import java.sql.Connection;
@@ -22,7 +23,7 @@ public class UserService {
     public UserService(){
     }
 
-    public UserEntity checkCredentials(String username, String password) throws NonUniqueResultException, CredentialsException{
+    public UserEntity checkCredentials(String username, String password) throws NonUniqueResultException, CredentialsException, InvalidCredentialsException {
         List<UserEntity> usersList;
 
         try{
@@ -52,30 +53,36 @@ public class UserService {
         }
     }
 
-    /*
-    public UserEntity performLogin(String username, String password) throws SQLException {
-        String query = "SELECT id, username FROM users WHERE username = ? AND password = ?";
-
-        try(PreparedStatement statement = connection.prepareStatement(query)){
-            statement.setString(1, username);
-            statement.setString(2, password);
-
-            try(ResultSet resultSet = statement.executeQuery()){
-
-                if(!resultSet.isBeforeFirst()){
-                    return null;
-                }else{
-                    resultSet.next();
-                    int logged_id = resultSet.getInt("id");
-                    String logged_username = resultSet.getString("username");
-
-                    UserEntity loggedUser = new UserEntity(logged_id, logged_username);
-                    return loggedUser;
-                }
-
-            }
-        }
+    public UserEntity findUserByUsername(String username) {
+        return em.createNamedQuery("UserEntity.findByUsername", UserEntity.class)
+                .setParameter("username", username)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
     }
-    aaa
-    */
+
+    public UserEntity findUserByEmail(String email) {
+        return em.createNamedQuery("UserEntity.findByEmail", UserEntity.class)
+                .setParameter("email", email)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    public UserEntity addNewUser(String username, String password, String email) throws CredentialsException {
+        if (findUserByUsername(username) != null) {
+            throw new CredentialsException("Username already in use!");
+        }
+
+        if (findUserByEmail(email) != null) {
+            throw new CredentialsException("Email already in use!");
+        }
+
+        UserEntity newUser = new UserEntity(username, password, email);
+        em.persist(newUser);
+
+        return newUser;
+    }
 }

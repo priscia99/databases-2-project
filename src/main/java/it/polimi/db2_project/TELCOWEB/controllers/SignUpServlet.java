@@ -2,27 +2,26 @@ package it.polimi.db2_project.TELCOWEB.controllers;
 
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
+import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
 import it.polimi.db2_project.TELCOEJB.services.UserService;
-import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
-
-import java.io.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-import javax.ejb.EJB;
-import javax.servlet.ServletContext;
-import javax.servlet.UnavailableException;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import javax.ejb.EJB;
+import javax.servlet.ServletContext;
+import javax.servlet.UnavailableException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-@WebServlet(name = "loginServlet", value = "/perform-login")
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "signUpServlet", value = "/perform-signup")
+public class SignUpServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/UserService")
@@ -53,38 +52,32 @@ public class LoginServlet extends HttpServlet {
         // Retrieve username and password from request
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        if(username == null || username.isEmpty() || password == null || password.isEmpty()){
+        String email = request.getParameter("email");
+        if(username == null || username.isEmpty() || password == null || password.isEmpty()
+        || email == null || email.isEmpty()){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty parameters");
             return;
         }
 
         // Create user entity object
         UserEntity user;
+        String path = null;
+        String answerMessage = "User successfully created";
 
         try{
-            user = userService.checkCredentials(username, password);
+            user = userService.addNewUser(username, password,email);
         }
-        catch(NonUniqueResultException | CredentialsException e){
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-            return;
-        }
-
-        String path = null;
-        if(user == null){
-            // Username or password incorrect -> return to login page
-            ServletContext servletContext = getServletContext();
-            final WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
-            webContext.setVariable("loginInfoMsg", "Incorrect username or password. Try again.");
-            path = "/index.html";	//Re-direct to login page again
-            templateEngine.process(path, webContext, response.getWriter());
-        }else{
-            // User is an actual object -> user authenticated successfully
-            request.getSession().setAttribute("user", user);	// Create a new session giving the user object as an attribute
-            path = getServletContext().getContextPath() + "/home";	// Re-direct to home page
-            response.sendRedirect(path);
+        catch(CredentialsException e){
+            answerMessage = e.getMessage();
         }
 
+        ServletContext servletContext = getServletContext();
+        WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
+        webContext.setVariable("loginInfoMsg", answerMessage);
+        path = "/index.html";    //Re-direct to login page again
+        templateEngine.process(path, webContext, response.getWriter());
         out.close();
+
     }
 
     public void destroy() {
