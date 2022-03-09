@@ -2,6 +2,7 @@ package it.polimi.db2_project.TELCOWEB.controllers;
 
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
+import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
 import it.polimi.db2_project.TELCOEJB.services.UserService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
@@ -60,6 +61,7 @@ public class LoginServlet extends HttpServlet {
 
         // Create user entity object
         UserEntity user;
+        String path = null;
 
         try{
             user = userService.checkCredentials(username, password);
@@ -68,21 +70,20 @@ public class LoginServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
-
-        String path = null;
-        if(user == null){
-            // Username or password incorrect -> return to login page
+        catch(InvalidCredentialsException e) {
             ServletContext servletContext = getServletContext();
-            final WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
+            WebContext webContext = new WebContext(request, response, servletContext, request.getLocale());
             webContext.setVariable("loginInfoMsg", "Incorrect username or password. Try again.");
-            path = "/index.html";	//Re-direct to login page again
+            path = "/index.html";    //Re-direct to login page again
             templateEngine.process(path, webContext, response.getWriter());
-        }else{
-            // User is an actual object -> user authenticated successfully
-            request.getSession().setAttribute("user", user);	// Create a new session giving the user object as an attribute
-            path = getServletContext().getContextPath() + "/home";	// Re-direct to home page
-            response.sendRedirect(path);
+            out.close();
+            return;
         }
+
+        // User is an actual object -> user authenticated successfully
+        request.getSession().setAttribute("user", user);	// Create a new session giving the user object as an attribute
+        path = getServletContext().getContextPath() + "/home";	// Re-direct to home page
+        response.sendRedirect(path);
 
         out.close();
     }

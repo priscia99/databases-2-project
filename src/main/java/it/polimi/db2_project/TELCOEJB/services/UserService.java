@@ -40,7 +40,7 @@ public class UserService {
         // Check the retrieved list of users
         if(usersList.isEmpty()){
             // No one matches with the given username and password
-            return null;
+            throw new InvalidCredentialsException("Invalid Username or Password");
         }
         else if(usersList.size() == 1){
             // An user matches
