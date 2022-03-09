@@ -2,18 +2,29 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>Telco | Login</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Telco | Landing Page</title>
 </head>
 <body>
 <center>
-<h1>Welcome to Telco | Login</h1>
+    <h1>Welcome to Telco</h1>
+
+    <h3>Login</h3>
     <p th:text="${loginInfoMsg}"></p>
-  <form action="perform-login" method="post">
-    Username: <input type="text" name="username" required="required"><br>
-    Password: <input type="password" name="password" required="required"><br>
-      <input type="submit" value="Login">
-  </form>
-  </center>
+    <form action="perform-login" method="post">
+        Username: <input type="text" name="username" required="required"><br>
+        Password: <input type="password" name="password" required="required"><br>
+        <input type="submit" value="Login">
+    </form>
+
+    <h3>Sign-up</h3>
+    <form action="perform-signup" method="post">
+        Username: <input type="text" name="username" required="required"><br>
+        E-mail: <input type="text" name="email" required="required"><br>
+        Password: <input type="password" name="password" required="required"><br>
+        <input type="submit" value="Sign up">
+    </form>
+
+</center>
 </body>
 </html>
