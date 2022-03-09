@@ -40,14 +40,16 @@ public class HomePageServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
 // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
-
+        HttpSession session = request.getSession();
+        /*
         // If the user is not logged in (not present in session) redirect to the login
         String loginpath = getServletContext().getContextPath() + "/index.html";
-        HttpSession session = request.getSession();
+
         if (session.isNew() || session.getAttribute("user") == null) {
             response.sendRedirect(loginpath);
             return;
         }
+         */
 
         UserEntity user = (UserEntity) session.getAttribute("user");
 

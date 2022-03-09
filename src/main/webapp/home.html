@@ -5,7 +5,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p th:text="'Welcome back, ' + ${session.user.getUsername()} + '!'"></p>
-<a href="logout">Logout</a>
+
+<div th:with="condition=${session != null && session.user != null}" th:remove="tag">
+    <p th:if="${condition}" th:text="'Welcome back, ' + ${session.user.getUsername()} + '!'"></p>
+    <a href="index.html" th:unless="${condition}" >Login</a>
+</div>
+
+<a href="logout" th:if="${session != null && session.user != null}">Logout</a>
 </body>
 </html>
