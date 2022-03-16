@@ -6,6 +6,10 @@ import java.util.List;
 @Entity
 @IdClass(ServicePackageEntityPK.class)
 @Table(name = "servicepackage")
+
+@NamedQueries({
+        @NamedQuery(name = "ServicePackageEntity.getAllPackages", query = "SELECT p FROM ServicePackageEntity p")
+})
 public class ServicePackageEntity {
 
     @Id

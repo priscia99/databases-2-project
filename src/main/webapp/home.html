@@ -11,6 +11,11 @@
     <a href="index.html" th:unless="${condition}" >Login</a>
 </div>
 
+<div th:each="package: ${packages}">
+    <p th:text="${package.name}" />
+    <p th:text="${package.monthlyFee}" />
+</div>
+
 <a href="logout" th:if="${session != null && session.user != null}">Logout</a>
 </body>
 </html>
