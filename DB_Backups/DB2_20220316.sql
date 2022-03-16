@@ -164,11 +164,14 @@ DROP TABLE IF EXISTS `servicepackage_service`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `servicepackage_service` (
   `servicepackage_id` int NOT NULL,
+  `servicepackage_validityPeriod` int NOT NULL,
+  `servicepackage_monthlyFee` float NOT NULL,
   `service_id` int NOT NULL,
   UNIQUE KEY `servicepackage_service_unique` (`servicepackage_id`,`service_id`),
+  KEY `servicepackage_service_servicepackage` (`servicepackage_id`,`servicepackage_validityPeriod`,`servicepackage_monthlyFee`),
   KEY `servicepackage_service_service` (`service_id`),
   CONSTRAINT `servicepackage_service_service` FOREIGN KEY (`service_id`) REFERENCES `service` (`serviceId`),
-  CONSTRAINT `servicepackage_service_servicepackage` FOREIGN KEY (`servicepackage_id`) REFERENCES `servicepackage` (`packageId`)
+  CONSTRAINT `servicepackage_service_servicepackage` FOREIGN KEY (`servicepackage_id`, `servicepackage_validityPeriod`, `servicepackage_monthlyFee`) REFERENCES `servicepackage` (`packageId`, `validityPeriod`, `monthlyFee`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -178,7 +181,6 @@ CREATE TABLE `servicepackage_service` (
 
 LOCK TABLES `servicepackage_service` WRITE;
 /*!40000 ALTER TABLE `servicepackage_service` DISABLE KEYS */;
-INSERT INTO `servicepackage_service` VALUES (1,1),(1,2);
 /*!40000 ALTER TABLE `servicepackage_service` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,4 +219,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-16 16:44:06
+-- Dump completed on 2022-03-16 17:23:58
