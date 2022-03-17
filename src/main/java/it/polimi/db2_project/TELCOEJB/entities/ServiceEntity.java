@@ -43,4 +43,86 @@ public class ServiceEntity {
 
     }
 
+    public ServiceEntity(int serviceId, ServiceType serviceType, int includedMinutes, int feeMinutes, int includedSMS, int feeSMS, int includedGB, int feeGB) {
+        this.serviceId = serviceId;
+        this.serviceType = serviceType;
+        IncludedMinutes = includedMinutes;
+        FeeMinutes = feeMinutes;
+        IncludedSMS = includedSMS;
+        FeeSMS = feeSMS;
+        IncludedGB = includedGB;
+        FeeGB = feeGB;
+    }
+
+    public int getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public ServiceType getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(ServiceType serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public int getIncludedMinutes() {
+        return IncludedMinutes;
+    }
+
+    public void setIncludedMinutes(int includedMinutes) {
+        IncludedMinutes = includedMinutes;
+    }
+
+    public int getFeeMinutes() {
+        return FeeMinutes;
+    }
+
+    public void setFeeMinutes(int feeMinutes) {
+        FeeMinutes = feeMinutes;
+    }
+
+    public int getIncludedSMS() {
+        return IncludedSMS;
+    }
+
+    public void setIncludedSMS(int includedSMS) {
+        IncludedSMS = includedSMS;
+    }
+
+    public int getFeeSMS() {
+        return FeeSMS;
+    }
+
+    public void setFeeSMS(int feeSMS) {
+        FeeSMS = feeSMS;
+    }
+
+    public int getIncludedGB() {
+        return IncludedGB;
+    }
+
+    public void setIncludedGB(int includedGB) {
+        IncludedGB = includedGB;
+    }
+
+    public int getFeeGB() {
+        return FeeGB;
+    }
+
+    public void setFeeGB(int feeGB) {
+        FeeGB = feeGB;
+    }
+
+    public List<ServicePackageEntity> getServicePackageEntities() {
+        return servicePackageEntities;
+    }
+
+    public void setServicePackageEntities(List<ServicePackageEntity> servicePackageEntities) {
+        this.servicePackageEntities = servicePackageEntities;
+    }
 }

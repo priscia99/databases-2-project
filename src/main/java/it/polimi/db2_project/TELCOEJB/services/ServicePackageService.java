@@ -29,6 +29,7 @@ public class ServicePackageService {
                     .getResultList();
         }
         catch (PersistenceException e){
+            e.printStackTrace();
             throw new ServicePackageException("An error occoured while trying to fetch all service packages.");
         }
 

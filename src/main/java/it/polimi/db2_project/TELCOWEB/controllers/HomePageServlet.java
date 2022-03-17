@@ -11,6 +11,7 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.UnavailableException;
@@ -51,10 +52,11 @@ public class HomePageServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         UserEntity user = (UserEntity) session.getAttribute("user");
-        ArrayList<ServicePackageEntity> packages = null;
+        List<ServicePackageEntity> packages = null;
         try{
             packages = servicePackageService.getAllPackages();
         } catch (ServicePackageException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
 

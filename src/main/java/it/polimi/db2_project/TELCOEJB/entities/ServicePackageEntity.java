@@ -31,6 +31,13 @@ public class ServicePackageEntity {
     List<OrderEntity> orderEntities ;
 
     @ManyToMany(fetch = FetchType.EAGER )
+    @JoinTable(name = "servicepackage_service",
+    joinColumns = {
+                    @JoinColumn(name = "servicepackage_id", referencedColumnName = "packageId"),
+            @JoinColumn(name = "servicepackage_validityperiod", referencedColumnName = "validityPeriod"),
+            @JoinColumn(name = "servicepackage_monthlyfee", referencedColumnName = "monthlyFee")
+    },
+    inverseJoinColumns = {@JoinColumn(name = "service_id", referencedColumnName = "serviceId")})
     List<ServiceEntity> services;
 
     public ServicePackageEntity() {
