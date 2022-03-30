@@ -12,8 +12,13 @@
 </div>
 
 <div th:each="package: ${packages}">
-    <p th:text="${package.name}" />
-    <p th:text="${package.monthlyFee}" />
+    <p th:text="${package.getName()}" />
+    <p th:text="${package.getMonthlyFee()}" />
+    <p th:text="${package.getPackageId()}" />
+    <p>SERVIZI: </p>
+    <div th:each="service: ${package.getServices()}">
+        <p th:text="${service.getServiceType()}" />
+    </div>
 </div>
 
 <a href="logout" th:if="${session != null && session.user != null}">Logout</a>
