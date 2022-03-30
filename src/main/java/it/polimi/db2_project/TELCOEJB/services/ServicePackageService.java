@@ -35,4 +35,21 @@ public class ServicePackageService {
 
         return new ArrayList<>(packages);
     }
+
+    public List<ServicePackageEntity> getPackagesById(String chosenPackageId) throws ServicePackageException {
+        List<ServicePackageEntity> packages;
+
+        try{
+            // retrieving the list of users that match with a given username and password
+            packages = em.createNamedQuery("ServicePackageEntity.getPackagesById", ServicePackageEntity.class)
+                    .setParameter("packageId", Integer.parseInt(chosenPackageId))
+                    .getResultList();
+        }
+        catch (PersistenceException e){
+            e.printStackTrace();
+            throw new ServicePackageException("An error occoured while trying to fetch packages by id.");
+        }
+
+        return new ArrayList<>(packages);
+    }
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Buy Service Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div><p>Select a Service Package</p>
+    <form action="buyservice" method="post">
+        Choose the package:
+    <select name="chosenPackageId">
+        <option th:if="${chosenPackageId!= null} "value=chosenPackageId th:text="${packages.get(0).getName()}"}></option>
+        <option th:each="package : ${packages}" th:value="${package.getPackageId()}" th:text="${package.getName()}">
+        </option>
+    </select>
+        <input type="submit" value="Select Package">
+    </form>
+</div>
+</body>
+</html>
