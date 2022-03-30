@@ -58,21 +58,18 @@ public class BuyServicePageServlet extends HttpServlet {
 
         UserEntity user = (UserEntity) session.getAttribute("user");
         List<ServicePackageEntity> packages = null;
-        String chosenPackageId = request.getParameter("chosenPackageId");
-        System.out.println(chosenPackageId);
-        if(chosenPackageId == null ||chosenPackageId.isEmpty() || chosenPackageId.isBlank()) {
             try {
                 packages = servicePackageService.getAllPackages();
             } catch (ServicePackageException e) {
                 e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
-        }else{
+        String chosenPackageId = request.getParameter("chosenPackageId");
+        List<ServicePackageEntity> chosenPackages = null;
+        if(!(chosenPackageId == null ||chosenPackageId.isEmpty() || chosenPackageId.isBlank())) {
             try {
-                packages = servicePackageService.getPackagesById(chosenPackageId);
-                context.setVariable("chosenPackageId", chosenPackageId);
-                System.out.println("prova");
-                System.out.println(context.getVariable("chosenPackageId"));
+                chosenPackages = servicePackageService.getPackagesById(chosenPackageId);
+                context.setVariable("chosenPackages", chosenPackages);
             } catch (ServicePackageException e) {
                 e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

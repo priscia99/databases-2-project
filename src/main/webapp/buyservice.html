@@ -9,11 +9,20 @@
     <form action="buyservice" method="post">
         Choose the package:
     <select name="chosenPackageId">
-        <option th:if="${chosenPackageId!= null} "value=chosenPackageId th:text="${packages.get(0).getName()}"}></option>
+        <option th:if="${chosenPackages!= null} "value="${chosenPackages.get(0).getId()}" th:text="${chosenPackages.get(0).getName()}"}></option>
         <option th:each="package : ${packages}" th:value="${package.getPackageId()}" th:text="${package.getName()}">
         </option>
     </select>
         <input type="submit" value="Select Package">
+    </form>
+    <form action="buyservice" method="post" th:if="${chosenPackages!= null}">
+        Choose the validity period:
+        <select name="chosenValidityPeriod">
+            <option th:each="package : ${packages}" th:value="${package.getValidityPeriod()}"
+                    th:text="${package.getValidityPeriod()} + ' months for ' + ${package.getMonthlyFee()} + ' euros'">
+            </option>
+        </select>
+        <input type="submit" value="Select Validity Period">
     </form>
 </div>
 </body>
