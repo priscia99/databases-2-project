@@ -68,7 +68,6 @@ public class HomePageServlet extends HttpServlet {
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("user", user);
         context.setVariable("packageMap", new HashMap<Integer, ArrayList<ServicePackageEntity>>(packages));
-        context.setVariable("packageIds",packages.keySet());
         templateEngine.process(path, context, response.getWriter());
     }
 

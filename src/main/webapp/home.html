@@ -69,16 +69,11 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${package.getMonthlyFee()}"></h5>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item" th:text="${package.getValidityPeriod()} + 'Euro / months'"></li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
 
 <!--
 <div th:each="package: ${packages}">
