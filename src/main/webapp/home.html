@@ -38,38 +38,47 @@
     </div>
 </nav>
 
-<div th:each="key: ${packageIds}">
-    <div th:each="packages: ${packageMap.get(key)}">
-        <div class="card" >
-            <div class="card-body">
-                <h5 class="card-title" th:text="${packages.get(0).getName()}"></h5>
-                <div th:each="package: ${packages}">
-                    <p class="card-text" th:text="${package.getMonthlyFee()}"></p>
-                    <p class="card-text" th:text="${package.getValidityPeriod()}"></p>
+
+<div th:each="packageList : ${packageMap}">
+
+    <div class="card" >
+        <div class="card-body">
+            <h5 class="card-title" th:text="${packageList.getValue().get(0).getName()}"></h5>
+        </div>
+
+        <div class="card-body">
+            <p>Additional services:</p>
+            <div th:each="service: ${packageList.getValue().get(0).getServices()}">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${service.getServiceType()}"></h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:if="${service.getIncludedMinutes() != 0}" th:text="${service.getIncludedMinutes()} + ' minutes'"></li>
+                        <li class="list-group-item" th:if="${service.getIncludedGB() != 0}" th:text="${service.getIncludedGB()} + ' GB'"></li>
+                        <li class="list-group-item" th:if="${service.getIncludedSMS() != 0}" th:text="${service.getIncludedSMS()} + ' SMS'"></li>
+                        <li class="list-group-item" th:if="${service.getFeeMinutes() != 0}" th:text="${service.getFeeMinutes()} + 'Euro / additional minute'"></li>
+                        <li class="list-group-item" th:if="${service.getFeeGB() != 0}" th:text="${service.getFeeGB()} + 'Euro / additional GB'"></li>
+                        <li class="list-group-item" th:if="${service.getFeeSMS() != 0}" th:text="${service.getFeeSMS()} + 'Euro / additional SMS'"></li>
+                    </ul>
                 </div>
             </div>
-
-            <div class="card-body">
-                <p>Additional services:</p>
-                <div th:each="service: ${packages.get(0).getServices()}">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${service.getServiceType()}"></h5>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item" th:if="${service.getIncludedMinutes() != 0}" th:text="${service.getIncludedMinutes()} + ' minutes'"></li>
-                            <li class="list-group-item" th:if="${service.getIncludedGB() != 0}" th:text="${service.getIncludedGB()} + ' GB'"></li>
-                            <li class="list-group-item" th:if="${service.getIncludedSMS() != 0}" th:text="${service.getIncludedSMS()} + ' SMS'"></li>
-                            <li class="list-group-item" th:if="${service.getFeeMinutes() != 0}" th:text="${service.getFeeMinutes()} + 'Euro / additional minute'"></li>
-                            <li class="list-group-item" th:if="${service.getFeeGB() != 0}" th:text="${service.getFeeGB()} + 'Euro / additional GB'"></li>
-                            <li class="list-group-item" th:if="${service.getFeeSMS() != 0}" th:text="${service.getFeeSMS()} + 'Euro / additional SMS'"></li>
-                        </ul>
+            <p>Plans:</p>
+            <div th:each="package : ${packageList.getValue()}">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${package.getMonthlyFee()}"></h5>
                     </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:text="${package.getValidityPeriod()} + 'Euro / months'"></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
+
 
 <!--
 <div th:each="package: ${packages}">
