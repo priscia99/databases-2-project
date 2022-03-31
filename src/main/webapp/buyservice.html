@@ -9,8 +9,11 @@
     <form action="buyservice" method="post">
         Choose the package:
     <select name="chosenPackageId">
-        <option th:if="${chosenPackages!= null} "value="${chosenPackages.get(0).getId()}" th:text="${chosenPackages.get(0).getName()}"}></option>
-        <option th:each="package : ${packages}" th:value="${package.getPackageId()}" th:text="${package.getName()}">
+<!--        <option th:if="${chosenPackages!= null} "value="${chosenPackages.get(0).getId()}" th:text="${chosenPackages.get(0).getName()}"}></option>-->
+        <option th:each="packageList : ${packageMap}" th:value="${packageList.getKey()}" th:text="${packageList.getValue().get(0).getName()}">
+        <option th:if="${chosenPackages!= null}" value="${chosenPackages.get(0).getId()}" selected disabled hidden>
+            <div th:text="${chosenPackages.get(0).getName()}"> </div>
+        </option>
         </option>
     </select>
         <input type="submit" value="Select Package">
@@ -18,7 +21,7 @@
     <form action="buyservice" method="post" th:if="${chosenPackages!= null}">
         Choose the validity period:
         <select name="chosenValidityPeriod">
-            <option th:each="package : ${packages}" th:value="${package.getValidityPeriod()}"
+            <option th:each="package : ${chosenPackages}" th:value="${package.getValidityPeriod()}"
                     th:text="${package.getValidityPeriod()} + ' months for ' + ${package.getMonthlyFee()} + ' euros'">
             </option>
         </select>
