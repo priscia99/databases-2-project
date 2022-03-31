@@ -12,7 +12,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Stateless
 public class ServicePackageService {
@@ -51,5 +55,35 @@ public class ServicePackageService {
         }
 
         return new ArrayList<>(packages);
+    }
+
+    public HashMap<Integer,ArrayList<ServicePackageEntity>> getAllPackagesToMap() throws ServicePackageException{
+        HashMap<Integer,ArrayList<ServicePackageEntity>> packages;
+        packages = new HashMap<>();
+
+        try{
+            // retrieving the list of users that match with a given username and password
+            List<ServicePackageEntity> packagesList;
+            packagesList = em.createNamedQuery("ServicePackageEntity.getAllPackages", ServicePackageEntity.class)
+                    .getResultList();
+            //converting it into map
+            for(int i = 0; i< packagesList.size(); i++){
+                if(!(packages.containsKey(packagesList.get(i).getPackageId()))){
+                    ArrayList<ServicePackageEntity> newPackageList = new ArrayList<>();
+                    newPackageList.add(packagesList.get(i));
+                    packages.put(packagesList.get(i).getPackageId(),newPackageList);
+                }else{
+                    ArrayList<ServicePackageEntity> newPackageList = packages.get(packagesList.get(i).getPackageId());
+                    newPackageList.add(packagesList.get(i));
+                    packages.put(packagesList.get(i).getPackageId(),newPackageList);
+                }
+            }
+        }
+        catch (PersistenceException e){
+            e.printStackTrace();
+            throw new ServicePackageException("An error occoured while trying to fetch all service packages.");
+        }
+
+        return packages;
     }
 }

@@ -11,7 +11,9 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.UnavailableException;
@@ -52,9 +54,9 @@ public class HomePageServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         UserEntity user = (UserEntity) session.getAttribute("user");
-        List<ServicePackageEntity> packages = null;
+        HashMap<Integer,ArrayList<ServicePackageEntity>> packages = null;
         try{
-            packages = servicePackageService.getAllPackages();
+            packages = servicePackageService.getAllPackagesToMap();
         } catch (ServicePackageException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -65,7 +67,8 @@ public class HomePageServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("user", user);
-        context.setVariable("packages", packages);
+        context.setVariable("packageMap", new HashMap<Integer, ArrayList<ServicePackageEntity>>(packages));
+        context.setVariable("packageIds",packages.keySet());
         templateEngine.process(path, context, response.getWriter());
     }
 
