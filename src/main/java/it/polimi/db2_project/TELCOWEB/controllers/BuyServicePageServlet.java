@@ -71,12 +71,34 @@ public class BuyServicePageServlet extends HttpServlet {
             try {
                 chosenPackages = servicePackageService.getPackagesById(chosenPackageId);
                 context.setVariable("chosenPackages", chosenPackages);
+                request.getSession().setAttribute("chosenPackages", chosenPackages);
+                request.getSession().setAttribute("chosenPackageId", chosenPackageId);
             } catch (ServicePackageException e) {
                 e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
+        if(request.getSession().getAttribute("chosenPackageId")!=null){
+            chosenPackageId = (String) request.getSession().getAttribute("chosenPackageId");
+            context.setVariable("chosenPackageId", chosenPackageId);
+        }
 
+        if(request.getSession().getAttribute("chosenPackages")!=null){
+            chosenPackages = (List<ServicePackageEntity>) request.getSession().getAttribute("chosenPackages");
+            context.setVariable("chosenPackages", chosenPackages);
+        }
+        String chosenValidityPeriod = request.getParameter("chosenValidityPeriod");
+        ServicePackageEntity chosenPackage = null;
+        if(!(chosenValidityPeriod == null ||chosenPackageId.isEmpty() || chosenPackageId.isBlank())) {
+            try {
+                chosenPackage = servicePackageService.getPackagesByIdAndValidityPeriod(chosenPackageId,chosenValidityPeriod);
+                context.setVariable("chosenPackage", chosenPackage);
+                context.setVariable("chosenValidityPeriod", chosenValidityPeriod);
+            } catch (ServicePackageException e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            }
+        }
 //        // Redirect to the Home page and add missions to the parameters
 //        String path = "/buyservice.html";
 //        ServletContext servletContext = getServletContext();

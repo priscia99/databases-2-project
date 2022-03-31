@@ -24,9 +24,18 @@
             <option th:each="package : ${chosenPackages}" th:value="${package.getValidityPeriod()}"
                     th:text="${package.getValidityPeriod()} + ' months for ' + ${package.getMonthlyFee()} + ' euros'">
             </option>
+            <option th:if="${chosenValidityPeriod!= null}" value="${chosenPackage.getValidityPeriod()}" selected disabled hidden>
+                <div th:text="${chosenPackage.getValidityPeriod()} + ' months for ' + ${chosenPackage.getMonthlyFee()} + ' euros'"> </div>
+            </option>
         </select>
         <input type="submit" value="Select Validity Period">
     </form>
+    <div th:if="${chosenPackage!= null}">
+        prova
+<!--        <label th:each="service : ${chosenPackage.getServices()}" for="one"><input type="checkbox" id="one" />First</label>-->
+<!--        <label for="two"> <input type="checkbox" id="two" />Second </label>-->
+<!--        <label for="three"><input type="checkbox" id="three" />Third </label>-->
+    </div>
 </div>
 </body>
 </html>
