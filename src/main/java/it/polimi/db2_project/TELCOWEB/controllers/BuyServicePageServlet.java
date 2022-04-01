@@ -1,8 +1,11 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
+import it.polimi.db2_project.TELCOEJB.entities.OptionalProductEntity;
 import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
+import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
+import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
 import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
 import it.polimi.db2_project.TELCOEJB.services.UserService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
@@ -32,7 +35,8 @@ public class BuyServicePageServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/ServicePackageService")
     private ServicePackageService servicePackageService;
-
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/OptionalProductService")
+    private OptionalProductService optionalProductService;
 
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
@@ -89,12 +93,15 @@ public class BuyServicePageServlet extends HttpServlet {
         }
         String chosenValidityPeriod = request.getParameter("chosenValidityPeriod");
         ServicePackageEntity chosenPackage = null;
+        List<OptionalProductEntity> optionalProducts = null;
         if(!(chosenValidityPeriod == null ||chosenPackageId.isEmpty() || chosenPackageId.isBlank())) {
             try {
                 chosenPackage = servicePackageService.getPackagesByIdAndValidityPeriod(chosenPackageId,chosenValidityPeriod);
                 context.setVariable("chosenPackage", chosenPackage);
                 context.setVariable("chosenValidityPeriod", chosenValidityPeriod);
-            } catch (ServicePackageException e) {
+                optionalProducts = optionalProductService.getAllOptionalProducts();
+                context.setVariable("optionalProducts", optionalProducts);
+            } catch (ServicePackageException | OptionalProductException e) {
                 e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }

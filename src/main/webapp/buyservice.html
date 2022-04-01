@@ -31,10 +31,17 @@
         <input type="submit" value="Select Validity Period">
     </form>
     <div th:if="${chosenPackage!= null}">
-        prova
-<!--        <label th:each="service : ${chosenPackage.getServices()}" for="one"><input type="checkbox" id="one" />First</label>-->
-<!--        <label for="two"> <input type="checkbox" id="two" />Second </label>-->
-<!--        <label for="three"><input type="checkbox" id="three" />Third </label>-->
+        <form th:action="buyservice"  method="post">
+            <p>
+                <label>Optional Products:
+                    <input type="checkbox" name = "chosenOptionalProducts"
+                           th:each="optionalProduct : ${optionalProducts}"
+                           th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
+                           th:value="${optionalProduct.getProductId()}"/>
+                </label>
+            </p>
+            <input type="submit" value="Select Optional Packages">
+        </form>
     </div>
 </div>
 </body>

@@ -6,6 +6,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "optionalproduct")
+
+
+@NamedQueries({
+        @NamedQuery(name = "OptionalProductsEntity.getAllOptionalProducts", query = "SELECT o FROM OptionalProductEntity o"),
+
+})
 public class OptionalProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
