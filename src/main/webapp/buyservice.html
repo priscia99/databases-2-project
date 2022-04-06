@@ -28,10 +28,11 @@
                 <div th:text="${chosenPackage.getValidityPeriod()} + ' months for ' + ${chosenPackage.getMonthlyFee()} + ' euros'"> </div>
             </option>
         </select>
+        <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
         <input type="submit" value="Select Validity Period">
     </form>
     <div th:if="${chosenPackage!= null}">
-        <form th:action="buyservice"  method="post">
+        <form th:action="confirmation"  method="post">
             <p>
                 <label>Optional Products:
                     <input type="checkbox" name = "chosenOptionalProducts"
@@ -40,7 +41,9 @@
                            th:value="${optionalProduct.getProductId()}"/>
                 </label>
             </p>
-            <input type="submit" value="Select Optional Packages">
+            <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
+            <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
+            <input type="submit" value="Confirm">
         </form>
     </div>
 </div>

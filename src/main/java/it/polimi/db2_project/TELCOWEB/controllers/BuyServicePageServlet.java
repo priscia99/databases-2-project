@@ -75,21 +75,11 @@ public class BuyServicePageServlet extends HttpServlet {
             try {
                 chosenPackages = servicePackageService.getPackagesById(chosenPackageId);
                 context.setVariable("chosenPackages", chosenPackages);
-                request.getSession().setAttribute("chosenPackages", chosenPackages);
-                request.getSession().setAttribute("chosenPackageId", chosenPackageId);
+                context.setVariable("chosenPackageId",chosenPackageId);
             } catch (ServicePackageException e) {
                 e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
-        }
-        if(request.getSession().getAttribute("chosenPackageId")!=null){
-            chosenPackageId = (String) request.getSession().getAttribute("chosenPackageId");
-            context.setVariable("chosenPackageId", chosenPackageId);
-        }
-
-        if(request.getSession().getAttribute("chosenPackages")!=null){
-            chosenPackages = (List<ServicePackageEntity>) request.getSession().getAttribute("chosenPackages");
-            context.setVariable("chosenPackages", chosenPackages);
         }
         String chosenValidityPeriod = request.getParameter("chosenValidityPeriod");
         ServicePackageEntity chosenPackage = null;
@@ -99,6 +89,7 @@ public class BuyServicePageServlet extends HttpServlet {
                 chosenPackage = servicePackageService.getPackagesByIdAndValidityPeriod(chosenPackageId,chosenValidityPeriod);
                 context.setVariable("chosenPackage", chosenPackage);
                 context.setVariable("chosenValidityPeriod", chosenValidityPeriod);
+                context.setVariable("chosenPackageId",chosenPackageId);
                 optionalProducts = optionalProductService.getAllOptionalProducts();
                 context.setVariable("optionalProducts", optionalProducts);
             } catch (ServicePackageException | OptionalProductException e) {
@@ -106,10 +97,6 @@ public class BuyServicePageServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
-//        // Redirect to the Home page and add missions to the parameters
-//        String path = "/buyservice.html";
-//        ServletContext servletContext = getServletContext();
-//        final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("user", user);
         context.setVariable("packageMap", new HashMap<Integer, ArrayList<ServicePackageEntity>>(packages));
         templateEngine.process(path, context, response.getWriter());
