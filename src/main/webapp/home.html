@@ -39,6 +39,20 @@
 </nav>
 
 
+<div th:if="${rejectedOrders!=null}">
+REJECTED ORDERS
+    <form th:each="rejectedOrder: ${rejectedOrders}" action="confirmation" method="post">
+        <select name="rejectedOrderId">
+            <option th:value="${rejectedOrder}" th:text="'Order ID: '${rejectedOrder.getOrderId()}
+            + '<br>Creation Date: ' + ${rejectedOrder.getCreationDateTime()}
+             + '<br>Total Fee: ' + ${rejectedOrder.getTotalFee()}">
+            </option>
+        </select>
+        <input type="submit" value="Pay">
+    </form>
+</div>
+
+
 <div th:each="packageList : ${packageMap}">
 
     <div class="card" >

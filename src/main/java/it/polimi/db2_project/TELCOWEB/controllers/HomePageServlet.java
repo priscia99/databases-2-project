@@ -1,19 +1,18 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
+import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
 import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
+import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
-import it.polimi.db2_project.TELCOEJB.services.UserService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.UnavailableException;
@@ -68,6 +67,18 @@ public class HomePageServlet extends HttpServlet {
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("user", user);
         context.setVariable("packageMap", new HashMap<Integer, ArrayList<ServicePackageEntity>>(packages));
+
+        //check if the user is insolvent
+        List<OrderEntity> rejectedOrders = new ArrayList<>();
+        if(user != null && user.isInsolvent()){
+            List<OrderEntity> allOrders = user.getOrderEntities();
+            for(int i = 0; i < allOrders.size(); i++){
+                if(allOrders.get(i).getOrderState() == OrderState.REJECTED){
+                    rejectedOrders.add(allOrders.get(i));
+                }
+            }
+            context.setVariable("rejectedOrders",rejectedOrders);
+        }
         templateEngine.process(path, context, response.getWriter());
     }
 
