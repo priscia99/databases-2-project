@@ -73,7 +73,7 @@ public class OptionalProductService {
         return optionalProduct;
     }
 
-    private List<OptionalProductEntity> getListOptionalProducts(List<String> productIdList) throws OptionalProductException{
+    public List<OptionalProductEntity> getListOptionalProducts(List<String> productIdList) throws OptionalProductException{
         List<OptionalProductEntity> optionalProductEntities = new ArrayList<>();
         for(int i = 0; i < productIdList.size(); i++){
             try {
