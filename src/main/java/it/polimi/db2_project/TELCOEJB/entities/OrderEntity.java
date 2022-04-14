@@ -3,7 +3,7 @@ package it.polimi.db2_project.TELCOEJB.entities;
 import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 
 import javax.persistence.*;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -12,6 +12,7 @@ import java.util.List;
 public class OrderEntity {
 
     @Id
+    @GeneratedValue
     @Column(name = "orderId", nullable = false, length=64)
     private String orderId;
 
@@ -49,9 +50,7 @@ public class OrderEntity {
 
     public OrderEntity(){}
 
-    public OrderEntity(String orderId, Timestamp creationDateTime, float totalFee, Timestamp startTime, Timestamp endTime, OrderState orderState, UserEntity user, List<OptionalProductEntity> optionalProducts, ServicePackageEntity servicePackage) {
-        this.orderId = orderId;
-        this.creationDateTime = creationDateTime;
+    public OrderEntity(float totalFee, Timestamp startTime, Timestamp endTime, OrderState orderState, UserEntity user, List<OptionalProductEntity> optionalProducts, ServicePackageEntity servicePackage) {
         this.totalFee = totalFee;
         this.startTime = startTime;
         this.endTime = endTime;

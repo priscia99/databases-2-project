@@ -1,8 +1,11 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud;
 import it.polimi.db2_project.TELCOEJB.entities.OptionalProductEntity;
+import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
 import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
+import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
@@ -13,6 +16,11 @@ import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -61,16 +69,32 @@ public class ConfirmationPageServlet extends HttpServlet {
 
         // get user information
         UserEntity user = (UserEntity) session.getAttribute("user");
+        // get order information
+        OrderEntity storedOrder = (OrderEntity) session.getAttribute("order");
 
         // get chosenPackageId, chosenValidityPeriod and chosenOptionalProducts from the request
-        String chosenPackageId = request.getParameter("chosenPackageId");
-        String chosenValidityPeriod = request.getParameter("chosenValidityPeriod");
-        String chosenOptionalProductsId[] = request.getParameterValues("chosenOptionalProducts");
+
+        String chosenPackageId = null;
+        String chosenValidityPeriod = null;
+        String[] chosenOptionalProductsId = null;
+        final List<String> optionalProducts = new ArrayList<>();
+
+        if(storedOrder == null) {
+            chosenPackageId = request.getParameter("chosenPackageId");
+            chosenValidityPeriod = request.getParameter("chosenValidityPeriod");
+            chosenOptionalProductsId = request.getParameterValues("chosenOptionalProducts");
+        }else{
+            chosenPackageId = String.valueOf(storedOrder.getServicePackage().getPackageId());
+            chosenValidityPeriod = String.valueOf(storedOrder.getServicePackage().getValidityPeriod());
+            storedOrder.getOptionalProducts().forEach(opt -> optionalProducts.add(String.valueOf(opt.getProductId())));
+        }
+
 
         ServicePackageEntity chosenServicePackage = null;
         List<OptionalProductEntity> chosenOptionalProducts = null;
+
         // check if all request parameters are actually present
-        if(chosenPackageId == null || chosenValidityPeriod == null){
+        if((chosenPackageId == null || chosenValidityPeriod == null)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Some fields are not filled");
             return;
         }
@@ -92,7 +116,16 @@ public class ConfirmationPageServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
                 e.printStackTrace();
             }
+        }else if(optionalProducts.size() != 0){
+            try {
+                chosenOptionalProducts = optionalProductService.getListOptionalProducts(optionalProducts);
+            } catch (OptionalProductException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                e.printStackTrace();
+            }
         }
+
+
 
         // computing the total fee to pay
 
@@ -105,6 +138,25 @@ public class ConfirmationPageServlet extends HttpServlet {
         }
         totalFee *= chosenServicePackage.getValidityPeriod();
 
+        // Generating the order that has to be attached to the session
+
+        // Retrieving the local current date time
+        // TODO: Change it with starting time given in input by the user
+        Clock cl = Clock.systemUTC();
+        LocalDateTime start = LocalDateTime.now();
+
+        // add the validity period time to the start time in order to compute the end time of the service package
+        LocalDateTime end = start.plusMonths(Integer.parseInt(chosenValidityPeriod));
+        Timestamp startTime = Timestamp.valueOf(start);
+        Timestamp endTime = Timestamp.valueOf(end);
+
+        // creating the order entity
+        OrderEntity order = new OrderEntity(totalFee, startTime, endTime, OrderState.CREATED, user, chosenOptionalProducts, chosenServicePackage);
+
+        // Insert the tentative order into the session
+        request.getSession().setAttribute("order", order);
+
+        // Insert the objects into the context of the response
         context.setVariable("servicePackage", chosenServicePackage);
         context.setVariable("totalFee", totalFee);
         context.setVariable("user", user);

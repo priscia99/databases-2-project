@@ -1,5 +1,6 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
+import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
@@ -11,6 +12,7 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.ejb.EJB;
+import javax.persistence.criteria.Order;
 import javax.servlet.ServletContext;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.*;
@@ -82,8 +84,14 @@ public class LoginServlet extends HttpServlet {
 
         // User is an actual object -> user authenticated successfully
         request.getSession().setAttribute("user", user);	// Create a new session giving the user object as an attribute
-        path = getServletContext().getContextPath() + "/home";	// Re-direct to home page
-        response.sendRedirect(path);
+        OrderEntity order = (OrderEntity) request.getSession().getAttribute("order");
+        if(order != null){
+            response.sendRedirect(request.getContextPath() + "/confirmation");
+        }
+        else {
+            path = getServletContext().getContextPath() + "/home";    // Re-direct to home page
+            response.sendRedirect(path);
+        }
 
         out.close();
     }

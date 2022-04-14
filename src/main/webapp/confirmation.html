@@ -104,6 +104,7 @@
         </tr>
         </tbody>
     </table>
-
+    <a th:if="${session != null && session.user != null}" class="btn btn-primary" href="perform-purchase" role="button">Buy</a>
+    <a th:if="${session == null ||  session.user == null}" class="btn btn-primary" href="index.html" role="button">Signup or login to continue your purchase</a>
 </body>
 </html>
