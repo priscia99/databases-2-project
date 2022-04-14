@@ -13,9 +13,9 @@ import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.UnavailableException;
@@ -89,7 +89,7 @@ public class BuyServicePageServlet extends HttpServlet {
                 chosenPackage = servicePackageService.getPackagesByIdAndValidityPeriod(chosenPackageId,chosenValidityPeriod);
                 context.setVariable("chosenPackage", chosenPackage);
                 context.setVariable("chosenValidityPeriod", chosenValidityPeriod);
-                context.setVariable("chosenPackageId",chosenPackageId);
+//                context.setVariable("chosenPackageId",chosenPackageId);
                 optionalProducts = optionalProductService.getAllOptionalProducts();
                 context.setVariable("optionalProducts", optionalProducts);
             } catch (ServicePackageException | OptionalProductException e) {
@@ -97,8 +97,26 @@ public class BuyServicePageServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
+        String chosenOptionalProductsId[] = request.getParameterValues("chosenOptionalProducts");
+        HashMap<Integer,Boolean> chosenOptionalProductsMap = new HashMap<>();
+        if(chosenOptionalProductsId != null) {
+                context.setVariable("chosenOptionalProducts", chosenOptionalProductsId);
+                for (int i = 0; i < optionalProducts.size(); i++){
+                    chosenOptionalProductsMap.put(optionalProducts.get(i).getProductId(),false);
+                }
+                for(int i = 0; i < chosenOptionalProductsId.length; i++) {
+                    chosenOptionalProductsMap.put(Integer.valueOf(chosenOptionalProductsId[i]), true);
+                    context.setVariable("chosenOptionalProductsMap", chosenOptionalProductsMap);
+                }
+        }
         context.setVariable("user", user);
         context.setVariable("packageMap", new HashMap<Integer, ArrayList<ServicePackageEntity>>(packages));
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        Date tomorrow = new Date();
+        tomorrow.setYear(tomorrow.getYear()+1);
+        context.setVariable("today",df.format(today));
+        context.setVariable("tomorrow",df.format(tomorrow));
         templateEngine.process(path, context, response.getWriter());
     }
 

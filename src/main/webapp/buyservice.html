@@ -31,21 +31,53 @@
         <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
         <input type="submit" value="Select Validity Period">
     </form>
-    <div th:if="${chosenPackage!= null}">
-        <form th:action="confirmation"  method="post">
+    <div th:if="${chosenPackage!= null} and ${chosenOptionalProducts==null}">
+        <form th:action="buyservice"  method="post">
             <p>
-                <label>Optional Products:
-                    <input type="checkbox" name = "chosenOptionalProducts"
-                           th:each="optionalProduct : ${optionalProducts}"
-                           th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
-                           th:value="${optionalProduct.getProductId()}"/>
-                </label>
+                <label>Optional Products:</label>
+            <div th:each="optionalProduct : ${optionalProducts}">
+                <input type="checkbox" name = "chosenOptionalProducts"
+                       th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
+                       th:value="${optionalProduct.getProductId()}"/>
+            </div>
             </p>
             <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
             <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
             <input type="submit" value="Confirm">
         </form>
     </div>
+    <div th:if="${chosenPackage!= null} and ${chosenOptionalProducts!=null}">
+        <form th:action="buyservice"  method="post">
+            <p>
+                <label>Optional Products:</label>
+                    <div th:each="optionalProduct : ${optionalProducts}">
+                    <input type="checkbox" name = "chosenOptionalProducts"
+                           th:if="${chosenOptionalProductsMap.get(optionalProduct.getProductId())}"
+                           th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
+                           th:value="${optionalProduct.getProductId()}"
+                           checked="checked"/>
+                    <input type="checkbox" name = "chosenOptionalProducts"
+                           th:unless="${chosenOptionalProductsMap.get(optionalProduct.getProductId())}"
+                           th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
+                           th:value="${optionalProduct.getProductId()}"/>
+                </div>
+            </p>
+            <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
+            <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
+            <input type="submit" value="Confirm">
+        </form>
+    </div>
+ <div th:if="${chosenOptionalProducts!=null}">
+     <form th:action="confirmation"  method="post">
+         <label>Start date:</label>
+         <input type="date" name="startDate"
+                th:min="${today}" th:max="${tomorrow}">
+         <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
+         <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
+         <input type = "hidden" th:if= "${chosenOptionalProducts!=null}" th:value="${chosenOptionalProducts}" name = "chosenOptionalProducts">
+         <input type="submit" value="Confirm">
+     </form>
+ </div>
 </div>
 </body>
 </html>
