@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Home</title>
+</head>
+<body>
+<div th:with="condition=${session != null && session.employee != null}" th:remove="tag">
+    <div th:if="${condition}">
+        <span class="navbar-text pr-2" th:if="${condition}" th:text="'Employee number: ' + ${session.employee.getId()} + '!'"></span>
+        <a class="btn btn-secondary btn-sm" href="logout" role="button">Logout</a>
+    </div>
+</body>
+</html>
