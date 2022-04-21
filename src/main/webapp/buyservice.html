@@ -46,7 +46,7 @@
             <input type="submit" value="Confirm">
         </form>
     </div>
-    <div th:if="${chosenPackage!= null} and ${chosenOptionalProducts!=null}">
+    <div th:if="${chosenPackage!= null && chosenOptionalProducts!=null}">
         <form th:action="buyservice"  method="post">
             <p>
                 <label>Optional Products:</label>
@@ -74,7 +74,9 @@
                 th:min="${today}" th:max="${tomorrow}">
          <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
          <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-         <input type = "hidden" th:if= "${chosenOptionalProducts!=null}" th:value="${chosenOptionalProducts}" name = "chosenOptionalProducts">
+         <div th:each="optId : ${chosenOptionalProducts}">
+             <input type = "hidden" th:value="${optId}" name = "chosenOptionalProducts">
+         </div>
          <input type="submit" value="Confirm">
      </form>
  </div>

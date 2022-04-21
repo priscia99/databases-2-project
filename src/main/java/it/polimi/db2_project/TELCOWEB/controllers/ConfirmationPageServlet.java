@@ -18,9 +18,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.Clock;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.*;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -77,89 +77,102 @@ public class ConfirmationPageServlet extends HttpServlet {
         String chosenPackageId = null;
         String chosenValidityPeriod = null;
         String[] chosenOptionalProductsId = null;
+        String startDate = null;
+
         final List<String> optionalProducts = new ArrayList<>();
 
         if(storedOrder == null) {
             chosenPackageId = request.getParameter("chosenPackageId");
             chosenValidityPeriod = request.getParameter("chosenValidityPeriod");
             chosenOptionalProductsId = request.getParameterValues("chosenOptionalProducts");
+            startDate = request.getParameter("startDate");
         }else{
             chosenPackageId = String.valueOf(storedOrder.getServicePackage().getPackageId());
             chosenValidityPeriod = String.valueOf(storedOrder.getServicePackage().getValidityPeriod());
             storedOrder.getOptionalProducts().forEach(opt -> optionalProducts.add(String.valueOf(opt.getProductId())));
         }
 
+        if(storedOrder == null) {
+            ServicePackageEntity chosenServicePackage = null;
+            List<OptionalProductEntity> chosenOptionalProducts = null;
 
-        ServicePackageEntity chosenServicePackage = null;
-        List<OptionalProductEntity> chosenOptionalProducts = null;
+            // check if all request parameters are actually present
+            if ((chosenPackageId == null || chosenValidityPeriod == null)) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Some fields are not filled");
+                return;
+            }
 
-        // check if all request parameters are actually present
-        if((chosenPackageId == null || chosenValidityPeriod == null)){
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Some fields are not filled");
-            return;
-        }
-
-        // check if the ID and the validity period of the chosen service package are valid
-        try {
-            servicePackageService.checkValidity(chosenPackageId, chosenValidityPeriod);
-            chosenServicePackage = servicePackageService.getPackagesByIdAndValidityPeriod(chosenPackageId, chosenValidityPeriod);
-        } catch (ServicePackageException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Some fields are not valid");
-            return;
-        }
-
-        // get all chosen optional products
-        if(chosenOptionalProductsId != null) {
+            // check if the ID and the validity period of the chosen service package are valid
             try {
-                chosenOptionalProducts = optionalProductService.getListOptionalProducts(Arrays.asList(chosenOptionalProductsId));
-            } catch (OptionalProductException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                servicePackageService.checkValidity(chosenPackageId, chosenValidityPeriod);
+                chosenServicePackage = servicePackageService.getPackagesByIdAndValidityPeriod(chosenPackageId, chosenValidityPeriod);
+            } catch (ServicePackageException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Some fields are not valid");
+                return;
+            }
+
+            // get all chosen optional products
+            if (chosenOptionalProductsId != null) {
+                try {
+                    chosenOptionalProducts = optionalProductService.getListOptionalProducts(Arrays.asList(chosenOptionalProductsId));
+                } catch (OptionalProductException e) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                    e.printStackTrace();
+                }
+            } else if (optionalProducts.size() != 0) {
+                try {
+                    chosenOptionalProducts = optionalProductService.getListOptionalProducts(optionalProducts);
+                } catch (OptionalProductException e) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+            // computing the total fee to pay
+
+            float totalFee = chosenServicePackage.getMonthlyFee();
+            if (chosenOptionalProducts != null) {
+                context.setVariable("optionalProducts", new ArrayList<>(chosenOptionalProducts));
+                for (OptionalProductEntity p : chosenOptionalProducts) {
+                    totalFee += p.getMonthlyFee();
+                }
+            }
+            totalFee *= chosenServicePackage.getValidityPeriod();
+
+            // Generating the order that has to be attached to the session
+
+            // define the format used to convert the given starting date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = null;
+
+            // parsing the given starting date
+            try {
+                parsedDate = dateFormat.parse(startDate);
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }else if(optionalProducts.size() != 0){
-            try {
-                chosenOptionalProducts = optionalProductService.getListOptionalProducts(optionalProducts);
-            } catch (OptionalProductException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-                e.printStackTrace();
-            }
+            // creating the starting time stamp
+            LocalDateTime start = Instant.ofEpochMilli(parsedDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+            Timestamp startTime = Timestamp.valueOf(start);
+
+            // add the validity period time to the start time in order to compute the end time of the service package
+            LocalDateTime end = start.plusMonths(Integer.parseInt(chosenValidityPeriod));
+
+            Timestamp endTime = Timestamp.valueOf(end);
+
+            // creating the order entity
+            OrderEntity order = new OrderEntity(totalFee, startTime, endTime, OrderState.CREATED, user, chosenOptionalProducts, chosenServicePackage);
+
+            // Insert the tentative order into the session
+            request.getSession().setAttribute("order", order);
+
+            // Insert the objects into the context of the response
+            context.setVariable("orderInfo", order);
         }
-
-
-
-        // computing the total fee to pay
-
-        float totalFee = chosenServicePackage.getMonthlyFee();
-        if(chosenOptionalProducts != null) {
-            context.setVariable("optionalProducts", new ArrayList<>(chosenOptionalProducts));
-            for (OptionalProductEntity p : chosenOptionalProducts) {
-                totalFee += p.getMonthlyFee();
-            }
+        else {
+            // Insert the objects into the context of the response
+            context.setVariable("orderInfo", storedOrder);
         }
-        totalFee *= chosenServicePackage.getValidityPeriod();
-
-        // Generating the order that has to be attached to the session
-
-        // Retrieving the local current date time
-        // TODO: Change it with starting time given in input by the user
-        Clock cl = Clock.systemUTC();
-        LocalDateTime start = LocalDateTime.now();
-
-        // add the validity period time to the start time in order to compute the end time of the service package
-        LocalDateTime end = start.plusMonths(Integer.parseInt(chosenValidityPeriod));
-        Timestamp startTime = Timestamp.valueOf(start);
-        Timestamp endTime = Timestamp.valueOf(end);
-
-        // creating the order entity
-        OrderEntity order = new OrderEntity(totalFee, startTime, endTime, OrderState.CREATED, user, chosenOptionalProducts, chosenServicePackage);
-
-        // Insert the tentative order into the session
-        request.getSession().setAttribute("order", order);
-
-        // Insert the objects into the context of the response
-        context.setVariable("servicePackage", chosenServicePackage);
-        context.setVariable("totalFee", totalFee);
-        context.setVariable("user", user);
 
         templateEngine.process(path, context, response.getWriter());
 
