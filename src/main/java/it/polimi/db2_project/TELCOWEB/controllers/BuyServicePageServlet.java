@@ -101,13 +101,20 @@ public class BuyServicePageServlet extends HttpServlet {
         String chosenOptionalProductsId[] = request.getParameterValues("chosenOptionalProducts");
         HashMap<Integer,Boolean> chosenOptionalProductsMap = new HashMap<>();
         if(chosenOptionalProductsId != null) {
-                context.setVariable("chosenOptionalProducts", chosenOptionalProductsId);
-                for (int i = 0; i < chosenPackage.getOptionalProducts().size(); i++){
-                    chosenOptionalProductsMap.put(chosenPackage.getOptionalProducts().get(i).getProductId(),false);
-                }
-                for(int i = 0; i < chosenOptionalProductsId.length; i++) {
-                    chosenOptionalProductsMap.put(Integer.valueOf(chosenOptionalProductsId[i]), true);
-                    context.setVariable("chosenOptionalProductsMap", chosenOptionalProductsMap);
+//                System.out.println(chosenOptionalProductsId[0]);
+                if(!chosenOptionalProductsId[0].equals("No Optional Product(s)")) {
+                    context.setVariable("chosenOptionalProducts", chosenOptionalProductsId);
+                    for (int i = 0; i < chosenPackage.getOptionalProducts().size(); i++) {
+                        chosenOptionalProductsMap.put(chosenPackage.getOptionalProducts().get(i).getProductId(), false);
+                    }
+                    for (int i = 0; i < chosenOptionalProductsId.length; i++) {
+                        chosenOptionalProductsMap.put(Integer.valueOf(chosenOptionalProductsId[i]), true);
+                        context.setVariable("chosenOptionalProductsMap", chosenOptionalProductsMap);
+                    }
+                }else{
+                    chosenOptionalProductsId[0] = "";
+                    context.setVariable("chosenOptionalProducts", chosenOptionalProductsId);
+
                 }
         }
         context.setVariable("user", user);
