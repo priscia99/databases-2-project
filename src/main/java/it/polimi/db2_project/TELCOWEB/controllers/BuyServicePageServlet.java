@@ -62,6 +62,7 @@ public class BuyServicePageServlet extends HttpServlet {
 
 
         UserEntity user = (UserEntity) session.getAttribute("user");
+        session.removeAttribute("order");
         HashMap<Integer,ArrayList<ServicePackageEntity>> packages = null;
             try {
                 packages = servicePackageService.getAllPackagesToMap();
