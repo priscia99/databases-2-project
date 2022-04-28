@@ -37,8 +37,8 @@ public class ServicePackageEntity {
     @JoinTable(name = "servicepackage_service",
     joinColumns = {
                     @JoinColumn(name = "servicepackage_id", referencedColumnName = "packageId"),
-//            @JoinColumn(name = "servicepackage_validityperiod", referencedColumnName = "validityPeriod"),
-//            @JoinColumn(name = "servicepackage_monthlyfee", referencedColumnName = "monthlyFee")
+            @JoinColumn(name = "servicepackage_validityperiod", referencedColumnName = "validityPeriod"),
+            @JoinColumn(name = "servicepackage_monthlyfee", referencedColumnName = "monthlyFee")
     },
     inverseJoinColumns = {@JoinColumn(name = "service_id", referencedColumnName = "serviceId")})
     List<ServiceEntity> services;
@@ -47,8 +47,10 @@ public class ServicePackageEntity {
     @JoinTable(name = "servicepackage_optionalproduct",
             joinColumns = {
                     @JoinColumn(name = "servicepackage_id", referencedColumnName = "packageId"),
+                    @JoinColumn(name = "servicepackage_validityperiod", referencedColumnName = "validityPeriod"),
+                    @JoinColumn(name = "servicepackage_monthlyfee", referencedColumnName = "monthlyFee")
        },
-            inverseJoinColumns = {@JoinColumn(name = "optionalproduct_id", referencedColumnName = "productId")})
+            inverseJoinColumns = {@JoinColumn(name = "optionalproduct_productID", referencedColumnName = "productId")})
     List<OptionalProductEntity> optionalProducts;
 
     public ServicePackageEntity() {
