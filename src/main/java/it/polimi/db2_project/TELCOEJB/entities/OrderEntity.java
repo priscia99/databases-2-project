@@ -7,14 +7,16 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
-
+@Table(name = "orders")
+@NamedQueries({
+        @NamedQuery(name = "OrderEntity.findById", query = "SELECT o FROM OrderEntity o WHERE o.orderId = :orderId"),
+})
 public class OrderEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "orderId", nullable = false, length=64)
-    private String orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "orderId", nullable = false)
+    private int orderId;
 
     @Column(name = "creationDateTime", nullable = false)
     private Timestamp creationDateTime;
@@ -37,9 +39,14 @@ public class OrderEntity {
     UserEntity user;
 
     @ManyToMany(fetch = FetchType.EAGER )
+    @JoinTable(name = "order_optionalproduct",
+            joinColumns = {
+                    @JoinColumn(name = "order_id", referencedColumnName = "orderId"),
+            },
+            inverseJoinColumns = {@JoinColumn(name = "optionalproduct_id", referencedColumnName = "productId")})
     List<OptionalProductEntity> optionalProducts ;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
             @JoinColumn(name = "packageID", referencedColumnName = "packageID"),
             @JoinColumn(name = "validityPeriod", referencedColumnName = "validityPeriod"),
@@ -60,11 +67,11 @@ public class OrderEntity {
         this.servicePackage = servicePackage;
     }
 
-    public String getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
