@@ -110,6 +110,30 @@ public class ConfirmationPageServlet extends HttpServlet {
                 return;
             }
 
+            //check if the optional products are included in the servicePackage
+            for(int i = 0; i < chosenOptionalProductsId.length; i++){
+                Boolean isOptionalProductPresent = false;
+                for(int j = 0; j < chosenServicePackage.getOptionalProducts().size(); j++){
+                    isOptionalProductPresent = isOptionalProductPresent || (chosenServicePackage.getOptionalProducts().get(j).getProductId() == Integer.parseInt(chosenOptionalProductsId[i]));
+                }
+                if (!isOptionalProductPresent){
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Optional products field is not valid");
+                    return;
+                }
+            }
+            //check if the optional product id array has not duplicates
+            for(int i = 0; i < chosenOptionalProductsId.length; i++){
+                for(int j = 0; j < chosenOptionalProductsId.length; j++){
+                    if(i!=j){
+                        if(chosenOptionalProductsId[i] == chosenOptionalProductsId[j]){
+                            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Optional products field is not valid (duplicates)");
+                            return;
+                        }
+                    }
+                }
+            }
+
+
             // get all chosen optional products
             if (chosenOptionalProductsId != null) {
                 try {

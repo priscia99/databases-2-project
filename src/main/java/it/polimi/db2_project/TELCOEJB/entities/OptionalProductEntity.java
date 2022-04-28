@@ -29,14 +29,19 @@ public class OptionalProductEntity {
     @ManyToMany(mappedBy = "optionalProducts", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     List<OrderEntity> orderEntities ;
 
+    @ManyToMany(mappedBy = "optionalProducts", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    List<ServicePackageEntity> servicePackageEntities ;
+
+
     public OptionalProductEntity() {
     }
 
-    public OptionalProductEntity(int productId, String name, int monthlyFee, List<OrderEntity> orderEntities) {
+    public OptionalProductEntity(int productId, String name, int monthlyFee, List<OrderEntity> orderEntities, List<ServicePackageEntity> servicePackageEntities) {
         this.productId = productId;
         this.name = name;
         this.monthlyFee = monthlyFee;
         this.orderEntities = orderEntities;
+        this.servicePackageEntities = servicePackageEntities;
     }
 
     public int getProductId() {
@@ -69,5 +74,13 @@ public class OptionalProductEntity {
 
     public void setOrderEntities(List<OrderEntity> orderEntities) {
         this.orderEntities = orderEntities;
+    }
+
+    public List<ServicePackageEntity> getServicePackageEntities() {
+        return servicePackageEntities;
+    }
+
+    public void setServicePackageEntities(List<ServicePackageEntity> servicePackageEntities) {
+        this.servicePackageEntities = servicePackageEntities;
     }
 }

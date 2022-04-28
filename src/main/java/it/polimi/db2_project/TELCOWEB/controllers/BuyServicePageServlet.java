@@ -62,6 +62,7 @@ public class BuyServicePageServlet extends HttpServlet {
 
 
         UserEntity user = (UserEntity) session.getAttribute("user");
+        session.removeAttribute("order");
         HashMap<Integer,ArrayList<ServicePackageEntity>> packages = null;
             try {
                 packages = servicePackageService.getAllPackagesToMap();
@@ -83,16 +84,16 @@ public class BuyServicePageServlet extends HttpServlet {
         }
         String chosenValidityPeriod = request.getParameter("chosenValidityPeriod");
         ServicePackageEntity chosenPackage = null;
-        List<OptionalProductEntity> optionalProducts = null;
+//        List<OptionalProductEntity> optionalProducts = null;
         if(!(chosenValidityPeriod == null ||chosenPackageId.isEmpty() || chosenPackageId.isBlank())) {
             try {
                 chosenPackage = servicePackageService.getPackagesByIdAndValidityPeriod(chosenPackageId,chosenValidityPeriod);
                 context.setVariable("chosenPackage", chosenPackage);
                 context.setVariable("chosenValidityPeriod", chosenValidityPeriod);
 //                context.setVariable("chosenPackageId",chosenPackageId);
-                optionalProducts = optionalProductService.getAllOptionalProducts();
-                context.setVariable("optionalProducts", optionalProducts);
-            } catch (ServicePackageException | OptionalProductException e) {
+//                optionalProducts = optionalProductService.getAllOptionalProducts();
+//                context.setVariable("optionalProducts", optionalProducts);
+            } catch (ServicePackageException e) {
                 e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
@@ -101,8 +102,8 @@ public class BuyServicePageServlet extends HttpServlet {
         HashMap<Integer,Boolean> chosenOptionalProductsMap = new HashMap<>();
         if(chosenOptionalProductsId != null) {
                 context.setVariable("chosenOptionalProducts", chosenOptionalProductsId);
-                for (int i = 0; i < optionalProducts.size(); i++){
-                    chosenOptionalProductsMap.put(optionalProducts.get(i).getProductId(),false);
+                for (int i = 0; i < chosenPackage.getOptionalProducts().size(); i++){
+                    chosenOptionalProductsMap.put(chosenPackage.getOptionalProducts().get(i).getProductId(),false);
                 }
                 for(int i = 0; i < chosenOptionalProductsId.length; i++) {
                     chosenOptionalProductsMap.put(Integer.valueOf(chosenOptionalProductsId[i]), true);
