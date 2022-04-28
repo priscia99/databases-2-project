@@ -35,7 +35,7 @@
         <form th:action="buyservice"  method="post">
             <p>
                 <label>Optional Products:</label>
-            <div th:each="optionalProduct : ${optionalProducts}">
+            <div th:each="optionalProduct : ${chosenPackage.getOptionalProducts()}">
                 <input type="checkbox" name = "chosenOptionalProducts"
                        th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
                        th:value="${optionalProduct.getProductId()}"/>
@@ -43,14 +43,14 @@
             </p>
             <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
             <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-            <input type="submit" value="Confirm">
+            <input type="submit" value="Select Optional Product(s)">
         </form>
     </div>
     <div th:if="${chosenPackage!= null && chosenOptionalProducts!=null}">
         <form th:action="buyservice"  method="post">
             <p>
                 <label>Optional Products:</label>
-                    <div th:each="optionalProduct : ${optionalProducts}">
+                    <div th:each="optionalProduct : ${chosenPackage.getOptionalProducts()}">
                     <input type="checkbox" name = "chosenOptionalProducts"
                            th:if="${chosenOptionalProductsMap.get(optionalProduct.getProductId())}"
                            th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
@@ -64,7 +64,7 @@
             </p>
             <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
             <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-            <input type="submit" value="Confirm">
+            <input type="submit" value="Select Optional Product(s)">
         </form>
     </div>
  <div th:if="${chosenOptionalProducts!=null}">

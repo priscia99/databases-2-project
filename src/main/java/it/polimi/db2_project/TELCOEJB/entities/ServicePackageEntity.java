@@ -43,16 +43,25 @@ public class ServicePackageEntity {
     inverseJoinColumns = {@JoinColumn(name = "service_id", referencedColumnName = "serviceId")})
     List<ServiceEntity> services;
 
+    @ManyToMany(fetch = FetchType.EAGER )
+    @JoinTable(name = "servicepackage_optionalproduct",
+            joinColumns = {
+                    @JoinColumn(name = "servicepackage_id", referencedColumnName = "packageId"),
+       },
+            inverseJoinColumns = {@JoinColumn(name = "optionalproduct_id", referencedColumnName = "productId")})
+    List<OptionalProductEntity> optionalProducts;
+
     public ServicePackageEntity() {
     }
 
-    public ServicePackageEntity(int packageId, int validityPeriod, float monthlyFee, String name, List<OrderEntity> orderEntities, List<ServiceEntity> services) {
+    public ServicePackageEntity(int packageId, int validityPeriod, float monthlyFee, String name, List<OrderEntity> orderEntities, List<ServiceEntity> services, List<OptionalProductEntity> optionalProducts) {
         this.packageId = packageId;
         this.validityPeriod = validityPeriod;
         this.monthlyFee = monthlyFee;
         this.name = name;
         this.orderEntities = orderEntities;
         this.services = services;
+        this.optionalProducts = optionalProducts;
     }
 
     public int getPackageId() {
@@ -103,4 +112,11 @@ public class ServicePackageEntity {
         this.services = services;
     }
 
+    public List<OptionalProductEntity> getOptionalProducts() {
+        return optionalProducts;
+    }
+
+    public void setOptionalProducts(List<OptionalProductEntity> optionalProducts) {
+        this.optionalProducts = optionalProducts;
+    }
 }
