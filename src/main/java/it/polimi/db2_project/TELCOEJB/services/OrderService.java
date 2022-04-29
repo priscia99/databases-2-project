@@ -17,12 +17,13 @@ public class OrderService {
     public OrderService() {
     }
     public OrderEntity findOrderById(int orderId) {
-        return em.createNamedQuery("OrderEntity.findById", OrderEntity.class)
-                .setParameter("orderId",orderId)
-                .setMaxResults(1)
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+//        return em.createNamedQuery("OrderEntity.findById", OrderEntity.class)
+//                .setParameter("orderId",orderId)
+//                .setMaxResults(1)
+//                .getResultStream()
+//                .findFirst()
+//                .orElse(null);
+        return em.find(OrderEntity.class,orderId);
     }
     public void persistOrder(OrderEntity order) throws OrderException {
         if (findOrderById(order.getOrderId()) != null) {

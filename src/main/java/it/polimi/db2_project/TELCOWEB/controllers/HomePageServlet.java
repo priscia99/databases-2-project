@@ -6,6 +6,7 @@ import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
+import it.polimi.db2_project.TELCOEJB.services.UserService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
@@ -32,6 +33,8 @@ public class HomePageServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/ServicePackageService")
     private ServicePackageService servicePackageService;
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/UserService")
+    private UserService userService;
 
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
@@ -53,6 +56,7 @@ public class HomePageServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         UserEntity user = (UserEntity) session.getAttribute("user");
+        user = userService.findUserByUsername(user.getUsername());
         HashMap<Integer,ArrayList<ServicePackageEntity>> packages = null;
         try{
             packages = servicePackageService.getAllPackagesToMap();

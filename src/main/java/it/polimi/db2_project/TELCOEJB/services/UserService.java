@@ -54,12 +54,13 @@ public class UserService {
     }
 
     public UserEntity findUserByUsername(String username) {
-        return em.createNamedQuery("UserEntity.findByUsername", UserEntity.class)
-                .setParameter("username", username)
-                .setMaxResults(1)
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+//        return em.createNamedQuery("UserEntity.findByUsername", UserEntity.class)
+//                .setParameter("username", username)
+//                .setMaxResults(1)
+//                .getResultStream()
+//                .findFirst()
+//                .orElse(null);
+        return em.find(UserEntity.class,username);
     }
 
     public UserEntity findUserByEmail(String email) {
@@ -92,4 +93,5 @@ public class UserService {
         em.flush();
         return user;
     }
+
 }

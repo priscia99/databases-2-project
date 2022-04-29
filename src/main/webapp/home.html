@@ -43,12 +43,10 @@
 REJECTED ORDERS
     <form th:each="rejectedOrder: ${rejectedOrders}" action="confirmation" method="post">
         <select name="rejectedOrderId">
-            <option th:value="${rejectedOrder}" th:text="'Order ID: '${rejectedOrder.getOrderId()}
-            + '<br>Creation Date: ' + ${rejectedOrder.getCreationDateTime()}
-             + '<br>Total Fee: ' + ${rejectedOrder.getTotalFee()}">
+            <option th:value="${rejectedOrder}" th:text="'Order ID: ' + ${rejectedOrder.getOrderId()} + 'Creation Date: ' + ${rejectedOrder.getCreationDateTime().toGMTString()} + 'Total Fee: ' + ${rejectedOrder.getTotalFee()}">
             </option>
         </select>
-        <input type="submit" value="Pay">
+        <input type="submit" value="Try again">
     </form>
 </div>
 

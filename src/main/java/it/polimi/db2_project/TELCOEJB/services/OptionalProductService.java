@@ -62,9 +62,10 @@ public class OptionalProductService {
         OptionalProductEntity optionalProduct;
         try{
             // retrieving the list of users that match with a given username and password
-            optionalProduct = em.createNamedQuery("OptionalProductsEntity.getOptionalProductsById", OptionalProductEntity.class)
-                    .setParameter("productId", Integer.parseInt(productId))
-                    .getResultList().get(0);
+//            optionalProduct = em.createNamedQuery("OptionalProductsEntity.getOptionalProductsById", OptionalProductEntity.class)
+//                    .setParameter("productId", Integer.parseInt(productId))
+//                    .getResultList().get(0);
+            optionalProduct = em.find(OptionalProductEntity.class,productId);
         }
         catch (PersistenceException e){
             e.printStackTrace();

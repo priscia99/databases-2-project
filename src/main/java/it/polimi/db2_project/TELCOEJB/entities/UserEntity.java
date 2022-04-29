@@ -8,7 +8,7 @@ import java.util.List;
 
 @NamedQueries({
         @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.username = :username AND u.password = :password"),
-        @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
+//        @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
         @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email = :email")
 })
 public class UserEntity {
@@ -29,7 +29,7 @@ public class UserEntity {
     @OneToOne(mappedBy = "relatedUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private AlertEntity alert;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST} )
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
     List<OrderEntity> orderEntities ;
 
     public UserEntity(){}
