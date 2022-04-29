@@ -43,7 +43,8 @@ public class PayOrderPageServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/OrderService")
     private OrderService orderService;
-
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/UserService")
+    private UserService userService;
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
         ServletContext servletContext = getServletContext();
@@ -69,6 +70,7 @@ public class PayOrderPageServlet extends HttpServlet {
 
         // get order information
         OrderEntity order = (OrderEntity) session.getAttribute("order");
+        UserEntity user = (UserEntity) session.getAttribute("user");
         //setting the creation date
         Date nowDate = new Date();
         LocalDateTime now = Instant.ofEpochMilli(nowDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -78,7 +80,9 @@ public class PayOrderPageServlet extends HttpServlet {
         if(Utils.pay()){
             order.setOrderState(OrderState.PAID);
         }else{
+            //setting the user as insolvent and the order state as rejected
             order.setOrderState(OrderState.REJECTED);
+            user = userService.setUserInsolvent(user.getUsername());
         }
         context.setVariable("order", order);
         //add the order to db
@@ -88,6 +92,9 @@ public class PayOrderPageServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             e.printStackTrace();
         }
+        //updating the session
+        session.removeAttribute("order");
+        session.setAttribute("user",user);
         templateEngine.process(path, context, response.getWriter());
 
     }

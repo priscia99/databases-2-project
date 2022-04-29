@@ -85,4 +85,11 @@ public class UserService {
 
         return newUser;
     }
+
+    public UserEntity setUserInsolvent(String username){
+        UserEntity user = em.find(UserEntity.class,username);
+        user.setInsolvent(true);
+        em.flush();
+        return user;
+    }
 }
