@@ -16,15 +16,14 @@
 
     <form action="admin/home" method="post">
         <label>Service Package Name:</label>
-        <input type="text" name="servicePackageName" required="required" th:if="${servicePackageName} == null">
-        <input type="text" name="servicePackageName" required="required" th:if="${servicePackageName} != null" th:value="${servicePackageName}">
+        <input type="text" name="servicePackageName" required="required">
         <br>
         <div>
             Enter validity period (months)
-            <input type="number"name="validityPeriod" required="required">
+            <input type="number"name="servicePackageValidityPeriod" required="required">
             <br>
             Enter its monthlyFee
-            <input type="number"name="monthlyFee" required="required">
+            <input type="number"name="servicePackageMonthlyFee" required="required">
         </div>
         <div>
             Choose associated services
@@ -44,6 +43,18 @@
             </div>
         </div>
         <input type="submit" value="Create Service Package">
+    </form>
+</div>
+<div>
+    <h3>        Optional Product Creator</h3>
+    <form action="admin/home" method="post">
+        <label>Service Package Name:</label>
+        <input type="text" name="optionalProductName" required="required">
+        <br>
+         Enter its monthlyFee
+        <input type="number"name="optionalProductMonthlyFee" required="required">
+        <br>
+        <input type="submit" value="Create Optional Product">
     </form>
 </div>
 </body>
