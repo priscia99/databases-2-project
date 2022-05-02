@@ -56,7 +56,9 @@ public class HomePageServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         UserEntity user = (UserEntity) session.getAttribute("user");
-        user = userService.findUserByUsername(user.getUsername());
+        if (user != null) {
+            user = userService.findUserByUsername(user.getUsername());
+        }
         HashMap<Integer,ArrayList<ServicePackageEntity>> packages = null;
         try{
             packages = servicePackageService.getAllPackagesToMap();
