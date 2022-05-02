@@ -71,6 +71,7 @@ public class PayOrderPageServlet extends HttpServlet {
         // get order information
         OrderEntity order = (OrderEntity) session.getAttribute("order");
         UserEntity user = (UserEntity) session.getAttribute("user");
+
         //setting the creation date
         Date nowDate = new Date();
         LocalDateTime now = Instant.ofEpochMilli(nowDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();

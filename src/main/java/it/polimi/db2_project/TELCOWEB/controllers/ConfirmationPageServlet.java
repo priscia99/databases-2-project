@@ -196,6 +196,9 @@ public class ConfirmationPageServlet extends HttpServlet {
         }
         else {
             // Insert the objects into the context of the response
+            if(user!=null){
+                storedOrder.setUser(user);
+            }
             context.setVariable("orderInfo", storedOrder);
         }
 
