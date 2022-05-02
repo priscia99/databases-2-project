@@ -7,6 +7,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "service")
+@NamedQueries({
+        @NamedQuery(name = "ServiceEntity.getAllServices", query = "SELECT s FROM ServiceEntity s"),
+})
 public class ServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

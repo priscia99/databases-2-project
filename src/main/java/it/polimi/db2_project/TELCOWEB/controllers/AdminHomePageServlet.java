@@ -1,12 +1,13 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
-import it.polimi.db2_project.TELCOEJB.entities.EmployeeEntity;
-import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
-import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
-import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
+import it.polimi.db2_project.TELCOEJB.entities.*;
 import it.polimi.db2_project.TELCOEJB.enums.OrderState;
+import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
+import it.polimi.db2_project.TELCOEJB.exceptions.ServiceException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
+import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
 import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
+import it.polimi.db2_project.TELCOEJB.services.ServiceService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
@@ -31,6 +32,10 @@ public class AdminHomePageServlet extends HttpServlet {
     private Connection connection = null;
     private TemplateEngine templateEngine;
 
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/ServiceService")
+    private ServiceService serviceService;
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/OptionalProductService")
+    private OptionalProductService optionalProductService;
 
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
@@ -58,8 +63,20 @@ public class AdminHomePageServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("employee", employee);
-
-
+        List <ServiceEntity> allServices = null;
+        List <OptionalProductEntity> allOptionalProducts = null;
+        try {
+            allServices = serviceService.getAllServices();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+        try {
+            allOptionalProducts = optionalProductService.getAllOptionalProducts();
+        } catch (OptionalProductException e) {
+            e.printStackTrace();
+        }
+        context.setVariable("allServices",allServices);
+        context.setVariable("allOptionalProducts",allOptionalProducts);
         templateEngine.process(path, context, response.getWriter());
     }
 

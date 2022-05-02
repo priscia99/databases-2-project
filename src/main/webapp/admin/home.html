@@ -10,5 +10,41 @@
         <span class="navbar-text pr-2" th:if="${condition}" th:text="'Employee number: ' + ${session.employee.getId()} + '!'"></span>
         <a class="btn btn-secondary btn-sm" href="logout" role="button">Logout</a>
     </div>
+</div>
+<div>
+    <h3>        Service Package Creator</h3>
+
+    <form action="admin/home" method="post">
+        <label>Service Package Name:</label>
+        <input type="text" name="servicePackageName" required="required" th:if="${servicePackageName} == null">
+        <input type="text" name="servicePackageName" required="required" th:if="${servicePackageName} != null" th:value="${servicePackageName}">
+        <br>
+        <div>
+            Enter validity period (months)
+            <input type="number"name="validityPeriod" required="required">
+            <br>
+            Enter its monthlyFee
+            <input type="number"name="monthlyFee" required="required">
+        </div>
+        <div>
+            Choose associated services
+            <div th:each="service : ${allServices}">
+                <input type="checkbox" name = "chosenServices"
+                       th:text="${service.getServiceType()}"
+                       th:value="${service.getServiceId()}" required="required"/>
+<!--                todo aggiungere gli altri campi-->
+            </div>
+        </div>
+        <div>
+            Choose associated optional products
+            <div th:each="optionalProduct : ${allOptionalProducts}">
+                <input type="checkbox" name = "chosenOptionalProducts"
+                       th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
+                       th:value="${optionalProduct.getProductId()}"/>
+            </div>
+        </div>
+        <input type="submit" value="Create Service Package">
+    </form>
+</div>
 </body>
 </html>
