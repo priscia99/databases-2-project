@@ -72,9 +72,9 @@
 <div th:if="${rejectedOrders!=null}" class="rejected-container p-3 mt-5">
     <h4>Rejected orders</h4>
     <p>Some of your orders are in a REJECTED status. Select one of them in order to try your purchase again.</p>
-    <form th:each="rejectedOrder: ${rejectedOrders}" action="confirmation" method="post">
+    <form action="confirmation" method="post">
         <select class="rejected-selector" name="rejectedOrderId">
-            <option th:value="${rejectedOrder}" th:text="'Order ID: ' + ${rejectedOrder.getOrderId()} + ' - Creation Date: ' + ${rejectedOrder.getCreationDateTime().toGMTString()} + ' - Total Fee: ' + ${rejectedOrder.getTotalFee()}">
+            <option th:each="rejectedOrder: ${rejectedOrders}" th:value="${rejectedOrder}" th:text="'Order ID: ' + ${rejectedOrder.getOrderId()} + ' - Creation Date: ' + ${rejectedOrder.getCreationDateTime().toGMTString()} + ' - Total Fee: ' + ${rejectedOrder.getTotalFee()}">
             </option>
         </select>
         <input class="rejected-submit" type="submit" value="Try again">
