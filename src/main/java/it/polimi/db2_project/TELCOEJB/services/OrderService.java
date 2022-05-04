@@ -30,5 +30,16 @@ public class OrderService {
             throw new OrderException("Order id already in use!");
         }
         em.persist(order);
+        em.flush();
+    }
+
+    public void updateOrderOnState(OrderEntity order) throws OrderException {
+        OrderEntity oldOrder = findOrderById(order.getOrderId());
+        if (oldOrder == null) {
+            throw new OrderException("Order not found");
+        }
+        oldOrder.setOrderState(order.getOrderState());
+        em.persist(oldOrder);
+        em.flush();
     }
 }

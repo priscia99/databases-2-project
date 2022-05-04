@@ -1,26 +1,16 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
-import it.polimi.db2_project.TELCOEJB.entities.OptionalProductEntity;
 import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
-import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.enums.OrderState;
-import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 import it.polimi.db2_project.TELCOEJB.exceptions.OrderException;
-import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
-import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
 import it.polimi.db2_project.TELCOEJB.services.OrderService;
-import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
 import it.polimi.db2_project.TELCOEJB.services.UserService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
 import javax.ejb.EJB;
@@ -72,28 +62,41 @@ public class PayOrderPageServlet extends HttpServlet {
         OrderEntity order = (OrderEntity) session.getAttribute("order");
         UserEntity user = (UserEntity) session.getAttribute("user");
 
-        //setting the creation date
-        Date nowDate = new Date();
-        LocalDateTime now = Instant.ofEpochMilli(nowDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
-        Timestamp nowTime = Timestamp.valueOf(now);
-        order.setCreationDateTime(nowTime);
-        //setting the order state
-        if(Utils.pay()){
-            order.setOrderState(OrderState.PAID);
+        // understanding if the order is already present
+        if(order.getOrderId() == null) {
+            //setting the creation date
+            Date nowDate = new Date();
+            LocalDateTime now = Instant.ofEpochMilli(nowDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+            Timestamp nowTime = Timestamp.valueOf(now);
+            order.setCreationDateTime(nowTime);
+            //setting the order state
+            if (Utils.pay()) {
+                order.setOrderState(OrderState.PAID);
+            } else {
+                //setting the user as insolvent and the order state as rejected
+                order.setOrderState(OrderState.REJECTED);
+                user = userService.setUserInsolvent(user.getUsername());
+            }
+            //add the order to db
+            try {
+                orderService.persistOrder(order);
+            } catch (OrderException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                e.printStackTrace();
+            }
         }else{
-            //setting the user as insolvent and the order state as rejected
-            order.setOrderState(OrderState.REJECTED);
-            user = userService.setUserInsolvent(user.getUsername());
-        }
-        context.setVariable("order", order);
-        //add the order to db
-        try {
-            orderService.persistOrder(order);
-        } catch (OrderException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-            e.printStackTrace();
+            if (Utils.pay()) {
+                order.setOrderState(OrderState.PAID);
+                try {
+                    orderService.updateOrderOnState(order);
+                } catch (OrderException e) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                    e.printStackTrace();
+                }
+            }
         }
         //updating the session
+        context.setVariable("order", order);
         session.removeAttribute("order");
         session.setAttribute("user",user);
         templateEngine.process(path, context, response.getWriter());

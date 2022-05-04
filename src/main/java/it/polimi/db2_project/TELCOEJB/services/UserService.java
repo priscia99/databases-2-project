@@ -83,7 +83,7 @@ public class UserService {
 
         UserEntity newUser = new UserEntity(username, password, email);
         em.persist(newUser);
-
+        em.flush();
         return newUser;
     }
 

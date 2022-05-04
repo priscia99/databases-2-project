@@ -8,6 +8,7 @@ import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
+import it.polimi.db2_project.TELCOEJB.services.OrderService;
 import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
 import it.polimi.db2_project.TELCOEJB.services.UserService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
@@ -42,6 +43,8 @@ public class ConfirmationPageServlet extends HttpServlet {
     private ServicePackageService servicePackageService;
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/OptionalProductService")
     private OptionalProductService optionalProductService;
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/OrderService")
+    private OrderService orderService;
 
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
@@ -68,9 +71,16 @@ public class ConfirmationPageServlet extends HttpServlet {
 
         // get user information
         UserEntity user = (UserEntity) session.getAttribute("user");
+        String rejectedOrderId = (String) request.getParameter("rejectedOrderId");
         // get order information
-        OrderEntity storedOrder = (OrderEntity) session.getAttribute("order");
+        OrderEntity storedOrder = null;
+        if(rejectedOrderId == null) {
+            storedOrder = (OrderEntity) session.getAttribute("order");
+        }else {
+            storedOrder = orderService.findOrderById(Integer.parseInt(rejectedOrderId));
+            session.setAttribute("order", storedOrder);
 
+        }
         // get chosenPackageId, chosenValidityPeriod and chosenOptionalProducts from the request
 
         String chosenPackageId = null;
