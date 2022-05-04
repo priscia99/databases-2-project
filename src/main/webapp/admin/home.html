@@ -14,7 +14,7 @@
 <div>
     <h3>        Service Package Creator</h3>
 
-    <form action="admin/home" method="post">
+    <form action="create-package" method="post">
         <label>Service Package Name:</label>
         <input type="text" name="servicePackageName" required="required">
         <br>
@@ -33,7 +33,7 @@
             <div th:each="service : ${allServices}">
                 <input type="checkbox" name = "chosenServices"
                        th:text="${service.getServiceType()}"
-                       th:value="${service.getServiceId()}" required="required"/>
+                       th:value="${service.getServiceId()}" />
 <!--                todo aggiungere gli altri campi-->
             </div>
         </div>

@@ -16,6 +16,7 @@ import java.util.List;
 public class ServicePackageEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "packageId")
     private int packageId;
 
@@ -56,12 +57,10 @@ public class ServicePackageEntity {
     public ServicePackageEntity() {
     }
 
-    public ServicePackageEntity(int packageId, int validityPeriod, float monthlyFee, String name, List<OrderEntity> orderEntities, List<ServiceEntity> services, List<OptionalProductEntity> optionalProducts) {
-        this.packageId = packageId;
+    public ServicePackageEntity(int validityPeriod, float monthlyFee, String name, List<ServiceEntity> services, List<OptionalProductEntity> optionalProducts) {
         this.validityPeriod = validityPeriod;
         this.monthlyFee = monthlyFee;
         this.name = name;
-        this.orderEntities = orderEntities;
         this.services = services;
         this.optionalProducts = optionalProducts;
     }

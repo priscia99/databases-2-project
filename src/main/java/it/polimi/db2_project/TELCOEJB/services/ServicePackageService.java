@@ -7,10 +7,12 @@ import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+import javax.persistence.*;
+import javax.transaction.*;
+import javax.transaction.RollbackException;
+import java.security.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -113,6 +115,17 @@ public class ServicePackageService {
             e.printStackTrace();
             throw new ServicePackageException("An error occoured while trying to fetch packages by id and validity period");
         }
+    }
+
+    public void persistServicePackages(ArrayList<ServicePackageEntity> servicePackages){
+        for(ServicePackageEntity e : servicePackages){
+            this.persistServicePackage(e);
+        }
+    }
+
+    public void persistServicePackage(ServicePackageEntity p){
+        em.persist(p);
+        em.flush();
     }
 
 

@@ -65,7 +65,7 @@ public class OptionalProductService {
 //            optionalProduct = em.createNamedQuery("OptionalProductsEntity.getOptionalProductsById", OptionalProductEntity.class)
 //                    .setParameter("productId", Integer.parseInt(productId))
 //                    .getResultList().get(0);
-            optionalProduct = em.find(OptionalProductEntity.class,productId);
+            optionalProduct = em.find(OptionalProductEntity.class,Integer.parseInt(productId));
         }
         catch (PersistenceException e){
             e.printStackTrace();
