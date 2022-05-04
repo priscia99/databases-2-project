@@ -18,12 +18,15 @@
         <label>Service Package Name:</label>
         <input type="text" name="servicePackageName" required="required">
         <br>
-        <div>
-            Enter validity period (months)
-            <input type="number"name="servicePackageValidityPeriod" required="required">
-            <br>
-            Enter its monthlyFee
-            <input type="number"name="servicePackageMonthlyFee" required="required">
+        <button onclick="addValidityAndFee()">Add new</button>
+        <div id="periods-container">
+            <div class="period">
+                Enter validity period (months)
+                <input type="number"name="servicePackageValidityPeriod" required="required">
+                <br>
+                Enter its monthlyFee
+                <input type="number"name="servicePackageMonthlyFee" required="required">
+            </div>
         </div>
         <div>
             Choose associated services
@@ -57,5 +60,21 @@
         <input type="submit" value="Create Optional Product">
     </form>
 </div>
+<script>
+    function addValidityAndFee(){
+        const periodsContainer = document.getElementById('periods-container');
+
+        const newDiv = "<div class=\"period\">" +
+            "Enter validity period (months)" +
+            "<input type=\"number\" name=\"servicePackageValidityPeriod\" required=\"required\">" +
+                "<br>" +
+                    "Enter its monthlyFee" +
+                    "<input type=\"number\" name=\"servicePackageMonthlyFee\" required=\"required\">" +
+        "</div>";
+
+        periodsContainer.insertAdjacentHTML("beforeend", newDiv);
+
+    }
+</script>
 </body>
 </html>
