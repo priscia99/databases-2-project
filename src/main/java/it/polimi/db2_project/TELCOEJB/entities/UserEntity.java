@@ -26,6 +26,9 @@ public class UserEntity {
     @Column(name = "isInsolvent", nullable = false)
     private boolean isInsolvent;
 
+    @Column(name = "FailedAttempts", nullable = false)
+    private int failedAttempts;
+
     @OneToOne(mappedBy = "relatedUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private AlertEntity alert;
 
@@ -79,6 +82,14 @@ public class UserEntity {
 
     public void setAlert(AlertEntity alert) {
         this.alert = alert;
+    }
+
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
     }
 
     public List<OrderEntity> getOrderEntities() {
