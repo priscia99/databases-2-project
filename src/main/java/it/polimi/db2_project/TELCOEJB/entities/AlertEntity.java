@@ -19,13 +19,16 @@ public class AlertEntity {
     private Timestamp lastRejectionDateTime;
 
     @OneToOne
-    @JoinColumn(name = "username")
+    @JoinColumns({
+            @JoinColumn(name = "username", referencedColumnName = "username"),
+            @JoinColumn(name = "email", referencedColumnName = "email")
+    })
     private UserEntity relatedUser;
+
 
     public AlertEntity(){}
 
-    public AlertEntity(int alertID, float amount, Timestamp lastRejectionDateTime, UserEntity relatedUser) {
-        this.alertID = alertID;
+    public AlertEntity(float amount, Timestamp lastRejectionDateTime, UserEntity relatedUser) {
         this.amount = amount;
         this.lastRejectionDateTime = lastRejectionDateTime;
         this.relatedUser = relatedUser;

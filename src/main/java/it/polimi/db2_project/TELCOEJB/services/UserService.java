@@ -90,6 +90,7 @@ public class UserService {
     public UserEntity setUserInsolvent(String username){
         UserEntity user = em.find(UserEntity.class,username);
         user.setInsolvent(true);
+        user.setFailedAttempts(user.getFailedAttempts() +1);
         em.flush();
         return user;
     }
