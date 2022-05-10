@@ -1,6 +1,9 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
+import it.polimi.db2_project.TELCOEJB.entities.AlertEntity;
+import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
+import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
@@ -95,4 +98,18 @@ public class UserService {
         return user;
     }
 
+    public void checkInsolvence(UserEntity user, AlertService alertService) {
+        UserEntity newUser = findUserByUsername(user.getUsername());
+        List<OrderEntity> orderEntities = newUser.getOrderEntities();
+        for(int i = 0; i < orderEntities.size(); i++){
+            if(orderEntities.get(i).getOrderState() == OrderState.REJECTED){
+                return;
+            }
+        }
+        newUser.setInsolvent(false);
+        newUser.setFailedAttempts(0);
+        AlertEntity alert = alertService.findAlertById(newUser.getAlert().getAlertID());
+        em.remove(alert);
+        em.flush();
+    }
 }

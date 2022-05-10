@@ -29,5 +29,9 @@ public class AlertService {
         return newAlert;
     }
 
+    public AlertEntity findAlertById(int id){
+        return em.find(AlertEntity.class,id);
+    }
+
 
 }

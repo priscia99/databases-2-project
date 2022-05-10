@@ -97,6 +97,8 @@ public class PayOrderPageServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
                     e.printStackTrace();
                 }
+                //check if the user is still insolvent
+                userService.checkInsolvence(user,alertService);
             }else{
                 order.setOrderState(OrderState.REJECTED);
                 user = userService.setUserInsolvent(user.getUsername());
