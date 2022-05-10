@@ -18,19 +18,21 @@ public class AlertEntity {
     @Column(name = "lastRejectionDateTime", nullable = true)
     private Timestamp lastRejectionDateTime;
 
+    @Column(name = "email", nullable = false, length=64)
+    private String email;
+
     @OneToOne
-    @JoinColumns({
-            @JoinColumn(name = "username", referencedColumnName = "username"),
-            @JoinColumn(name = "email", referencedColumnName = "email")
-    })
+    @JoinColumn(name = "username")
     private UserEntity relatedUser;
+
 
 
     public AlertEntity(){}
 
-    public AlertEntity(float amount, Timestamp lastRejectionDateTime, UserEntity relatedUser) {
+    public AlertEntity(float amount, Timestamp lastRejectionDateTime, String email, UserEntity relatedUser) {
         this.amount = amount;
         this.lastRejectionDateTime = lastRejectionDateTime;
+        this.email = email;
         this.relatedUser = relatedUser;
     }
 
@@ -56,6 +58,14 @@ public class AlertEntity {
 
     public void setLastRejectionDateTime(Timestamp lastRejectionDateTime) {
         this.lastRejectionDateTime = lastRejectionDateTime;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public UserEntity getRelatedUser() {

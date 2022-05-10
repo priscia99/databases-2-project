@@ -4,6 +4,7 @@ import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 import it.polimi.db2_project.TELCOEJB.exceptions.OrderException;
+import it.polimi.db2_project.TELCOEJB.services.AlertService;
 import it.polimi.db2_project.TELCOEJB.services.OrderService;
 import it.polimi.db2_project.TELCOEJB.services.UserService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
@@ -35,6 +36,8 @@ public class PayOrderPageServlet extends HttpServlet {
     private OrderService orderService;
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/UserService")
     private UserService userService;
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/AlertService")
+    private AlertService alertService;
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
         ServletContext servletContext = getServletContext();
@@ -64,10 +67,8 @@ public class PayOrderPageServlet extends HttpServlet {
         // understanding if the order is already present
         if(order.getOrderId() == 0) {
             //setting the creation date
-            Date nowDate = new Date();
-            LocalDateTime now = Instant.ofEpochMilli(nowDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
-            Timestamp nowTime = Timestamp.valueOf(now);
-            order.setCreationDateTime(nowTime);
+
+            order.setCreationDateTime(Utils.getNowTime());
             //setting the order state
             if (Utils.pay()) {
                 order.setOrderState(OrderState.PAID);
@@ -75,6 +76,10 @@ public class PayOrderPageServlet extends HttpServlet {
                 //setting the user as insolvent and the order state as rejected
                 order.setOrderState(OrderState.REJECTED);
                 user = userService.setUserInsolvent(user.getUsername());
+                //check if the user is insolvent for the third time
+                if(user.getFailedAttempts()==3){
+                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
+                }
             }
             //add the order to db
             try {
@@ -91,6 +96,13 @@ public class PayOrderPageServlet extends HttpServlet {
                 } catch (OrderException e) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
                     e.printStackTrace();
+                }
+            }else{
+                order.setOrderState(OrderState.REJECTED);
+                user = userService.setUserInsolvent(user.getUsername());
+                //check if the user is insolvent for the third time
+                if(user.getFailedAttempts()==3){
+                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
                 }
             }
         }
