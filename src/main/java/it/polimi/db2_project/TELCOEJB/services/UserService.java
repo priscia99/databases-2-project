@@ -98,7 +98,7 @@ public class UserService {
         return user;
     }
 
-    public void checkInsolvence(UserEntity user, AlertService alertService) {
+    public void checkInsolvence(UserEntity user) {
         UserEntity newUser = findUserByUsername(user.getUsername());
         List<OrderEntity> orderEntities = newUser.getOrderEntities();
         for(int i = 0; i < orderEntities.size(); i++){
@@ -108,8 +108,9 @@ public class UserService {
         }
         newUser.setInsolvent(false);
         newUser.setFailedAttempts(0);
-        AlertEntity alert = alertService.findAlertById(newUser.getAlert().getAlertID());
-        em.remove(alert);
+//        AlertEntity alert = alertService.findAlertById(newUser.getAlert().getAlertID());
+//        em.remove(alert);
+        //todo fare trigger
         em.flush();
     }
 }

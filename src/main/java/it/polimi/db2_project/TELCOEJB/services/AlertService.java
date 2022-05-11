@@ -21,17 +21,17 @@ public class AlertService {
     public AlertService(){
     }
 
-    public AlertEntity createNewAlert(UserEntity user, float amount, Timestamp timestamp) {
-
-        AlertEntity newAlert = new AlertEntity(amount,timestamp,user.getEmail(),user);
-        em.persist(newAlert);
-        em.flush();
-        return newAlert;
-    }
-
-    public AlertEntity findAlertById(int id){
-        return em.find(AlertEntity.class,id);
-    }
+//    public AlertEntity createNewAlert(UserEntity user, float amount, Timestamp timestamp) {
+//
+//        AlertEntity newAlert = new AlertEntity(amount,timestamp,user.getEmail(),user);
+//        em.persist(newAlert);
+//        em.flush();
+//        return newAlert;
+//    }
+//
+//    public AlertEntity findAlertById(int id){
+//        return em.find(AlertEntity.class,id);
+//    }
 
 
 }

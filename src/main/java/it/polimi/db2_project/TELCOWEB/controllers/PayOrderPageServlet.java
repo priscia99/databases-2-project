@@ -76,10 +76,11 @@ public class PayOrderPageServlet extends HttpServlet {
                 //setting the user as insolvent and the order state as rejected
                 order.setOrderState(OrderState.REJECTED);
                 user = userService.setUserInsolvent(user.getUsername());
+                //todo fare transazione
                 //check if the user is insolvent for the third time
-                if(user.getFailedAttempts()==3){
-                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
-                }
+//                if(user.getFailedAttempts()==3){
+//                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
+//                }
             }
             //add the order to db
             try {
@@ -98,14 +99,15 @@ public class PayOrderPageServlet extends HttpServlet {
                     e.printStackTrace();
                 }
                 //check if the user is still insolvent
-                userService.checkInsolvence(user,alertService);
+                userService.checkInsolvence(user);
             }else{
                 order.setOrderState(OrderState.REJECTED);
                 user = userService.setUserInsolvent(user.getUsername());
+                //todo fare transazione
                 //check if the user is insolvent for the third time
-                if(user.getFailedAttempts()==3){
-                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
-                }
+//                if(user.getFailedAttempts()==3){
+//                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
+//                }
             }
         }
         //updating the session
