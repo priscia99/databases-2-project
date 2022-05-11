@@ -62,6 +62,7 @@ public class AdminCreatePackageServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        // todo gestire quando non seleziono optional products per un service package
         // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
