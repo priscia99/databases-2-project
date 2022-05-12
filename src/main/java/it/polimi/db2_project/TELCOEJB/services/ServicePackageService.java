@@ -108,22 +108,6 @@ public class ServicePackageService {
         return packages.get(0);
     }
 
-    public void persistServicePackages(ArrayList<ServicePackageEntity> servicePackages){
-        int size = servicePackages.size();
-        this.persistServicePackage(servicePackages.get(0));
-        ServicePackageEntity servicePackage =  servicePackages.get(0);
-        em.refresh(servicePackage);
-        int packageId = servicePackage.getPackageId();
-        for(int i = 1; i < size; i++){
-            Query query = em.createNativeQuery("INSERT INTO servicepackage (packageId, validityPeriod, monthlyFee, name) VALUES (?,?,?,?)");
-            query.setParameter(1, packageId);
-            query.setParameter(2, servicePackages.get(i).getValidityPeriod());
-            query.setParameter(3,servicePackages.get(i).getMonthlyFee());
-            query.setParameter(4,servicePackages.get(i).getName());
-            query.executeUpdate();
-        }
-    }
-
     public void persistServicePackage(ServicePackageEntity p){
         em.persist(p);
         em.flush();
