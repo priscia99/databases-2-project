@@ -51,28 +51,37 @@ public class HomePageServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-// set request encoding to match the project character encoding (utf-8)
+
+        // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
 
+        // get user information from session
         UserEntity user = (UserEntity) session.getAttribute("user");
         if (user != null) {
+            // if user exists, get the entire object
             user = userService.findUserByUsername(user.getUsername());
         }
-        HashMap<Integer,ArrayList<ServicePackageEntity>> packages = null;
-        try{
-            packages = servicePackageService.getAllPackagesToMap();
+
+        // Retrieve all packages
+        ArrayList<ServicePackageEntity> servicePackages = null;
+        try {
+            servicePackages = servicePackageService.getAllPackages();
         } catch (ServicePackageException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            // todo add error handler
         }
 
         // Redirect to the Home page and add missions to the parameters
         String path = "/home.html";
         ServletContext servletContext = getServletContext();
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
+
+        // add user information to the context
         context.setVariable("user", user);
-        context.setVariable("packageMap", new HashMap<Integer, ArrayList<ServicePackageEntity>>(packages));
+
+        // add the service packages retrieved to the context
+        context.setVariable("servicePackages", servicePackages);
 
         //check if the user is insolvent
         List<OrderEntity> rejectedOrders = new ArrayList<>();

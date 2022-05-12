@@ -1,5 +1,6 @@
 package it.polimi.db2_project.TELCOEJB.entities;
 import javax.persistence.*;
+import java.time.Period;
 import java.util.List;
 
 
@@ -49,10 +50,11 @@ public class ServicePackageEntity {
     public ServicePackageEntity() {
     }
 
-    public ServicePackageEntity(int validityPeriod, float monthlyFee, String name, List<ServiceEntity> services, List<OptionalProductEntity> optionalProducts) {
+    public ServicePackageEntity(String name, List<ServiceEntity> services, List<OptionalProductEntity> optionalProducts, List<PeriodEntity> validityPeriods) {
         this.name = name;
         this.services = services;
         this.optionalProducts = optionalProducts;
+        this.periods = validityPeriods;
     }
 
     public int getPackageId() {
@@ -93,5 +95,9 @@ public class ServicePackageEntity {
 
     public void setOptionalProducts(List<OptionalProductEntity> optionalProducts) {
         this.optionalProducts = optionalProducts;
+    }
+
+    public List<PeriodEntity> getPeriods() {
+        return periods;
     }
 }

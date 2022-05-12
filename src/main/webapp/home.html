@@ -82,11 +82,11 @@
 </div>
 
 
-<div th:each="packageList : ${packageMap}">
+<div th:each="package : ${servicePackages}">
 
     <div class="container">
         <div class="package-container p-3 mt-5">
-            <h4 th:text="${packageList.getValue().get(0).getName()}">Prova</h4>
+            <h4 th:text="${package.getName()}"></h4>
             <h5>Services offered: </h5>
             <table class="table w-100 table-striped table-dark">
                 <thead class="table-light">
@@ -105,7 +105,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="service: ${packageList.getValue().get(0).getServices()}">
+                <tr th:each="service: ${package.getServices()}">
                     <td th:text="${service.getServiceType()}"></td>
                     <td th:text="${ (service.getIncludedSMS() != 0) ? service.getIncludedSMS() + ' SMS' : ''}"></td>
                     <td th:text="${ (service.getIncludedMinutes() != 0) ? service.getIncludedMinutes() + ' min': ''}"></td>
@@ -118,13 +118,13 @@
             </table>
             <h5>Plans:</h5>
             <div class="row">
-                <div th:class="col-lg-3" th:each="package : ${packageList.getValue()}">
+                <div th:class="col-lg-3" th:each="period : ${package.getPeriods()}">
                     <div class="card price-card">
                         <div class="card-body">
-                            <span class="price" th:text="${package.getMonthlyFee()} + ' Euros'"></span><span> per month</span>
+                            <span class="price" th:text="${period.getMonthlyFee()} + ' Euros'"></span><span> per month</span>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item" th:text="${package.getValidityPeriod()} + ' month(s)'" ></li>
+                            <li class="list-group-item" th:text="${period.getValidityPeriod()} + ' month(s)'" ></li>
                         </ul>
                     </div>
                 </div>
