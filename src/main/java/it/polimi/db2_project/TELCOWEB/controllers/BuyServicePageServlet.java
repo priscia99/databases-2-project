@@ -53,72 +53,28 @@ public class BuyServicePageServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-// set request encoding to match the project character encoding (utf-8)
+        // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         String path = "/buyservice.html";
         ServletContext servletContext = getServletContext();
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
 
-
         UserEntity user = (UserEntity) session.getAttribute("user");
         session.removeAttribute("order");
-        HashMap<Integer,ArrayList<ServicePackageEntity>> packages = null;
-            try {
-                packages = servicePackageService.getAllPackagesToMap();
-            } catch (ServicePackageException e) {
-                e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-            }
-        String chosenPackageId = request.getParameter("chosenPackageId");
-        List<ServicePackageEntity> chosenPackages = null;
-        if(!(chosenPackageId == null ||chosenPackageId.isEmpty() || chosenPackageId.isBlank())) {
-            try {
-                chosenPackages = servicePackageService.getPackagesById(chosenPackageId);
-                context.setVariable("chosenPackages", chosenPackages);
-                context.setVariable("chosenPackageId",chosenPackageId);
-            } catch (ServicePackageException e) {
-                e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-            }
-        }
-        String chosenValidityPeriod = request.getParameter("chosenValidityPeriod");
-        ServicePackageEntity chosenPackage = null;
-//        List<OptionalProductEntity> optionalProducts = null;
-        if(!(chosenValidityPeriod == null ||chosenPackageId.isEmpty() || chosenPackageId.isBlank())) {
-            try {
-                chosenPackage = servicePackageService.getPackagesByIdAndValidityPeriod(chosenPackageId,chosenValidityPeriod);
-                context.setVariable("chosenPackage", chosenPackage);
-                context.setVariable("chosenValidityPeriod", chosenValidityPeriod);
-//                context.setVariable("chosenPackageId",chosenPackageId);
-//                optionalProducts = optionalProductService.getAllOptionalProducts();
-//                context.setVariable("optionalProducts", optionalProducts);
-            } catch (ServicePackageException e) {
-                e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-            }
-        }
-        String chosenOptionalProductsId[] = request.getParameterValues("chosenOptionalProducts");
-        HashMap<Integer,Boolean> chosenOptionalProductsMap = new HashMap<>();
-        if(chosenOptionalProductsId != null) {
-//                System.out.println(chosenOptionalProductsId[0]);
-                if(!chosenOptionalProductsId[0].equals("No Optional Product(s)")) {
-                    context.setVariable("chosenOptionalProducts", chosenOptionalProductsId);
-                    for (int i = 0; i < chosenPackage.getOptionalProducts().size(); i++) {
-                        chosenOptionalProductsMap.put(chosenPackage.getOptionalProducts().get(i).getProductId(), false);
-                    }
-                    for (int i = 0; i < chosenOptionalProductsId.length; i++) {
-                        chosenOptionalProductsMap.put(Integer.valueOf(chosenOptionalProductsId[i]), true);
-                        context.setVariable("chosenOptionalProductsMap", chosenOptionalProductsMap);
-                    }
-                }else{
-                    chosenOptionalProductsId[0] = "";
-                    context.setVariable("chosenOptionalProducts", chosenOptionalProductsId);
 
-                }
+        ArrayList<ServicePackageEntity> servicePackages = null;
+        try {
+            servicePackages = servicePackageService.getAllPackages();
+        } catch (ServicePackageException e) {
+            e.printStackTrace();
+            // todo exception and error handler
         }
+
+        // add objects to context
+        context.setVariable("servicePackages", servicePackages);
         context.setVariable("user", user);
-        context.setVariable("packageMap", new HashMap<Integer, ArrayList<ServicePackageEntity>>(packages));
+
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
         Date tomorrow = new Date();
