@@ -13,6 +13,7 @@ import java.util.List;
 //})
 public class OrderEntity {
 
+    // attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderId", nullable = false)
@@ -34,6 +35,7 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     private OrderState orderState;
 
+    // foreign keys
     @ManyToOne
     @JoinColumn(name = "username")
     UserEntity user;
@@ -47,26 +49,24 @@ public class OrderEntity {
     List<OptionalProductEntity> optionalProducts ;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumns({
-            @JoinColumn(name = "packageID", referencedColumnName = "packageID"),
-            @JoinColumn(name = "validityPeriod", referencedColumnName = "validityPeriod"),
-            @JoinColumn(name = "monthlyFee", referencedColumnName = "monthlyFee")
-    })
-    ServicePackageEntity servicePackage;
+    @JoinColumn(name = "periodId")
+    PeriodEntity associatedPeriod;
 
-
-    public OrderEntity(){}
-
-    public OrderEntity(float totalFee, Timestamp startTime, Timestamp endTime, OrderState orderState, UserEntity user, List<OptionalProductEntity> optionalProducts, ServicePackageEntity servicePackage) {
+    // constructors
+    public OrderEntity(float totalFee, Timestamp startTime, Timestamp endTime, OrderState orderState, UserEntity user, List<OptionalProductEntity> optionalProducts, PeriodEntity associatedPeriod) {
         this.totalFee = totalFee;
         this.startTime = startTime;
         this.endTime = endTime;
         this.orderState = orderState;
         this.user = user;
         this.optionalProducts = optionalProducts;
-        this.servicePackage = servicePackage;
+        this.associatedPeriod = associatedPeriod;
     }
 
+    // void constructor
+    public OrderEntity(){}
+
+    // getter and setters
     public Integer getOrderId() {
         return orderId;
     }
@@ -131,11 +131,11 @@ public class OrderEntity {
         this.optionalProducts = optionalProducts;
     }
 
-    public ServicePackageEntity getServicePackage() {
-        return servicePackage;
+    public PeriodEntity getAssociatedPeriod() {
+        return associatedPeriod;
     }
 
-    public void setServicePackage(ServicePackageEntity servicePackage) {
-        this.servicePackage = servicePackage;
+    public void setAssociatedPeriod(PeriodEntity associatedPeriod) {
+        this.associatedPeriod = associatedPeriod;
     }
 }

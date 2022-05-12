@@ -4,32 +4,28 @@ import java.util.List;
 
 
 @Entity
-@IdClass(ServicePackageEntityPK.class)
 @Table(name = "servicepackage")
 
 @NamedQueries({
         @NamedQuery(name = "ServicePackageEntity.getAllPackages", query = "SELECT p FROM ServicePackageEntity p"),
         @NamedQuery(name = "ServicePackageEntity.getPackagesById", query = "SELECT p FROM ServicePackageEntity p WHERE p.packageId = :packageId"),
-        @NamedQuery(name = "ServicePackageEntity.getPackagesByIdAndValidityPeriod", query = "SELECT p FROM ServicePackageEntity p WHERE p.packageId = :packageId and p.validityPeriod = :validityPeriod")
+        // @NamedQuery(name = "ServicePackageEntity.getPackagesByIdAndValidityPeriod", query = "SELECT p FROM ServicePackageEntity p WHERE p.packageId = :packageId and p.validityPeriod = :validityPeriod")
 
 })
 public class ServicePackageEntity {
 
+    // attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "packageId")
     private int packageId;
 
-    @Id
-    @Column(name = "validityPeriod")
-    private int validityPeriod;
-
-    @Id
-    @Column(name = "monthlyFee")
-    private float monthlyFee;
-
     @Column(name = "Name", nullable = false, length =64)
     private String name;
+
+    // foreign keys
+    @OneToMany(mappedBy = "packageId", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
+    List<PeriodEntity> periods;
 
     @OneToMany(mappedBy = "servicePackage", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST} )
     List<OrderEntity> orderEntities ;
@@ -38,8 +34,6 @@ public class ServicePackageEntity {
     @JoinTable(name = "servicepackage_service",
     joinColumns = {
                     @JoinColumn(name = "servicepackage_id", referencedColumnName = "packageId"),
-            @JoinColumn(name = "servicepackage_validityperiod", referencedColumnName = "validityPeriod"),
-            @JoinColumn(name = "servicepackage_monthlyfee", referencedColumnName = "monthlyFee")
     },
     inverseJoinColumns = {@JoinColumn(name = "service_id", referencedColumnName = "serviceId")})
     List<ServiceEntity> services;
@@ -48,8 +42,6 @@ public class ServicePackageEntity {
     @JoinTable(name = "servicepackage_optionalproduct",
             joinColumns = {
                     @JoinColumn(name = "servicepackage_id", referencedColumnName = "packageId"),
-                    @JoinColumn(name = "servicepackage_validityperiod", referencedColumnName = "validityPeriod"),
-                    @JoinColumn(name = "servicepackage_monthlyfee", referencedColumnName = "monthlyFee")
        },
             inverseJoinColumns = {@JoinColumn(name = "optionalproduct_productID", referencedColumnName = "productId")})
     List<OptionalProductEntity> optionalProducts;
@@ -58,8 +50,6 @@ public class ServicePackageEntity {
     }
 
     public ServicePackageEntity(int validityPeriod, float monthlyFee, String name, List<ServiceEntity> services, List<OptionalProductEntity> optionalProducts) {
-        this.validityPeriod = validityPeriod;
-        this.monthlyFee = monthlyFee;
         this.name = name;
         this.services = services;
         this.optionalProducts = optionalProducts;
@@ -71,22 +61,6 @@ public class ServicePackageEntity {
 
     public void setPackageId(int packageId) {
         this.packageId = packageId;
-    }
-
-    public int getValidityPeriod() {
-        return validityPeriod;
-    }
-
-    public void setValidityPeriod(int validityPeriod) {
-        this.validityPeriod = validityPeriod;
-    }
-
-    public float getMonthlyFee() {
-        return monthlyFee;
-    }
-
-    public void setMonthlyFee(float monthlyFee) {
-        this.monthlyFee = monthlyFee;
     }
 
     public String getName() {
