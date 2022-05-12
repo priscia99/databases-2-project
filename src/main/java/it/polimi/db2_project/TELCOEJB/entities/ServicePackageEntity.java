@@ -50,11 +50,10 @@ public class ServicePackageEntity {
     public ServicePackageEntity() {
     }
 
-    public ServicePackageEntity(String name, List<ServiceEntity> services, List<OptionalProductEntity> optionalProducts, List<PeriodEntity> validityPeriods) {
+    public ServicePackageEntity(String name, List<ServiceEntity> services, List<OptionalProductEntity> optionalProducts) {
         this.name = name;
         this.services = services;
         this.optionalProducts = optionalProducts;
-        this.periods = validityPeriods;
     }
 
     public int getPackageId() {

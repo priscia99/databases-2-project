@@ -24,7 +24,7 @@ public class PeriodEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "monthlyFee")
-    private int monthlyFee;
+    private float monthlyFee;
 
     // foreign keys
     @ManyToOne()
@@ -35,7 +35,7 @@ public class PeriodEntity {
     List<OrderEntity> orders;   // on order table
 
     // constructors
-    public PeriodEntity(int validityPeriod, int monthlyFee, ServicePackageEntity servicePackage) {
+    public PeriodEntity(int validityPeriod, float monthlyFee, ServicePackageEntity servicePackage) {
         this.validityPeriod = validityPeriod;
         this.monthlyFee = monthlyFee;
         this.servicePackage = servicePackage;

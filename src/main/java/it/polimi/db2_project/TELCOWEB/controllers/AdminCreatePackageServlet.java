@@ -6,6 +6,7 @@ import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServiceException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
+import it.polimi.db2_project.TELCOEJB.services.PeriodService;
 import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
 import it.polimi.db2_project.TELCOEJB.services.ServiceService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
@@ -43,6 +44,8 @@ public class AdminCreatePackageServlet extends HttpServlet {
     private OptionalProductService optionalProductService;
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/ServicePackageService")
     private ServicePackageService servicePackageService;
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/PeriodService")
+    private PeriodService periodService;
 
     @Resource
     private UserTransaction userTransaction;
@@ -101,22 +104,27 @@ public class AdminCreatePackageServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+        // Create the new service package entity
+        ServicePackageEntity newServicePackage = new ServicePackageEntity(packageName, serviceEntities, optionalProductEntities);
         ArrayList<ServicePackageEntity> createdPackageWithPeriods = new ArrayList<>();
 
+        // Create the new validity periods entities
+        ArrayList<PeriodEntity> newPeriodEntities = new ArrayList<>();
         for(int i=0; i<validityPeriods.length; i++){
-            createdPackageWithPeriods.add(
-                    new ServicePackageEntity(
+            newPeriodEntities.add(
+                    new PeriodEntity(
                             Integer.parseInt(validityPeriods[i]),
                             Float.parseFloat(monthlyFees[i]),
-                            packageName,
-                            serviceEntities,
-                            optionalProductEntities
+                            newServicePackage
                     )
             );
         }
+
+        // Single transaction that inserts the package service entity and the associated period entities
         try {
             userTransaction.begin();
-            servicePackageService.persistServicePackages(createdPackageWithPeriods);
+            servicePackageService.persistServicePackage(newServicePackage);
+            periodService.persistPeriods(newPeriodEntities);
             userTransaction.commit();
         } catch (Exception e) {
             e.printStackTrace();

@@ -94,7 +94,7 @@ public class ServicePackageService {
 
         try{
             // retrieving the list of users that match with a given username and password
-            packages = em.createNamedQuery("ServicePackageEntity.getPackagesByIdAndValidityPeriod", ServicePackageEntity.class)
+            packages = em.createNamedQuery("PeriodEntity.findPeriodById", ServicePackageEntity.class)
                     .setParameter("packageId", Integer.parseInt(packageId))
                     .setParameter("validityPeriod",Integer.parseInt(validityPeriod))
                     .getResultList();
@@ -106,15 +106,6 @@ public class ServicePackageService {
         if(packages.size() > 1)
             throw new ServicePackageException("Multiple instances found while trying to fetch packages by id and validity period");
         return packages.get(0);
-    }
-    public Boolean checkValidity(String packageId, String validityPeriod) throws ServicePackageException {
-        try {
-            getPackagesByIdAndValidityPeriod(packageId,validityPeriod);
-            return true;
-        }catch (PersistenceException e){
-            e.printStackTrace();
-            throw new ServicePackageException("An error occoured while trying to fetch packages by id and validity period");
-        }
     }
 
     public void persistServicePackages(ArrayList<ServicePackageEntity> servicePackages){
