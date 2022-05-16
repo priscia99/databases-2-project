@@ -16,13 +16,9 @@ public class PeriodEntity {
     @Column(name = "ID")
     private int periodId;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "validityPeriod")
     private int validityPeriod;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "monthlyFee")
     private float monthlyFee;
 
@@ -31,45 +27,62 @@ public class PeriodEntity {
     @JoinColumn(name = "packageId")
     private ServicePackageEntity servicePackage;    // on service package table
 
-    @OneToMany(mappedBy = "periodId", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
+    @OneToMany(mappedBy = "associatedPeriod", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST} )
     List<OrderEntity> orders;   // on order table
 
-    // constructors
+    public PeriodEntity() {
+    }
+
+    public PeriodEntity(int validityPeriod, float monthlyFee, ServicePackageEntity servicePackage, List<OrderEntity> orders) {
+        this.validityPeriod = validityPeriod;
+        this.monthlyFee = monthlyFee;
+        this.servicePackage = servicePackage;
+        this.orders = orders;
+    }
+
     public PeriodEntity(int validityPeriod, float monthlyFee, ServicePackageEntity servicePackage) {
         this.validityPeriod = validityPeriod;
         this.monthlyFee = monthlyFee;
         this.servicePackage = servicePackage;
     }
 
-    public PeriodEntity() {}
-
-    // getter
     public int getPeriodId() {
         return periodId;
+    }
+
+    public void setPeriodId(int periodId) {
+        this.periodId = periodId;
     }
 
     public int getValidityPeriod() {
         return validityPeriod;
     }
 
-    public int getMonthlyFee() {
+    public void setValidityPeriod(int validityPeriod) {
+        this.validityPeriod = validityPeriod;
+    }
+
+    public float getMonthlyFee() {
         return monthlyFee;
+    }
+
+    public void setMonthlyFee(float monthlyFee) {
+        this.monthlyFee = monthlyFee;
     }
 
     public ServicePackageEntity getServicePackage() {
         return servicePackage;
     }
 
-    // setters
-    public void setValidityPeriod(int validityPeriod) {
-        this.validityPeriod = validityPeriod;
-    }
-
-    public void setMonthlyFee(int monthlyFee) {
-        this.monthlyFee = monthlyFee;
-    }
-
     public void setServicePackage(ServicePackageEntity servicePackage) {
         this.servicePackage = servicePackage;
+    }
+
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
 }

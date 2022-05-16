@@ -86,4 +86,9 @@ public class OptionalProductService {
         }
         return new ArrayList<>(optionalProductEntities);
     }
+
+    public void persistOptionalProduct(OptionalProductEntity optionalProductEntity) {
+        em.persist(optionalProductEntity);
+        em.flush();
+    }
 }

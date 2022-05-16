@@ -36,12 +36,9 @@ public class OptionalProductEntity {
     public OptionalProductEntity() {
     }
 
-    public OptionalProductEntity(int productId, String name, int monthlyFee, List<OrderEntity> orderEntities, List<ServicePackageEntity> servicePackageEntities) {
-        this.productId = productId;
+    public OptionalProductEntity(String name, int monthlyFee) {
         this.name = name;
         this.monthlyFee = monthlyFee;
-        this.orderEntities = orderEntities;
-        this.servicePackageEntities = servicePackageEntities;
     }
 
     public int getProductId() {

@@ -25,11 +25,9 @@ public class ServicePackageEntity {
     private String name;
 
     // foreign keys
-    @OneToMany(mappedBy = "packageId", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
+    @OneToMany(mappedBy = "servicePackage", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
     List<PeriodEntity> periods;
 
-    @OneToMany(mappedBy = "servicePackage", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST} )
-    List<OrderEntity> orderEntities ;
 
     @ManyToMany(fetch = FetchType.EAGER )
     @JoinTable(name = "servicepackage_service",
@@ -70,14 +68,6 @@ public class ServicePackageEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<OrderEntity> getOrderEntities() {
-        return orderEntities;
-    }
-
-    public void setOrderEntities(List<OrderEntity> orderEntities) {
-        this.orderEntities = orderEntities;
     }
 
     public List<ServiceEntity> getServices() {
