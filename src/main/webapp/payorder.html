@@ -39,20 +39,20 @@
 
 <h3>Chosen service package</h3>
 <span>Name: </span>
-<span th:text="${order.getServicePackage().getName()}"></span>
+<span th:text="${orderInfo.getAssociatedPeriod().getServicePackage().getName()}"></span>
 <br>
 <span>Validity period: </span>
-<span th:text="${order.getServicePackage().getValidityPeriod()} + 'month(s)' "></span>
+<span th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()} + 'month(s)' "></span>
 <br>
 <span>Monthly fee: </span>
-<span th:text="${order.getServicePackage().getMonthlyFee()} + 'E.' "></span>
+<span th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()} + 'E.' "></span>
 <br>
 <span>Starting date: </span>
-<span th:text="${order.getStartTime()}"></span>
+<span th:text="${orderInfo.getStartTime()}"></span>
 <br><br><br>
 
 <h3>Additional products</h3>
-<div th:if="${order.getOptionalProducts() != null}">
+<div th:if="${orderInfo.getOptionalProducts() != null}">
   <table th:class = "table-striped">
     <thead>
     <tr>
@@ -61,14 +61,14 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="optionalProduct : ${order.getOptionalProducts()}">
+    <tr th:each="optionalProduct : ${orderInfo.getOptionalProducts()}">
       <td th:text="${optionalProduct.getName()}"></td>
       <td th:text="${optionalProduct.getMonthlyFee()} + E"></td>
     </tr>
     </tbody>
   </table>
 </div>
-<div th:if="${order.getOptionalProducts() == null}">
+<div th:if="${orderInfo.getOptionalProducts() == null}">
   <span>No additional products selected</span>
 </div>
 <br><br><br>
@@ -85,28 +85,28 @@
   </thead>
   <tbody th:class="table-striped">
   <tr>
-    <td th:text="${order.getServicePackage().getName()}"></td>
-    <td th:text="${order.getServicePackage().getMonthlyFee()}"></td>
-    <td th:text="${order.getServicePackage().getValidityPeriod()}"></td>
-    <td th:text="${order.getServicePackage().getMonthlyFee() * order.getServicePackage().getValidityPeriod()}"></td>
+    <td th:text="${orderInfo.getAssociatedPeriod().getServicePackage().getName()}"></td>
+    <td th:text="${orderInfo.getAssociatedPeriod().getMonthlyFee()}"></td>
+    <td th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()}"></td>
+    <td th:text="${orderInfo.getAssociatedPeriod().getMonthlyFee() * orderInfo.getAssociatedPeriod().getValidityPeriod()}"></td>
   </tr>
-  <tr th:each="optionalProduct : ${order.getOptionalProducts()}">
+  <tr th:each="optionalProduct : ${orderInfo.getOptionalProducts()}">
     <td th:text="${optionalProduct.getName()}"></td>
     <td th:text="${optionalProduct.getMonthlyFee()} + E."></td>
-    <td th:text="${order.getServicePackage().getValidityPeriod()}"></td>
-    <td th:text="${optionalProduct.getMonthlyFee() * order.getServicePackage().getValidityPeriod()} + E."></td>
+    <td th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()}"></td>
+    <td th:text="${optionalProduct.getMonthlyFee() * orderInfo.getAssociatedPeriod().getValidityPeriod()} + E."></td>
   </tr>
   <tr>
     <td colspan="3">
       TOTAL
     </td>
-    <td th:text="${order.getTotalFee()} + E."></td>
+    <td th:text="${orderInfo.getTotalFee()} + E."></td>
   </tr>
   <tr>
     <td colspan="3">
       STATUS
     </td>
-    <td th:text="${order.getOrderState()}"></td>
+    <td th:text="${orderInfo.getOrderState()}"></td>
   </tr>
   </tbody>
 </table>

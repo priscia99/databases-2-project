@@ -111,7 +111,7 @@ public class PayOrderPageServlet extends HttpServlet {
             }
         }
         //updating the session
-        context.setVariable("order", order);
+        context.setVariable("orderInfo", order);
         session.removeAttribute("order");
         session.setAttribute("user",user);
         templateEngine.process(path, context, response.getWriter());
