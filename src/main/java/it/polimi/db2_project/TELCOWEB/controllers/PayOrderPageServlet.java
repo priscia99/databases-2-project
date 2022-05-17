@@ -107,6 +107,12 @@ public class PayOrderPageServlet extends HttpServlet {
 //                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
 //                }
             }
+            try {
+                orderService.updateOrderOnState(order);
+            } catch (OrderException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                e.printStackTrace();
+            }
         }
         //updating the session
         context.setVariable("orderInfo", order);
