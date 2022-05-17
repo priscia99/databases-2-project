@@ -26,9 +26,9 @@ public class OrderService {
         return em.find(OrderEntity.class,orderId);
     }
     public void persistOrder(OrderEntity order) throws OrderException {
-        if (findOrderById(order.getOrderId()) != null) {
-            throw new OrderException("Order id already in use!");
-        }
+//        if (findOrderById(order.getOrderId()) != null) {
+//            throw new OrderException("Order id already in use!");
+//        }
         em.persist(order);
         em.flush();
     }

@@ -90,13 +90,13 @@ public class UserService {
         return newUser;
     }
 
-    public UserEntity setUserInsolvent(String username){
-        UserEntity user = em.find(UserEntity.class,username);
-        user.setInsolvent(true);
-        user.setFailedAttempts(user.getFailedAttempts() +1);
-        em.flush();
-        return user;
-    }
+//    public UserEntity setUserInsolvent(String username){
+//        UserEntity user = em.find(UserEntity.class,username);
+//        user.setInsolvent(true);
+//        user.setFailedAttempts(user.getFailedAttempts() +1);
+//        em.flush();
+//        return user;
+//    }
 
     public void checkInsolvence(UserEntity user) {
         UserEntity newUser = findUserByUsername(user.getUsername());

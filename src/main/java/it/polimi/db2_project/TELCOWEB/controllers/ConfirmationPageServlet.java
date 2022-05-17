@@ -112,21 +112,22 @@ public class ConfirmationPageServlet extends HttpServlet {
                 e.printStackTrace();
             }
 
+            float totalFee = chosenPeriodEntity.getMonthlyFee();
+
             // Retrieve the list of optional products in case the user has selected at least one of them
             ArrayList<OptionalProductEntity> chosenOptionalProductsEntities = null;
             if(chosenOptionalProducts != null) {
                 try {
                     chosenOptionalProductsEntities = (ArrayList<OptionalProductEntity>) optionalProductService.getListOptionalProducts(Arrays.asList(chosenOptionalProducts));
+                    for(OptionalProductEntity opt : chosenOptionalProductsEntities){
+                        totalFee += opt.getMonthlyFee() * chosenPeriodEntity.getValidityPeriod();
+                    }
                 } catch (OptionalProductException e) {
                     e.printStackTrace();
                 }
             }
 
-            // Compute the total fee to pay
-            float totalFee = chosenPeriodEntity.getMonthlyFee();
-            for(OptionalProductEntity opt : chosenOptionalProductsEntities){
-                totalFee += opt.getMonthlyFee() * chosenPeriodEntity.getValidityPeriod();
-            }
+
 
             // define the format used to convert the given starting date
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
