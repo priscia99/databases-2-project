@@ -39,13 +39,13 @@
 
     <h3>Chosen service package</h3>
     <span>Name: </span>
-    <span th:text="${orderInfo.getServicePackage().getName()}"></span>
+    <span th:text="${orderInfo.getAssociatedPeriod().getServicePackage().getName()}"></span>
     <br>
     <span>Validity period: </span>
-    <span th:text="${orderInfo.getServicePackage().getValidityPeriod()} + 'month(s)' "></span>
+    <span th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()} + 'month(s)' "></span>
     <br>
     <span>Monthly fee: </span>
-    <span th:text="${orderInfo.getServicePackage().getMonthlyFee()} + 'E.' "></span>
+    <span th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()} + 'E.' "></span>
     <br>
     <span>Starting date: </span>
     <span th:text="${orderInfo.getStartTime()}"></span>
@@ -85,16 +85,16 @@
         </thead>
         <tbody th:class="table-striped">
         <tr>
-            <td th:text="${orderInfo.getServicePackage().getName()}"></td>
-            <td th:text="${orderInfo.getServicePackage().getMonthlyFee()}"></td>
-            <td th:text="${orderInfo.getServicePackage().getValidityPeriod()}"></td>
-            <td th:text="${orderInfo.getServicePackage().getMonthlyFee() * orderInfo.getServicePackage().getValidityPeriod()}"></td>
+            <td th:text="${orderInfo.getAssociatedPeriod().getServicePackage().getName()}"></td>
+            <td th:text="${orderInfo.getAssociatedPeriod().getMonthlyFee()}"></td>
+            <td th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()}"></td>
+            <td th:text="${orderInfo.getAssociatedPeriod().getMonthlyFee() * orderInfo.getAssociatedPeriod().getValidityPeriod()}"></td>
         </tr>
         <tr th:each="optionalProduct : ${orderInfo.getOptionalProducts()}">
             <td th:text="${optionalProduct.getName()}"></td>
             <td th:text="${optionalProduct.getMonthlyFee()} + E."></td>
-            <td th:text="${orderInfo.getServicePackage().getValidityPeriod()}"></td>
-            <td th:text="${optionalProduct.getMonthlyFee() * orderInfo.getServicePackage().getValidityPeriod()} + E."></td>
+            <td th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()}"></td>
+            <td th:text="${optionalProduct.getMonthlyFee() * orderInfo.getAssociatedPeriod().getValidityPeriod()} + E."></td>
         </tr>
         <tr>
             <td colspan="3">

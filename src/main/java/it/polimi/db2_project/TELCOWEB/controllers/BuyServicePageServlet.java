@@ -60,6 +60,8 @@ public class BuyServicePageServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
 
+        String chosenPackageId = (String) request.getParameter("chosenPackageId");
+
         UserEntity user = (UserEntity) session.getAttribute("user");
         session.removeAttribute("order");
 
@@ -79,6 +81,16 @@ public class BuyServicePageServlet extends HttpServlet {
         Date today = new Date();
         Date tomorrow = new Date();
         tomorrow.setYear(tomorrow.getYear()+1);
+
+        ServicePackageEntity sp = null;
+        if(chosenPackageId != null){
+            try {
+                sp = servicePackageService.getPackageById(Integer.parseInt(chosenPackageId));
+            } catch (ServicePackageException e) {
+                e.printStackTrace();
+            }
+        }
+        context.setVariable("chosenPackage",sp);
         context.setVariable("today",df.format(today));
         context.setVariable("tomorrow",df.format(tomorrow));
         templateEngine.process(path, context, response.getWriter());

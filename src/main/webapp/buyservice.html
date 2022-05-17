@@ -4,6 +4,7 @@
     <title>Buy Service | Telco</title>
     <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css}" th:rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
 </head>
 <style>
     .selector-container{
@@ -67,125 +68,49 @@
 
 <div class="selector-container mt-5 p-3">
     <h3>Buy a Service Package</h3>
-
     <!-- Form used to select the service package to buy -->
     <form action="buyservice" method="post" class="mt-4">
         <h5>1. Select a Service Package</h5>
-    <select name="chosenPackageId" class="selector-input">
-        <option th:each="packageList : ${packageMap}" th:value="${packageList.getKey()}" th:text="${packageList.getValue().get(0).getName()}">
-        <option th:if="${chosenPackages!= null}" value="${chosenPackages.get(0).getId()}" selected disabled hidden>
-            <div th:text="${chosenPackages.get(0).getName()}"> </div>
-        </option>
-        </option>
-    </select>
+        <select name="chosenPackageId" class="selector-input" id="selectPackage" th:onchange="loadPeriods()">
+            <option th:each="package : ${servicePackages}" th:value="${package.getPackageId()}" th:text="${package.getName()}">
+            </option>
+        </select>
         <input type="submit" value="Select Package" class="submit-choice">
     </form>
 
     <!-- Form used to select the validity period associated with the service package -->
-    <form action="buyservice" method="post" th:if="${chosenPackages!= null}" class="mt-4">
+    <form action="confirmation" method="post" th:if="${chosenPackage!= null}" class="mt-4">
         <h5>2. Choose the validity period</h5>
-        <select name="chosenValidityPeriod" class="selector-input">
-            <option th:each="package : ${chosenPackages}" th:value="${package.getValidityPeriod()}"
-                    th:text="${package.getValidityPeriod()} + ' months for ' + ${package.getMonthlyFee()} + ' euros'">
-            </option>
-            <option th:if="${chosenValidityPeriod!= null}" value="${chosenPackage.getValidityPeriod()}" selected disabled hidden>
-                <div th:text="${chosenPackage.getValidityPeriod()} + ' months for ' + ${chosenPackage.getMonthlyFee()} + ' euros'"> </div>
+        <select name="chosenPeriodId" class="selector-input">
+            <option th:each="period : ${chosenPackage.getPeriods()}" th:value="${period.getPeriodId()}"
+                    th:text="${period.getValidityPeriod()} + ' months for ' + ${period.getMonthlyFee()} + ' euros'">
             </option>
         </select>
-        <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
-        <input type="submit" value="Select Validity Period" class="submit-choice">
+        <input type = "hidden" th:if= "${chosenPackage!=null}" th:value="${chosenPackage.getPackageId()}" name = "chosenPackageId">
+
+        <!-- Form used to allow the user to select the optional products -->
+        <div th:if="${chosenPackage!= null}" class="mt-4">
+            <h5>3. Choose the optional products associated to the package</h5>
+            <p>
+                <label>Optional Products:</label>
+            <div th:each="optionalProduct : ${chosenPackage.getOptionalProducts()}" class="optional-selector mt-2">
+                <input type="checkbox" name = "chosenOptionalProducts" class="mr-2"
+                       th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
+                       th:value="${optionalProduct.getProductId()}"/>
+            </div>
+            </p>
+        </div>
+        <div class="mt-4">
+            <h5>4. Choose the starting date of your package</h5>
+            <input type="date" name="startDate" class="date-selector"
+                   th:min="${today}" th:max="${tomorrow}">
+        </div>
+        <input type="submit" class="btn btn-dark mt-5" value="Confirm and proceed to confirmation page">
     </form>
 
-    <!-- Form used to allow the user to select the optional products -->
-    <div th:if="${chosenPackage!= null} and ${chosenOptionalProducts==null}" class="mt-4">
-        <form th:action="buyservice"  method="post">
-            <h5>3. Choose the optional products associated to the package</h5>
-            <p>
-                <label>Optional Products:</label>
-            <div th:each="optionalProduct : ${chosenPackage.getOptionalProducts()}" class="optional-selector mt-2">
-                <input type="checkbox" name = "chosenOptionalProducts" class="mr-2"
-                       th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
-                       th:value="${optionalProduct.getProductId()}"/>
-            </div>
-            </p>
-            <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
-            <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-            <input type="submit" class="btn btn-light" value="Select Optional Product(s)">
-        </form>
-        <form th:action="buyservice"  method="post">
-            <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
-            <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-            <input type="submit" class="btn btn-light mt-2" name = "chosenOptionalProducts" value="No Optional Product(s)">
-        </form>
-    </div>
-
-    <!-- Form used to load the previously selected optional products and display them as 'selected' -->
-    <div th:if="${chosenPackage!= null && chosenOptionalProducts!=null && chosenOptionalProducts[0]!=''}" class="mt-4">
-        <form th:action="buyservice"  method="post">
-            <h5>3. Choose the optional products associated to the package</h5>
-            <p>
-                <label>Optional Products:</label>
-                    <div th:each="optionalProduct : ${chosenPackage.getOptionalProducts()}" class="optional-selector mt-2">
-                    <input type="checkbox" name = "chosenOptionalProducts" class="mr-2"
-                           th:if="${chosenOptionalProductsMap.get(optionalProduct.getProductId())}"
-                           th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
-                           th:value="${optionalProduct.getProductId()}"
-                           checked="checked"/>
-                    <input type="checkbox" name = "chosenOptionalProducts" class="mr-2"
-                           th:unless="${chosenOptionalProductsMap.get(optionalProduct.getProductId())}"
-                           th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
-                           th:value="${optionalProduct.getProductId()}"/>
-                </div>
-            </p>
-            <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
-            <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-            <input type="submit" class="btn btn-light" value="Select Optional Product(s)">
-        </form>
-        <form th:action="buyservice"  method="post">
-            <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
-            <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-            <input type="submit" class="btn btn-light mt-2" name = "chosenOptionalProducts" value="No Optional Product(s)">
-        </form>
-    </div>
-
-    <!-- Form used to load the optional products when the user has selected to not choose any additional product -->
-    <div th:if="${chosenPackage!= null && chosenOptionalProducts!=null && chosenOptionalProducts[0]==''}" class="mt-4">
-        <form th:action="buyservice"  method="post">
-            <h5>3. Choose the optional products associated to the package</h5>
-            <p>
-                <label>Optional Products:</label>
-            <div th:each="optionalProduct : ${chosenPackage.getOptionalProducts()}" class="optional-selector mt-2">
-                <input type="checkbox" name = "chosenOptionalProducts" class="mr-2"
-                       th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
-                       th:value="${optionalProduct.getProductId()}"/>
-            </div>
-            </p>
-            <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
-            <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-            <input type="submit" class="btn btn-light" value="Select Optional Product(s)">
-        </form>
-        <form th:action="buyservice"  method="post">
-            <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
-            <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-            <input type="submit" class="btn btn-light mt-2" name = "chosenOptionalProducts" value="No Optional Product(s)">
-        </form>
-    </div>
-
-    <!-- Form used for the starting date selection -->
-    <div th:if="${chosenOptionalProducts!=null}" class="mt-4">
-     <form th:action="confirmation"  method="post">
-         <h5>4. Choose the starting date of your package</h5>
-         <input type="date" name="startDate" class="date-selector"
-                th:min="${today}" th:max="${tomorrow}">
-         <input type = "hidden" th:if= "${chosenPackageId!=null}" th:value="${chosenPackageId}" name = "chosenPackageId">
-         <input type = "hidden" th:if= "${chosenValidityPeriod!=null}" th:value="${chosenValidityPeriod}" name = "chosenValidityPeriod">
-         <div th:each="optId : ${chosenOptionalProducts}">
-             <input type = "hidden" th:value="${optId}" name = "chosenOptionalProducts">
-         </div>
-         <input type="submit" class="btn btn-dark mt-5" value="Confirm and proceed to confirmation page">
-     </form>
-    </div>
-
 </div>
+
+
+
 </body>
 </html>

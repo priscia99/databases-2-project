@@ -1,11 +1,10 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
+import it.polimi.db2_project.TELCOEJB.entities.PeriodEntity;
 import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
-import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
-import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
+import it.polimi.db2_project.TELCOEJB.exceptions.*;
 import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
-import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -40,6 +39,14 @@ public class ServicePackageService {
         }
 
         return new ArrayList<>(packages);
+    }
+
+    public ServicePackageEntity getPackageById(int packageId) throws ServicePackageException{
+        ServicePackageEntity res = em.find(ServicePackageEntity.class, packageId);
+        if(res == null){
+            throw new ServicePackageException("Service package not found.");
+        }
+        return res;
     }
 
 //    public List<ServicePackageEntity> getPackagesById(String chosenPackageId) throws ServicePackageException {

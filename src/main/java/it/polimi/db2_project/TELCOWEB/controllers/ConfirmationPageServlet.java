@@ -74,7 +74,7 @@ public class ConfirmationPageServlet extends HttpServlet {
         String chosenPackageId = (String) request.getParameter("chosenPackageId");
         String chosenPeriodId = (String) request.getParameter("chosenPeriodId");
         String[] chosenOptionalProducts = request.getParameterValues("chosenOptionalProducts");
-        String startDate = (String) request.getParameter("chosenStartDate");
+        String startDate = (String) request.getParameter("startDate");
 
         // get order entity in case if the order has been already stored in the session
         OrderEntity storedOrder = (OrderEntity) session.getAttribute("order");
@@ -82,8 +82,17 @@ public class ConfirmationPageServlet extends HttpServlet {
         if(storedOrder == null){
             // Handle a purchase in case the order is new
             if(chosenPackageId == null || chosenPeriodId == null || startDate == null){
+                if(chosenPackageId == null){
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "manca package id");
+                }
+                if(chosenPeriodId == null){
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "manca period id");
+                }
+                if(startDate == null){
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "manca start date");
+                }
                 // Some parameters are missing -> return a bad request error
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Some parameters are not filled");
+
                 return;
             }
 
