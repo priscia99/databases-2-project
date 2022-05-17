@@ -75,21 +75,28 @@ public class ConfirmationPageServlet extends HttpServlet {
         String chosenPeriodId = (String) request.getParameter("chosenPeriodId");
         String[] chosenOptionalProducts = request.getParameterValues("chosenOptionalProducts");
         String startDate = (String) request.getParameter("startDate");
+        String rejectedOrderId = (String) request.getParameter("rejectedOrderId");
 
         // get order entity in case if the order has been already stored in the session
-        OrderEntity storedOrder = (OrderEntity) session.getAttribute("order");
+        OrderEntity storedOrder;
+        if(rejectedOrderId == null) {
+            storedOrder = (OrderEntity) session.getAttribute("order");
+        }else {
+            storedOrder = orderService.findOrderById(Integer.parseInt(rejectedOrderId));
+            session.setAttribute("order", storedOrder);
+        }
 
         if(storedOrder == null){
             // Handle a purchase in case the order is new
             if(chosenPackageId == null || chosenPeriodId == null || startDate == null){
                 if(chosenPackageId == null){
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "manca package id");
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing package ID in order");
                 }
-                if(chosenPeriodId == null){
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "manca period id");
+                else if(chosenPeriodId == null){
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing period id");
                 }
-                if(startDate == null){
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "manca start date");
+                else if(startDate == null){
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing start date");
                 }
                 // Some parameters are missing -> return a bad request error
 
