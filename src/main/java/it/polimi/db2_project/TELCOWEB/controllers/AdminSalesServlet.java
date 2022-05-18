@@ -2,12 +2,14 @@ package it.polimi.db2_project.TELCOWEB.controllers;
 
 import it.polimi.db2_project.TELCOEJB.entities.*;
 import it.polimi.db2_project.TELCOEJB.enums.OrderState;
+import it.polimi.db2_project.TELCOEJB.exceptions.AdminViewsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServiceException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
 import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
 import it.polimi.db2_project.TELCOEJB.services.ServiceService;
+import it.polimi.db2_project.TELCOEJB.services.TotalPurchasesPerPackageService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
@@ -32,6 +34,8 @@ public class AdminSalesServlet extends HttpServlet {
     private Connection connection = null;
     private TemplateEngine templateEngine;
 
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/TotalPurchasesPerPackageService")
+    private TotalPurchasesPerPackageService totalPurchasesPerPackageService;
 
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
@@ -48,10 +52,26 @@ public class AdminSalesServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-// set request encoding to match the project character encoding (utf-8)
+
+        // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
 
+        // Get context
+        String path = "/admin/sales.html";
+        ServletContext servletContext = getServletContext();
+        final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
+
+        // Get total purchases per packages
+        ArrayList<TotalPurchasesPerPackageEntity> totalPurchasesPerPackage = null;
+        try {
+            totalPurchasesPerPackage = (ArrayList<TotalPurchasesPerPackageEntity>) totalPurchasesPerPackageService.getTotalPurchasesPerPackage();
+        } catch (AdminViewsException e) {
+            e.printStackTrace();
+        }
+
+        context.setVariable("totalPurchasesPerPackage",totalPurchasesPerPackage);
+        templateEngine.process(path, context, response.getWriter());
 
     }
 
