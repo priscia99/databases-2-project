@@ -26,7 +26,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 
-@WebServlet(name = "loginEmployeeServlet", value = "/perform-login-employee")
+@WebServlet(name = "loginEmployeeServlet", value = "/admin/perform-login-employee")
 public class LoginEmployeeServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 

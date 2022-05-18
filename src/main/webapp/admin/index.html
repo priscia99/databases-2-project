@@ -11,7 +11,8 @@
     <div>
         <h3>Login</h3>
         <p th:text="${loginInfoMsg}"></p>
-        <form action="../perform-login-employee" method="post">
+
+        <form action="perform-login-employee" method="post">
             Id: <input type="text" name="id" required="required"><br>
             Password: <input type="password" name="password" required="required"><br>
             <input type="submit" value="Login">
