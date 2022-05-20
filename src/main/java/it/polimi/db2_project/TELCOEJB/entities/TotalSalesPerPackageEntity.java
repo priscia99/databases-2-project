@@ -5,12 +5,15 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "total_sales_per_package")
+@NamedQueries({
+        @NamedQuery(name = "TotalSalesPerPackageEntity.getTotalSalesPerPackage", query = "SELECT s FROM TotalSalesPerPackageEntity s"),
+})
 public class TotalSalesPerPackageEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "packageId", nullable = false)
-    private int packageId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "packageId")
+    private ServicePackageEntity associatedPackage;
 
     @Column(name = "totalsales", nullable = true)
     private int totalSales;
@@ -22,12 +25,8 @@ public class TotalSalesPerPackageEntity {
     public TotalSalesPerPackageEntity() {
     }
 
-    public int getPackageId() {
-        return packageId;
-    }
-
-    public void setPackageId(int packageId) {
-        this.packageId = packageId;
+    public ServicePackageEntity getAssociatedPackage() {
+        return associatedPackage;
     }
 
     public int getTotalSales() {

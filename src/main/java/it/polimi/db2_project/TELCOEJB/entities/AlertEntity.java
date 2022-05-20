@@ -5,6 +5,9 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "alert")
+@NamedQueries({
+        @NamedQuery(name = "AlertEntity.getAlerts", query = "SELECT a FROM AlertEntity a"),
+})
 public class AlertEntity {
 
     @Id
@@ -24,8 +27,6 @@ public class AlertEntity {
     @OneToOne
     @JoinColumn(name = "username")
     private UserEntity relatedUser;
-
-
 
     public AlertEntity(){}
 

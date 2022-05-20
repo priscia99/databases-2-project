@@ -1,9 +1,8 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
-import it.polimi.db2_project.TELCOEJB.entities.OptionalProductEntity;
 import it.polimi.db2_project.TELCOEJB.entities.TotalPurchasesPerPackageEntity;
+import it.polimi.db2_project.TELCOEJB.entities.TotalPurchasesPerPackageValidityPeriodEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.AdminViewsException;
-import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -13,17 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-public class TotalPurchasesPerPackageService {
+public class TotalPurchasesPerPackageValidityPeriodService {
 
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
-    public List<TotalPurchasesPerPackageEntity> getTotalPurchasesPerPackage() throws AdminViewsException{
-        List<TotalPurchasesPerPackageEntity> purchases;
+    public List<TotalPurchasesPerPackageValidityPeriodEntity> getTotalPurchasesPerPackageValidityPeriod() throws AdminViewsException{
+        List<TotalPurchasesPerPackageValidityPeriodEntity> purchases;
 
         try{
             // retrieving the list of users that match with a given username and password
-            purchases = em.createNamedQuery("TotalPurchasesPerPackageEntity.getAllPurchasesPerPackage", TotalPurchasesPerPackageEntity.class)
+            purchases = em.createNamedQuery("TotalPurchasesPerPackageValidityPeriodEntity.getAllPurchasesPerPackageValidityPeriod", TotalPurchasesPerPackageValidityPeriodEntity.class)
                     .getResultList();
         }
         catch (PersistenceException e){

@@ -6,10 +6,7 @@ import it.polimi.db2_project.TELCOEJB.exceptions.AdminViewsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServiceException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
-import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
-import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
-import it.polimi.db2_project.TELCOEJB.services.ServiceService;
-import it.polimi.db2_project.TELCOEJB.services.TotalPurchasesPerPackageService;
+import it.polimi.db2_project.TELCOEJB.services.*;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
@@ -36,6 +33,27 @@ public class AdminSalesServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/TotalPurchasesPerPackageService")
     private TotalPurchasesPerPackageService totalPurchasesPerPackageService;
+
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/TotalPurchasesPerPackageValidityPeriodService")
+    private TotalPurchasesPerPackageValidityPeriodService totalPurchasesPerPackageValidityPeriodService;
+
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/TotalSalesPerPackageService")
+    private TotalSalesPerPackageService totalSalesPerPackageService;
+
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/AverageSalesOptionalProductPerServicePackageService")
+    private AverageSalesOptionalProductPerServicePackageService averageSalesOptionalProductPerServicePackageService;
+
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/InsolventUsersService")
+    private InsolventUsersService insolventUsersService;
+
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/SuspendedOrdersService")
+    private SuspendedOrdersService suspendedOrdersService;
+
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/AlertService")
+    private AlertService alertService;
+
+    @EJB(name = "it.polimi.db2_project.TELCOEJB.services/BestsellerOptionalProductEntity")
+    private BestsellerOptionalProductService bestsellerOptionalProductService;
 
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
@@ -70,7 +88,70 @@ public class AdminSalesServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+        // Get total purchases per packages and validity period
+        ArrayList<TotalPurchasesPerPackageValidityPeriodEntity> totalPurchasesPerPackageValidityPeriod = null;
+        try {
+            totalPurchasesPerPackageValidityPeriod = (ArrayList<TotalPurchasesPerPackageValidityPeriodEntity>) totalPurchasesPerPackageValidityPeriodService.getTotalPurchasesPerPackageValidityPeriod();
+        } catch (AdminViewsException e) {
+            e.printStackTrace();
+        }
+
+        // Get total sales per package with and without optional products
+        ArrayList<TotalSalesPerPackageEntity> totalSalesPerPackage = null;
+        try {
+            totalSalesPerPackage = (ArrayList<TotalSalesPerPackageEntity>) totalSalesPerPackageService.getTotalSalesPerPackage();
+        } catch (AdminViewsException e) {
+            e.printStackTrace();
+        }
+
+        // Get average sales of optional product per service package
+        ArrayList<AverageSalesOptionalProductPerServicePackageEntity> averageSalesOptionalProductPerServicePackage = null;
+        try {
+            averageSalesOptionalProductPerServicePackage = (ArrayList<AverageSalesOptionalProductPerServicePackageEntity>) averageSalesOptionalProductPerServicePackageService.getAverageSales();
+        } catch (AdminViewsException e) {
+            e.printStackTrace();
+        }
+
+        // Get list of insolvent users
+        ArrayList<InsolventUsersEntity> insolventUsers = null;
+        try {
+            insolventUsers = (ArrayList<InsolventUsersEntity>) insolventUsersService.getInsolventUsers();
+        } catch (AdminViewsException e) {
+            e.printStackTrace();
+        }
+
+        // Get list of suspended orders
+        ArrayList<SuspendedOrdersEntity> suspendedOrders = null;
+        try {
+            suspendedOrders = (ArrayList<SuspendedOrdersEntity>) suspendedOrdersService.getSuspendedOrders();
+        } catch (AdminViewsException e) {
+            e.printStackTrace();
+        }
+
+        // Get list of alerts
+        ArrayList<AlertEntity> alerts = null;
+        try {
+            alerts = (ArrayList<AlertEntity>) alertService.getAlerts();
+        } catch (AdminViewsException e) {
+            e.printStackTrace();
+        }
+
+        // Get bestseller optional product
+        BestsellerOptionalProductEntity bestsellerOptionalProduct = null;
+        try {
+            bestsellerOptionalProduct = bestsellerOptionalProductService.getBestsellerProduct();
+        } catch (AdminViewsException e) {
+            e.printStackTrace();
+        }
+
         context.setVariable("totalPurchasesPerPackage",totalPurchasesPerPackage);
+        context.setVariable("totalPurchasesPerPackageValidityPeriod",totalPurchasesPerPackageValidityPeriod);
+        context.setVariable("totalSalesPerPackage",totalSalesPerPackage);
+        context.setVariable("averageSalesOptionalProductPerServicePackage",averageSalesOptionalProductPerServicePackage);
+        context.setVariable("insolventUsers",insolventUsers);
+        context.setVariable("suspendedOrders",suspendedOrders);
+        context.setVariable("alerts",alerts);
+        context.setVariable("bestsellerOptionalProduct",bestsellerOptionalProduct);
         templateEngine.process(path, context, response.getWriter());
 
     }

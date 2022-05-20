@@ -5,28 +5,27 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "average_sales_optionalproduct_per_servicepackage")
+@NamedQueries({
+        @NamedQuery(name = "AverageSalesOptionalProductPerServicePackageEntity.getAverageSales", query = "SELECT s FROM AverageSalesOptionalProductPerServicePackageEntity s"),
+})
 public class AverageSalesOptionalProductPerServicePackageEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "packageId", nullable = false)
-    private int packageId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "packageId")
+    private ServicePackageEntity associatedPackage;
 
     @Column(name = "averageOptionalProducts", nullable = true)
-    private int averageOptionalProducts;
+    private float averageOptionalProducts;
 
     public AverageSalesOptionalProductPerServicePackageEntity() {
     }
 
-    public int getPackageId() {
-        return packageId;
+    public ServicePackageEntity getAssociatedPackage() {
+        return associatedPackage;
     }
 
-    public void setPackageId(int packageId) {
-        this.packageId = packageId;
-    }
-
-    public int getAverageOptionalProducts() {
+    public float getAverageOptionalProducts() {
         return averageOptionalProducts;
     }
 

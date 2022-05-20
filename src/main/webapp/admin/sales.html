@@ -9,7 +9,7 @@
 <div th:with="condition=${session != null && session.employee != null}" th:remove="tag">
     <div th:if="${condition}">
         <span class="navbar-text pr-2" th:if="${condition}" th:text="'Employee number: ' + ${session.employee.getId()} + '!'"></span>
-        <a class="btn btn-secondary btn-sm" href="logout" role="button">Logout</a>
+        <a class="btn btn-secondary btn-sm" href="../logout" role="button">Logout</a>
     </div>
 </div>
 
@@ -26,6 +26,130 @@
             <td th:text="${entry.getAssociatedPackage().getName()}"></td>
             <td th:text="${entry.getTotalPurchases()}"></td>
         </tr>
+    </tbody>
+</table>
+
+<h3>Total purchases per package and validity period</h3>
+<table class="table">
+    <thead>
+    <td>Package ID</td>
+    <td>Period ID</td>
+    <td>Package name</td>
+    <td>Period</td>
+    <td>Monthly fee</td>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${totalPurchasesPerPackageValidityPeriod}">
+        <td th:text="${entry.getAssociatedPeriod().getServicePackage().getPackageId()}"></td>
+        <td th:text="${entry.getAssociatedPeriod().getPeriodId()}"></td>
+        <td th:text="${entry.getAssociatedPeriod().getServicePackage().getName()}"></td>
+        <td th:text="${entry.getAssociatedPeriod().getValidityPeriod()}"></td>
+        <td th:text="${entry.getAssociatedPeriod().getMonthlyFee()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Total sales per package</h3>
+<table class="table">
+    <thead>
+    <td>Package ID</td>
+    <td>Package name</td>
+    <td>Total sales with optional products</td>
+    <td>Total sales without optional products</td>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${totalSalesPerPackage}">
+        <td th:text="${entry.getAssociatedPackage().getPackageId()}"></td>
+        <td th:text="${entry.getAssociatedPackage().getName()}"></td>
+        <td th:text="${entry.getTotalSales()}"></td>
+        <td th:text="${entry.getTotalSalesWithOptionalProduct()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Average sales of optional products per service package</h3>
+<table class="table">
+    <thead>
+    <td>Package ID</td>
+    <td>Package name</td>
+    <td>Average number of optional products sold</td>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${averageSalesOptionalProductPerServicePackage}">
+        <td th:text="${entry.getAssociatedPackage().getPackageId()}"></td>
+        <td th:text="${entry.getAssociatedPackage().getName()}"></td>
+        <td th:text="${entry.getAverageOptionalProducts()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Insolvent users</h3>
+<table class="table">
+    <thead>
+    <td>Username</td>
+    <td>E-mail</td>
+    <td>Failed attempts</td>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${insolventUsers}">
+        <td th:text="${entry.getUser().getUsername()}"></td>
+        <td th:text="${entry.getUser().getEmail()}"></td>
+        <td th:text="${entry.getUser().getFailedAttempts()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Suspended orders</h3>
+<table class="table">
+    <thead>
+    <td>Order ID</td>
+    <td>Username</td>
+    <td>Creation date</td>
+    <td>Total fee</td>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${suspendedOrders}">
+        <td th:text="${entry.getOrder().getOrderId()}"></td>
+        <td th:text="${entry.getOrder().getUser().getUsername()}"></td>
+        <td th:text="${entry.getOrder().getCreationDateTime()}"></td>
+        <td th:text="${entry.getOrder().getTotalFee()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Alerts</h3>
+<table class="table">
+    <thead>
+    <td>Alert ID</td>
+    <td>E-mail</td>
+    <td>Last rejection</td>
+    <td>Amount</td>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${alerts}">
+        <td th:text="${entry.getAlertID()}"></td>
+        <td th:text="${entry.getEmail()}"></td>
+        <td th:text="${entry.getLastRejectionDateTime()}"></td>
+        <td th:text="${entry.getAmount()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Best-seller optional product</h3>
+<table th:if="${bestsellerOptionalProduct != null}" class="table">
+    <thead>
+    <td>ID</td>
+    <td>Name</td>
+    <td>Monthly fee</td>
+    <td>Total sales</td>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${bestsellerOptionalProduct.getOptionalProduct().getProductId()}"></td>
+        <td th:text="${bestsellerOptionalProduct.getOptionalProduct().getName()}"></td>
+        <td th:text="${bestsellerOptionalProduct.getOptionalProduct().getMonthlyFee()}"></td>
+        <td th:text="${bestsellerOptionalProduct.getSales()}"></td>
+    </tr>
     </tbody>
 </table>
 

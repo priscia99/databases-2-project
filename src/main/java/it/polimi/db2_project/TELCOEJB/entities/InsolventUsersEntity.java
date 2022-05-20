@@ -5,21 +5,20 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "insolvent_users")
+@NamedQueries({
+        @NamedQuery(name = "InsolventUsersEntity.getInsolventUsers", query = "SELECT u FROM InsolventUsersEntity u"),
+})
 public class InsolventUsersEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "username", nullable = false)
-    private String packageId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "username")
+    private UserEntity user;
 
     public InsolventUsersEntity() {
     }
 
-    public String getPackageId() {
-        return packageId;
-    }
-
-    public void setPackageId(String packageId) {
-        this.packageId = packageId;
+    public UserEntity getUser() {
+        return user;
     }
 }

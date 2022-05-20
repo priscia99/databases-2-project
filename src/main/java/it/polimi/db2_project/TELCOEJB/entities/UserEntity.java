@@ -35,6 +35,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
     List<OrderEntity> orderEntities ;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
+    List<InsolventUsersEntity> associatedInsolventUser ;
+
     public UserEntity(){}
 
     public UserEntity(String username, String password, String email) {
