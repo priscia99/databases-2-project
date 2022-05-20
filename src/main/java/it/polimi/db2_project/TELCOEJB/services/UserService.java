@@ -98,19 +98,19 @@ public class UserService {
 //        return user;
 //    }
 
-    public void checkInsolvence(UserEntity user) {
-        UserEntity newUser = findUserByUsername(user.getUsername());
-        List<OrderEntity> orderEntities = newUser.getOrderEntities();
-        for(int i = 0; i < orderEntities.size(); i++){
-            if(orderEntities.get(i).getOrderState() == OrderState.REJECTED){
-                return;
-            }
-        }
-        newUser.setInsolvent(false);
-        newUser.setFailedAttempts(0);
-//        AlertEntity alert = alertService.findAlertById(newUser.getAlert().getAlertID());
-//        em.remove(alert);
-        //todo fare trigger
-        em.flush();
-    }
+//    public void checkInsolvence(UserEntity user) {
+//        UserEntity newUser = findUserByUsername(user.getUsername());
+//        List<OrderEntity> orderEntities = newUser.getOrderEntities();
+//        for(int i = 0; i < orderEntities.size(); i++){
+//            if(orderEntities.get(i).getOrderState() == OrderState.REJECTED){
+//                return;
+//            }
+//        }
+//        newUser.setInsolvent(false);
+//        newUser.setFailedAttempts(0);
+////        AlertEntity alert = alertService.findAlertById(newUser.getAlert().getAlertID());
+////        em.remove(alert);
+//        //todo fare trigger
+//        em.flush();
+//    }
 }

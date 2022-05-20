@@ -98,7 +98,7 @@ public class PayOrderPageServlet extends HttpServlet {
                     e.printStackTrace();
                 }
                 //check if the user is still insolvent
-                userService.checkInsolvence(user);
+//                userService.checkInsolvence(user);
             }else{
                 order.setOrderState(OrderState.REJECTED);
 //                user = userService.setUserInsolvent(user.getUsername());
