@@ -1,82 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Home</title>
+    <title>Telco | Admin Home</title>
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css}" th:rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
+<style>
+    .optional-selector{
+        height: 50px;
+        line-height: 50px;
+        padding-left: 20px;
+        background-color: #F9F5FF;
+    }
+    .selector-container{
+        width:70%;
+        margin-left: 15%;
+        margin-right:15%;
+        background-color: #C3D2D5;
+    }
+    .period{
+        margin-top: 10px;
+    }
+</style>
 <body>
-<div th:with="condition=${session != null && session.employee != null}" th:remove="tag">
-    <div th:if="${condition}">
-        <span class="navbar-text pr-2" th:if="${condition}" th:text="'Employee number: ' + ${session.employee.getId()} + '!'"></span>
-        <a class="btn btn-secondary btn-sm" href="../logout" role="button">Logout</a>
-    </div>
-</div>
-<div>
-    <a href="sales" class="button">Sales Report Page</a>
-</div>
-<div>
-    <h3>        Service Package Creator</h3>
-
-    <form action="create-package" method="post">
-        <label>Service Package Name:</label>
-        <input type="text" name="servicePackageName" required="required">
-        <br>
-        <button onclick="addValidityAndFee()">Add new</button>
-        <div id="periods-container">
-            <div class="period">
-                Enter validity period (months)
-                <input type="number"name="servicePackageValidityPeriod" required="required">
-                <br>
-                Enter its monthlyFee
-                <input type="number"name="servicePackageMonthlyFee" required="required">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Telco | Employee</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="sales">Sales Report</a>
+                </li>
+            </ul>
+            <div th:with="condition=${session != null && session.employee != null}" th:remove="tag">
+                <div th:if="${condition}">
+                    <span class="navbar-text pr-2" th:if="${condition}" th:text="'Welcome back, Employee #' + ${session.employee.getId()} + '!'"></span>
+                    <a class="btn btn-secondary btn-sm" href="../logout" role="button">Logout</a>
+                </div>
+                <div th:unless="${condition}">
+                    <a class="btn btn-secondary btn-sm" href="index.html" role="button">Login</a>
+                </div>
             </div>
         </div>
+    </div>
+</nav>
+
+<div class="selector-container mt-5 p-3">
+
+    <h3>Service Package Creator</h3>
+    <form action="create-package" method="post">
+
+        <h4 class="mt-3">Service package settings</h4>
+        <input type="text" name="servicePackageName" required="required" placeholder="Name (e.g. All Inclusive)">
+
+        <h4 class="mt-3">Validity periods settings</h4>
+        <button class="btn btn-danger mb-3" onclick="addValidityAndFee()">Add new</button>
+        <div id="periods-container">
+            <div class="period">
+                <b>#1</b>
+                <input type="number"name="servicePackageValidityPeriod" required="required" placeholder="Validity period">
+                <input type="number"name="servicePackageMonthlyFee" required="required" placeholder="Monthly fee">
+            </div>
+        </div>
+
+        <h4 class="mt-3">Associated services</h4>
         <div>
-            Choose associated services
-            <div th:each="service : ${allServices}">
+            <div th:each="service : ${allServices}" class="optional-selector mt-2">
                 <input type="checkbox" name = "chosenServices"
                        th:text="${service.getServiceType()}"
                        th:value="${service.getServiceId()}" />
 <!--                todo aggiungere gli altri campi-->
             </div>
         </div>
+
+        <h4 class="mt-3">Associated optional products</h4>
         <div>
-            Choose associated optional products
-            <div th:each="optionalProduct : ${allOptionalProducts}">
+            <div th:each="optionalProduct : ${allOptionalProducts}" class="optional-selector mt-2">
                 <input type="checkbox" name = "chosenOptionalProducts"
                        th:text="${optionalProduct.getName()} + ' for ' + ${optionalProduct.getMonthlyFee()} + ' euros per month'"
                        th:value="${optionalProduct.getProductId()}"/>
             </div>
         </div>
-        <input type="submit" value="Create Service Package">
+        <input class="btn btn-dark mt-5" type="submit" value="Create Service Package">
     </form>
 </div>
-<div>
-    <h3>        Optional Product Creator</h3>
+
+<div class="selector-container mt-5 mb-5 p-3">
+    <h3>Optional Product Creator</h3>
     <form action="create-optional" method="post">
-        <label>Service Package Name:</label>
-        <input type="text" name="optionalProductName" required="required">
+        <input class="mt-3" type="text" name="optionalProductName" required="required" placeholder="Optional Product name">
         <br>
-         Enter its monthlyFee
-        <input type="number"name="optionalProductMonthlyFee" required="required">
+        <input class="mt-2" type="number"name="optionalProductMonthlyFee" required="required" placeholder="Monthly Fee">
         <br>
-        <input type="submit" value="Create Optional Product">
+        <input class="btn btn-dark mt-5" type="submit" value="Create Optional Product">
     </form>
 </div>
+
 <script>
+    var periods = 2;
     function addValidityAndFee(){
         const periodsContainer = document.getElementById('periods-container');
-
-        const newDiv = "<div class=\"period\">" +
-            "Enter validity period (months)" +
-            "<input type=\"number\" name=\"servicePackageValidityPeriod\" required=\"required\">" +
-                "<br>" +
-                    "Enter its monthlyFee" +
-                    "<input type=\"number\" name=\"servicePackageMonthlyFee\" required=\"required\">" +
-        "</div>";
+        const newDiv = `<div class="period">
+            <b>#` + periods + `</b>
+            <input type="number" name="servicePackageValidityPeriod" required="required" placeholder="Validity period">
+            <input type="number" name="servicePackageMonthlyFee" required="required" placeholder="Monthly fee">
+        </div>`
 
         periodsContainer.insertAdjacentHTML("beforeend", newDiv);
-
+        periods = periods + 1;
     }
 </script>
 </body>
