@@ -53,14 +53,14 @@
 
 <h3>Additional products</h3>
 <div th:if="${orderInfo.getOptionalProducts() != null}">
-  <table th:class = "table-striped">
+  <table th:class = "table">
     <thead>
     <tr>
       <th>Name</th>
       <th>Monthly Fee</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody th:class="table-striped">
     <tr th:each="optionalProduct : ${orderInfo.getOptionalProducts()}">
       <td th:text="${optionalProduct.getName()}"></td>
       <td th:text="${optionalProduct.getMonthlyFee()} + E"></td>

@@ -57,7 +57,7 @@ public class PayOrderPageServlet extends HttpServlet {
         // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
-        String path = "/payorder.html";
+        String path = "/confirmation.html";
         ServletContext servletContext = getServletContext();
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
 
