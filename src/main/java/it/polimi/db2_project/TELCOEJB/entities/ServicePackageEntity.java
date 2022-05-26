@@ -10,8 +10,6 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "ServicePackageEntity.getAllPackages", query = "SELECT p FROM ServicePackageEntity p"),
         @NamedQuery(name = "ServicePackageEntity.getPackagesById", query = "SELECT p FROM ServicePackageEntity p WHERE p.packageId = :packageId"),
-        // @NamedQuery(name = "ServicePackageEntity.getPackagesByIdAndValidityPeriod", query = "SELECT p FROM ServicePackageEntity p WHERE p.packageId = :packageId and p.validityPeriod = :validityPeriod")
-
 })
 public class ServicePackageEntity {
 

@@ -11,8 +11,6 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "OptionalProductsEntity.getAllOptionalProducts", query = "SELECT o FROM OptionalProductEntity o"),
         @NamedQuery(name = "OptionalProductsEntity.getOptionalProductsByIdAndMonthlyFee", query = "SELECT o FROM OptionalProductEntity o WHERE o.productId = :productId and o.monthlyFee = :monthlyFee"),
-//        @NamedQuery(name = "OptionalProductsEntity.getOptionalProductsById", query = "SELECT o FROM OptionalProductEntity o WHERE o.productId = :productId"),
-
 })
 public class OptionalProductEntity {
     @Id
