@@ -8,9 +8,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-//@NamedQueries({
-//        @NamedQuery(name = "OrderEntity.findById", query = "SELECT o FROM OrderEntity o WHERE o.orderId = :orderId"),
-//})
 public class OrderEntity {
 
     // attributes

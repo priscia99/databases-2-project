@@ -5,9 +5,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "period")
-//@NamedQueries({
-//        @NamedQuery(name = "PeriodEntity.findPeriodById", query = "SELECT p FROM PeriodEntity p WHERE p.periodId = :periodId"),
-//})
 public class PeriodEntity {
 
     // columns

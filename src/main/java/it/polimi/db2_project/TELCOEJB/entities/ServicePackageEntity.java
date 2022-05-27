@@ -8,8 +8,7 @@ import java.util.List;
 @Table(name = "servicepackage")
 
 @NamedQueries({
-        @NamedQuery(name = "ServicePackageEntity.getAllPackages", query = "SELECT p FROM ServicePackageEntity p"),
-        @NamedQuery(name = "ServicePackageEntity.getPackagesById", query = "SELECT p FROM ServicePackageEntity p WHERE p.packageId = :packageId"),
+        @NamedQuery(name = "ServicePackageEntity.getAllPackages", query = "SELECT p FROM ServicePackageEntity p")
 })
 public class ServicePackageEntity {
 
