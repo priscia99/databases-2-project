@@ -38,26 +38,6 @@ public class OptionalProductService {
         return new ArrayList<>(optionalProducts);
     }
 
-    public Boolean checkValidity(String productId, String monthlyFee) throws OptionalProductException {
-        List<OptionalProductEntity> optionalProducts;
-        try{
-            // retrieving the list of users that match with a given username and password
-            optionalProducts = em.createNamedQuery("OptionalProductsEntity.getOptionalProductsByIdAndMonthlyFee", OptionalProductEntity.class)
-                    .setParameter("productId", Integer.parseInt(productId))
-                    .setParameter("monthlyFee",Integer.parseInt(monthlyFee))
-                    .getResultList();
-        }
-        catch (PersistenceException e){
-            e.printStackTrace();
-            throw new OptionalProductException("An error occoured while trying to fetch optional product by id and monthlyfee");
-        }
-        if( optionalProducts.size() == 1){
-            return true;
-        }else{
-            throw new OptionalProductException("An error occoured while trying to fetch optional product by id and monthlyfee");
-        }
-    }
-
     private OptionalProductEntity getOptionalProduct(String productId) throws OptionalProductException {
         OptionalProductEntity optionalProduct;
         try{

@@ -29,7 +29,9 @@ public class InsolventUsersService {
             e.printStackTrace();
             throw new AdminViewsException("An error occoured while trying to fetch sales report.");
         }
-
+        for (int i = 0; i < users.size(); i++){
+            em.refresh(users.get(i).getUser());
+        }
         return new ArrayList<>(users);
     }
 }

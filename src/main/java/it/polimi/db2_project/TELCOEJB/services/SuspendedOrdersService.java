@@ -29,7 +29,9 @@ public class SuspendedOrdersService {
             e.printStackTrace();
             throw new AdminViewsException("An error occoured while trying to fetch sales report.");
         }
-
+        for(int i = 0; i < orders.size(); i++){
+            em.refresh(orders.get(i).getOrder());
+        }
         return new ArrayList<>(orders);
     }
 }
