@@ -69,10 +69,9 @@ public class HomePageServlet extends HttpServlet {
             servicePackages = servicePackageService.getAllPackages();
         } catch (ServicePackageException e) {
             e.printStackTrace();
-            // todo add error handler
         }
 
-        // Redirect to the Home page and add missions to the parameters
+        // get servlet context and prepare the redirect path
         String path = "/home.html";
         ServletContext servletContext = getServletContext();
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());

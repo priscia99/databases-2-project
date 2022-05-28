@@ -43,7 +43,6 @@ public class LoginServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         doPost(request, response);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cannot perform a GET request");
-        //todo pagina errore
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{

@@ -75,6 +75,15 @@ public class AdminSalesServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
 
+        // get employee information from the session
+        EmployeeEntity employee = (EmployeeEntity) session.getAttribute("employee");
+        String loginPath = "../index.html";
+
+        // if the employee is not already logged, redirect to the login page
+        if(employee == null){
+            response.sendRedirect(loginPath);
+        }
+
         // Get context
         String path = "/admin/sales.html";
         ServletContext servletContext = getServletContext();

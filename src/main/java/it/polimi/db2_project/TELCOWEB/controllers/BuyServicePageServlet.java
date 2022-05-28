@@ -56,40 +56,43 @@ public class BuyServicePageServlet extends HttpServlet {
         // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
+
+        // get servlet context and prepare the redirect path
         String path = "/buyservice.html";
         ServletContext servletContext = getServletContext();
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
 
         String chosenPackageId = (String) request.getParameter("chosenPackageId");
-
         UserEntity user = (UserEntity) session.getAttribute("user");
         session.removeAttribute("order");
-
         ArrayList<ServicePackageEntity> servicePackages = null;
+
+        // get list of all service packages
         try {
             servicePackages = servicePackageService.getAllPackages();
         } catch (ServicePackageException e) {
             e.printStackTrace();
-            // todo exception and error handler
         }
-
-        // add objects to context
-        context.setVariable("servicePackages", servicePackages);
-        context.setVariable("user", user);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
         Date tomorrow = new Date();
         tomorrow.setYear(tomorrow.getYear()+1);
 
+        // retrieve the chosen service package entity in case the user has already selected a package ID
         ServicePackageEntity sp = null;
         if(chosenPackageId != null){
             try {
+                // retrieve the chosen service package entity
                 sp = servicePackageService.getPackageById(Integer.parseInt(chosenPackageId));
             } catch (ServicePackageException e) {
                 e.printStackTrace();
             }
         }
+
+        // add objects to context
+        context.setVariable("servicePackages", servicePackages);
+        context.setVariable("user", user);
         context.setVariable("chosenPackage",sp);
         context.setVariable("today",df.format(today));
         context.setVariable("tomorrow",df.format(tomorrow));

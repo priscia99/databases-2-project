@@ -65,12 +65,18 @@ public class AdminCreatePackageServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        // todo gestire quando non seleziono optional products per un service package
         // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
 
+        // get employee information from the session
         EmployeeEntity employee = (EmployeeEntity) session.getAttribute("employee");
+        String loginPath = "../index.html";
+
+        // if the employee is not already logged, redirect to the login page
+        if(employee == null){
+            response.sendRedirect(loginPath);
+        }
 
         // Fetching request parameters
         String packageName = request.getParameter("servicePackageName");
@@ -79,11 +85,15 @@ public class AdminCreatePackageServlet extends HttpServlet {
         String[] chosenServices = request.getParameterValues("chosenServices");
         String[] optionalProducts = request.getParameterValues("chosenOptionalProducts");
 
+        // check if some parameters are missing
         if(packageName == null || validityPeriods == null || monthlyFees == null || chosenServices == null || validityPeriods.length == 0 || monthlyFees.length == 0 || chosenServices.length == 0){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Some parameters are missing.");
             return;
         }
+
+        // double check the user inputs
         if(validityPeriods.length != monthlyFees.length){
+            // if the two lengths are not matching, then return an error with BAD REQUEST to the user
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The array lenghts are not the same");
             return;
         }
@@ -124,38 +134,52 @@ public class AdminCreatePackageServlet extends HttpServlet {
 
         // Single transaction that inserts the package service entity and the associated period entities
         try {
+            // begin of the transaction
             userTransaction.begin();
+            // persist all the new service packages
             servicePackageService.persistServicePackage(newServicePackage);
+            // persist all the new periods
             periodService.persistPeriods(newPeriodEntities);
+            // commit
             userTransaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             try{
+                // in case of error, rollback the transaction
                 userTransaction.rollback();
             } catch (SystemException systemException) {
                 e.printStackTrace();
             }
         }
 
-        // Redirect to the Home page and add missions to the parameters
-        String path = "/admin/home.html";
+        // get servlet context and prepare the redirect path
         ServletContext servletContext = getServletContext();
+        String path = "/admin/home.html";
+
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("employee", employee);
         List <ServiceEntity> allServices = null;
         List <OptionalProductEntity> allOptionalProducts = null;
+
+        // retrieve the list of all services
         try {
             allServices = serviceService.getAllServices();
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+
+        // retrieve the list of all optional products
         try {
             allOptionalProducts = optionalProductService.getAllOptionalProducts();
         } catch (OptionalProductException e) {
             e.printStackTrace();
         }
+
+        // prepare the variables of the context
         context.setVariable("allServices",allServices);
         context.setVariable("allOptionalProducts",allOptionalProducts);
+
+        // process the page
         templateEngine.process(path, context, response.getWriter());
     }
 

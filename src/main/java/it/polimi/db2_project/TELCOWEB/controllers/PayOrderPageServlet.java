@@ -67,7 +67,6 @@ public class PayOrderPageServlet extends HttpServlet {
         // understanding if the order is already present
         if(order.getOrderId() == 0) {
             //setting the creation date
-
             order.setCreationDateTime(Utils.getNowTime());
             //setting the order state
             if (Utils.pay()) {
@@ -75,11 +74,6 @@ public class PayOrderPageServlet extends HttpServlet {
             } else {
                 //setting the user as insolvent and the order state as rejected
                 order.setOrderState(OrderState.REJECTED);
-//                user = userService.setUserInsolvent(user.getUsername());
-                //check if the user is insolvent for the third time
-//                if(user.getFailedAttempts()==3){
-//                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
-//                }
             }
             //add the order to db
             try {
@@ -97,15 +91,8 @@ public class PayOrderPageServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
                     e.printStackTrace();
                 }
-                //check if the user is still insolvent
-//                userService.checkInsolvence(user);
             }else{
                 order.setOrderState(OrderState.REJECTED);
-//                user = userService.setUserInsolvent(user.getUsername());
-                //check if the user is insolvent for the third time
-//                if(user.getFailedAttempts()==3){
-//                    alertService.createNewAlert(user,order.getTotalFee(),Utils.getNowTime());
-//                }
             }
             try {
                 orderService.updateOrderOnState(order);
@@ -114,6 +101,7 @@ public class PayOrderPageServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
+
         //updating the session
         context.setVariable("orderInfo", order);
         session.removeAttribute("order");

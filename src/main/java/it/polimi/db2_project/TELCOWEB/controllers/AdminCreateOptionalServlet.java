@@ -62,12 +62,19 @@ public class AdminCreateOptionalServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        // todo gestire quando non seleziono optional products per un service package
+
         // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
 
+        // get employee information from the session
         EmployeeEntity employee = (EmployeeEntity) session.getAttribute("employee");
+        String loginPath = "../index.html";
+
+        // if the employee is not already logged, redirect to the login page
+        if(employee == null){
+            response.sendRedirect(loginPath);
+        }
 
         // Fetching request parameters
         String optionalProductName = request.getParameter("optionalProductName");
@@ -82,27 +89,37 @@ public class AdminCreateOptionalServlet extends HttpServlet {
             return;
         }
 
+        // persist the new optional product created
         optionalProductService.persistOptionalProduct(new OptionalProductEntity(optionalProductName,optionalProductMonthlyFee));
 
-        // Redirect to the Home page and add missions to the parameters
-        String path = "/admin/home.html";
+        // get servlet context and prepare the redirect path
         ServletContext servletContext = getServletContext();
+        String path = "/admin/home.html";
+
         final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("employee", employee);
         List <ServiceEntity> allServices = null;
         List <OptionalProductEntity> allOptionalProducts = null;
+
+        // retrieve the list of all services
         try {
             allServices = serviceService.getAllServices();
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+
+        // retrieve the list of all optional products
         try {
             allOptionalProducts = optionalProductService.getAllOptionalProducts();
         } catch (OptionalProductException e) {
             e.printStackTrace();
         }
+
+        // prepare the variables of the context
         context.setVariable("allServices",allServices);
         context.setVariable("allOptionalProducts",allOptionalProducts);
+
+        // process the page
         templateEngine.process(path, context, response.getWriter());
     }
 
