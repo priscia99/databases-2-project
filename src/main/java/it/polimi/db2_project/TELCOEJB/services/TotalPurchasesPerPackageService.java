@@ -30,6 +30,9 @@ public class TotalPurchasesPerPackageService {
             e.printStackTrace();
             throw new AdminViewsException("An error occoured while trying to fetch sales report.");
         }
+        for(int i = 0; i < purchases.size(); i++){
+            em.refresh(purchases.get(i).getAssociatedPackage());
+        }
 
         return new ArrayList<>(purchases);
     }

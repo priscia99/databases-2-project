@@ -29,7 +29,9 @@ public class TotalPurchasesPerPackageValidityPeriodService {
             e.printStackTrace();
             throw new AdminViewsException("An error occoured while trying to fetch sales report.");
         }
-
+        for(int i = 0; i < purchases.size();i++){
+            em.refresh(purchases.get(i).getAssociatedPeriod());
+        }
         return new ArrayList<>(purchases);
     }
 }
