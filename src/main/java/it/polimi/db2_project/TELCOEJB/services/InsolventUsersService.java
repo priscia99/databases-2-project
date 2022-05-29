@@ -17,6 +17,11 @@ public class InsolventUsersService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves the list of insolvent users
+     * @return the list of entities containing the insolvent users
+     * @throws AdminViewsException if an error occurs while trying to execute the query
+     */
     public List<InsolventUsersEntity> getInsolventUsers() throws AdminViewsException{
         List<InsolventUsersEntity> users;
 

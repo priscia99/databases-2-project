@@ -23,6 +23,11 @@ public class ServiceService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves all the services from the database
+     * @return the list of entities containing all the services
+     * @throws ServiceException if an error occurs while trying to execute the query
+     */
     public ArrayList<ServiceEntity> getAllServices() throws ServiceException {
         List<ServiceEntity> services;
 
@@ -39,6 +44,12 @@ public class ServiceService {
         return new ArrayList<>(services);
     }
 
+    /**
+     * Retrieves a single service given its ID in input
+     * @param serviceId ID of the service to be retrieved
+     * @return the service entity associated with the given ID
+     * @throws OptionalProductException if an error occurs while trying to execute the query
+     */
     private ServiceEntity getService(String serviceId) throws OptionalProductException {
         ServiceEntity serviceEntity;
         try{
@@ -51,6 +62,12 @@ public class ServiceService {
         return serviceEntity;
     }
 
+    /**
+     * Retrieves a list of services that is obtained by giving a list of IDs in input
+     * @param servicesList the list of IDs of the services that need to be retrieved
+     * @return a list of service entities
+     * @throws ServiceException if an error occurs while trying to execute the query
+     */
     public List<ServiceEntity> getListServices(List<String> servicesList) throws ServiceException{
         List<ServiceEntity> serviceEntities = new ArrayList<>();
         for(int i = 0; i < servicesList.size(); i++){

@@ -24,6 +24,15 @@ public class EmployeeService {
     public EmployeeService(){
     }
 
+    /**
+     * Check the credentials of an employee
+     * @param id employee's ID
+     * @param password employee's password
+     * @return the employee entity associated with the credentials given in input
+     * @throws NonUniqueResultException if more than one employee exist with the given credentials
+     * @throws CredentialsException if there is an error while trying to execute the query
+     * @throws InvalidCredentialsException if the credentials are not valid
+     */
     public EmployeeEntity checkCredentials(String id, String password) throws NonUniqueResultException, CredentialsException, InvalidCredentialsException {
         List<EmployeeEntity> employeeList;
 

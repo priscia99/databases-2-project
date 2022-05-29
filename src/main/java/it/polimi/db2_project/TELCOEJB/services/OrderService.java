@@ -16,23 +16,31 @@ public class OrderService {
 
     public OrderService() {
     }
+
+    /**
+     * Retrieves an order that matches with the ID given in input
+     * @param orderId The ID of the order to be retrieved
+     * @return the order entity that is associated with the given ID
+     */
     public OrderEntity findOrderById(int orderId) {
-//        return em.createNamedQuery("OrderEntity.findById", OrderEntity.class)
-//                .setParameter("orderId",orderId)
-//                .setMaxResults(1)
-//                .getResultStream()
-//                .findFirst()
-//                .orElse(null);
         return em.find(OrderEntity.class,orderId);
     }
+
+    /**
+     * Persist an order entity given in input
+     * @param order the order entity to be persisted
+     * @throws OrderException if there is an error while trying to persist the order
+     */
     public void persistOrder(OrderEntity order) throws OrderException {
-//        if (findOrderById(order.getOrderId()) != null) {
-//            throw new OrderException("Order id already in use!");
-//        }
         em.persist(order);
         em.flush();
     }
 
+    /**
+     * Updates the status of an order to the database
+     * @param order the order entity that needs to be updated
+     * @throws OrderException if the order is not found
+     */
     public void updateOrderOnState(OrderEntity order) throws OrderException {
         OrderEntity oldOrder = findOrderById(order.getOrderId());
         if (oldOrder == null) {

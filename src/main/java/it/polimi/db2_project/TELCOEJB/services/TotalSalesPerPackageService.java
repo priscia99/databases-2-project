@@ -17,6 +17,11 @@ public class TotalSalesPerPackageService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves the list of total sales per service package
+     * @return the list of entities containing the total sales per service package
+     * @throws AdminViewsException if an error occurs while trying to execute the query
+     */
     public List<TotalSalesPerPackageEntity> getTotalSalesPerPackage() throws AdminViewsException{
         List<TotalSalesPerPackageEntity> sales;
 

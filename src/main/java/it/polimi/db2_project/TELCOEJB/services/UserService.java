@@ -26,6 +26,15 @@ public class UserService {
     public UserService(){
     }
 
+    /**
+     * Check the user credentials
+     * @param username user's username
+     * @param password user's password
+     * @return the user entity associated to the given user if the login succeeded
+     * @throws NonUniqueResultException if the user entity retrieved is not unique
+     * @throws CredentialsException if an error occoured while trying to retrieve the user
+     * @throws InvalidCredentialsException if the credentials are not correct
+     */
     public UserEntity checkCredentials(String username, String password) throws NonUniqueResultException, CredentialsException, InvalidCredentialsException {
         List<UserEntity> usersList;
 
@@ -56,16 +65,20 @@ public class UserService {
         }
     }
 
+    /**
+     * Retrieves the user that matches with the username given in input
+     * @param username user's username
+     * @return the user entity associated with the given username
+     */
     public UserEntity findUserByUsername(String username) {
-//        return em.createNamedQuery("UserEntity.findByUsername", UserEntity.class)
-//                .setParameter("username", username)
-//                .setMaxResults(1)
-//                .getResultStream()
-//                .findFirst()
-//                .orElse(null);
         return em.find(UserEntity.class,username);
     }
 
+    /**
+     * Retrieves the user that matches with the email given in input
+     * @param email user's email
+     * @return the user entity associated with the given email
+     */
     public UserEntity findUserByEmail(String email) {
         return em.createNamedQuery("UserEntity.findByEmail", UserEntity.class)
                 .setParameter("email", email)
@@ -75,42 +88,29 @@ public class UserService {
                 .orElse(null);
     }
 
+    /**
+     * Creates a new user and persists it to the database
+     * @param username user's username
+     * @param password user's password
+     * @param email user's email
+     * @return the user entity associated to the new user created
+     * @throws CredentialsException if some parameters are already present
+     */
     public UserEntity addNewUser(String username, String password, String email) throws CredentialsException {
+        // return an error if the username is already in use
         if (findUserByUsername(username) != null) {
             throw new CredentialsException("Username already in use!");
         }
 
+        // return an error if the email is already in use
         if (findUserByEmail(email) != null) {
             throw new CredentialsException("Email already in use!");
         }
 
+        // if everything is fine, then create the user entity associated to the new user
         UserEntity newUser = new UserEntity(username, password, email);
-        em.persist(newUser);
+        em.persist(newUser);    // persist the new user to the database
         em.flush();
         return newUser;
     }
-
-//    public UserEntity setUserInsolvent(String username){
-//        UserEntity user = em.find(UserEntity.class,username);
-//        user.setInsolvent(true);
-//        user.setFailedAttempts(user.getFailedAttempts() +1);
-//        em.flush();
-//        return user;
-//    }
-
-//    public void checkInsolvence(UserEntity user) {
-//        UserEntity newUser = findUserByUsername(user.getUsername());
-//        List<OrderEntity> orderEntities = newUser.getOrderEntities();
-//        for(int i = 0; i < orderEntities.size(); i++){
-//            if(orderEntities.get(i).getOrderState() == OrderState.REJECTED){
-//                return;
-//            }
-//        }
-//        newUser.setInsolvent(false);
-//        newUser.setFailedAttempts(0);
-////        AlertEntity alert = alertService.findAlertById(newUser.getAlert().getAlertID());
-////        em.remove(alert);
-//        //todo fare trigger
-//        em.flush();
-//    }
 }

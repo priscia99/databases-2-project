@@ -22,6 +22,11 @@ public class OptionalProductService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves all the optional products from the database
+     * @return the list of entities containing all the optional products
+     * @throws OptionalProductException if an error occurs while trying to execute the query
+     */
     public ArrayList<OptionalProductEntity> getAllOptionalProducts() throws OptionalProductException {
         List<OptionalProductEntity> optionalProducts;
 
@@ -38,13 +43,15 @@ public class OptionalProductService {
         return new ArrayList<>(optionalProducts);
     }
 
+    /**
+     * Retrieves a single optional product given its ID in input
+     * @param productId ID of the optional product to be retrieved
+     * @return the optional product entity associated with the given ID
+     * @throws OptionalProductException if the service package is not found
+     */
     private OptionalProductEntity getOptionalProduct(String productId) throws OptionalProductException {
         OptionalProductEntity optionalProduct;
         try{
-            // retrieving the list of users that match with a given username and password
-//            optionalProduct = em.createNamedQuery("OptionalProductsEntity.getOptionalProductsById", OptionalProductEntity.class)
-//                    .setParameter("productId", Integer.parseInt(productId))
-//                    .getResultList().get(0);
             optionalProduct = em.find(OptionalProductEntity.class,Integer.parseInt(productId));
         }
         catch (PersistenceException e){
@@ -54,6 +61,12 @@ public class OptionalProductService {
         return optionalProduct;
     }
 
+    /**
+     * Retrieves a list of optional products that is obtained by giving a list of IDs in input
+     * @param productIdList the list of IDs of the optional products that need to be retrieved
+     * @return a list of optional products
+     * @throws OptionalProductException if an error occurs while trying to execute the query
+     */
     public List<OptionalProductEntity> getListOptionalProducts(List<String> productIdList) throws OptionalProductException{
         List<OptionalProductEntity> optionalProductEntities = new ArrayList<>();
         for(int i = 0; i < productIdList.size(); i++){
@@ -67,6 +80,10 @@ public class OptionalProductService {
         return new ArrayList<>(optionalProductEntities);
     }
 
+    /**
+     * Persists an optional product entity given in input
+     * @param optionalProductEntity the optional product entity to be persisted
+     */
     public void persistOptionalProduct(OptionalProductEntity optionalProductEntity) {
         em.persist(optionalProductEntity);
         em.flush();

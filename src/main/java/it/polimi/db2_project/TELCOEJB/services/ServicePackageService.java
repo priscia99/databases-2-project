@@ -25,6 +25,11 @@ public class ServicePackageService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves all the service packages from the database
+     * @return the list of entities containing all the service packages
+     * @throws ServicePackageException if an error occurs while trying to execute the query
+     */
     public ArrayList<ServicePackageEntity> getAllPackages() throws ServicePackageException{
         List<ServicePackageEntity> packages;
 
@@ -41,6 +46,12 @@ public class ServicePackageService {
         return new ArrayList<>(packages);
     }
 
+    /**
+     * Retrieves a single service package given its ID in input
+     * @param packageId ID of the service package to be retrieved
+     * @return the service package entity associated with the given ID
+     * @throws ServicePackageException if the service package is not found
+     */
     public ServicePackageEntity getPackageById(int packageId) throws ServicePackageException{
         ServicePackageEntity res = em.find(ServicePackageEntity.class, packageId);
         if(res == null){
@@ -49,72 +60,10 @@ public class ServicePackageService {
         return res;
     }
 
-//    public List<ServicePackageEntity> getPackagesById(String chosenPackageId) throws ServicePackageException {
-//        List<ServicePackageEntity> packages;
-//
-//        try{
-//            // retrieving the list of users that match with a given username and password
-//            packages = em.createNamedQuery("ServicePackageEntity.getPackagesById", ServicePackageEntity.class)
-//                    .setParameter("packageId", Integer.parseInt(chosenPackageId))
-//                    .getResultList();
-//        }
-//        catch (PersistenceException e){
-//            e.printStackTrace();
-//            throw new ServicePackageException("An error occoured while trying to fetch packages by id.");
-//        }
-//
-//        return new ArrayList<>(packages);
-//    }
-
-//    public HashMap<Integer,ArrayList<ServicePackageEntity>> getAllPackagesToMap() throws ServicePackageException{
-//        HashMap<Integer,ArrayList<ServicePackageEntity>> packages;
-//        packages = new HashMap<>();
-//
-//        try{
-//            // retrieving the list of users that match with a given username and password
-//            List<ServicePackageEntity> packagesList;
-//            packagesList = em.createNamedQuery("ServicePackageEntity.getAllPackages", ServicePackageEntity.class)
-//                    .getResultList();
-//            //converting it into map
-//            for(int i = 0; i< packagesList.size(); i++){
-//                if(!(packages.containsKey(packagesList.get(i).getPackageId()))){
-//                    ArrayList<ServicePackageEntity> newPackageList = new ArrayList<>();
-//                    newPackageList.add(packagesList.get(i));
-//                    packages.put(packagesList.get(i).getPackageId(),newPackageList);
-//                }else{
-//                    ArrayList<ServicePackageEntity> newPackageList = packages.get(packagesList.get(i).getPackageId());
-//                    newPackageList.add(packagesList.get(i));
-//                    packages.put(packagesList.get(i).getPackageId(),newPackageList);
-//                }
-//            }
-//        }
-//        catch (PersistenceException e){
-//            e.printStackTrace();
-//            throw new ServicePackageException("An error occoured while trying to fetch all service packages.");
-//        }
-//
-//        return packages;
-//    }
-
-//    public ServicePackageEntity getPackagesByIdAndValidityPeriod(String packageId, String validityPeriod) throws ServicePackageException {
-//        List<ServicePackageEntity> packages;
-//
-//        try{
-//            // retrieving the list of users that match with a given username and password
-//            packages = em.createNamedQuery("PeriodEntity.findPeriodById", ServicePackageEntity.class)
-//                    .setParameter("packageId", Integer.parseInt(packageId))
-//                    .setParameter("validityPeriod",Integer.parseInt(validityPeriod))
-//                    .getResultList();
-//        }
-//        catch (PersistenceException e){
-//            e.printStackTrace();
-//            throw new ServicePackageException("An error occoured while trying to fetch packages by id.");
-//        }
-//        if(packages.size() > 1)
-//            throw new ServicePackageException("Multiple instances found while trying to fetch packages by id and validity period");
-//        return packages.get(0);
-//    }
-
+    /**
+     * Persists a service package entity given in input
+     * @param p the service package entity to be persisted
+     */
     public void persistServicePackage(ServicePackageEntity p){
         em.persist(p);
         em.flush();

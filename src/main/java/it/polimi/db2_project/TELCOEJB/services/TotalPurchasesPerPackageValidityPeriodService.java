@@ -17,6 +17,11 @@ public class TotalPurchasesPerPackageValidityPeriodService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves the list of total purchases per service package and validity period
+     * @return the list of entities containing the total purchases per service package and a validity period
+     * @throws AdminViewsException if an error occurs while trying to execute the query
+     */
     public List<TotalPurchasesPerPackageValidityPeriodEntity> getTotalPurchasesPerPackageValidityPeriod() throws AdminViewsException{
         List<TotalPurchasesPerPackageValidityPeriodEntity> purchases;
 

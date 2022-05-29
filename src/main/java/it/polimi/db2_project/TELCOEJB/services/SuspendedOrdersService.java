@@ -17,6 +17,11 @@ public class SuspendedOrdersService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves the list of suspended orders
+     * @return the list of entities containing the suspended orders
+     * @throws AdminViewsException if an error occurs while trying to execute the query
+     */
     public List<SuspendedOrdersEntity> getSuspendedOrders() throws AdminViewsException{
         List<SuspendedOrdersEntity> orders;
 

@@ -24,6 +24,11 @@ public class AlertService {
     public AlertService(){
     }
 
+    /**
+     * Retrieves the list of alerts
+     * @return the list of entities containing the alerts
+     * @throws AdminViewsException if an error occurs while trying to execute the query
+     */
     public List<AlertEntity> getAlerts() throws AdminViewsException {
         List<AlertEntity> alerts;
 

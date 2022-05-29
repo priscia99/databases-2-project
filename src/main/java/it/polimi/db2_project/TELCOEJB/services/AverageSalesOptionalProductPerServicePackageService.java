@@ -17,6 +17,11 @@ public class AverageSalesOptionalProductPerServicePackageService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves the list of the average sales of the optional product per service package
+     * @return the list of entities containing the average sales of the optional product per service package
+     * @throws AdminViewsException if an error occurs while trying to execute the query
+     */
     public List<AverageSalesOptionalProductPerServicePackageEntity> getAverageSales() throws AdminViewsException{
         List<AverageSalesOptionalProductPerServicePackageEntity> sales;
 

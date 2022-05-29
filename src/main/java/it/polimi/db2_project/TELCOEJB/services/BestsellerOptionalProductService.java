@@ -17,6 +17,11 @@ public class BestsellerOptionalProductService {
     @PersistenceContext(unitName = "TELCOEJB")
     private EntityManager em;
 
+    /**
+     * Retrieves the best seller optional product
+     * @return the entity containing the best seller optional product
+     * @throws AdminViewsException if an error occurs while trying to execute the query
+     */
     public BestsellerOptionalProductEntity getBestsellerProduct() throws AdminViewsException{
         BestsellerOptionalProductEntity bestsellerOptionalProduct;
 
