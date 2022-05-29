@@ -47,11 +47,6 @@ public class HomePageServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doPost(request, response);
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-
         // set request encoding to match the project character encoding (utf-8)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
@@ -68,7 +63,7 @@ public class HomePageServlet extends HttpServlet {
         try {
             servicePackages = servicePackageService.getAllPackages();
         } catch (ServicePackageException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while retrieving the list of service packages");
         }
 
         // get servlet context and prepare the redirect path
@@ -94,6 +89,10 @@ public class HomePageServlet extends HttpServlet {
             context.setVariable("rejectedOrders",rejectedOrders);
         }
         templateEngine.process(path, context, response.getWriter());
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        doGet(request, response);
     }
 
     public void destroy() {

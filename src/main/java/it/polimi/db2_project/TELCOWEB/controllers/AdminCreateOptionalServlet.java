@@ -58,7 +58,7 @@ public class AdminCreateOptionalServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doPost(request, response);
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cannot perform a GET request");
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
@@ -105,14 +105,14 @@ public class AdminCreateOptionalServlet extends HttpServlet {
         try {
             allServices = serviceService.getAllServices();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of services");
         }
 
         // retrieve the list of all optional products
         try {
             allOptionalProducts = optionalProductService.getAllOptionalProducts();
         } catch (OptionalProductException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of optional product");
         }
 
         // prepare the variables of the context

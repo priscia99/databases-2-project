@@ -78,14 +78,14 @@ public class AdminHomePageServlet extends HttpServlet {
         try {
             allServices = serviceService.getAllServices();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of services");
         }
 
         // retrieve the list of all optional products
         try {
             allOptionalProducts = optionalProductService.getAllOptionalProducts();
         } catch (OptionalProductException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of optional products");
         }
 
         // prepare the variables of the context

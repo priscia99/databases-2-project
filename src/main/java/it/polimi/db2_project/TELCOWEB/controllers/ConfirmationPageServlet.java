@@ -110,7 +110,7 @@ public class ConfirmationPageServlet extends HttpServlet {
             try {
                 chosenPeriodEntity = periodService.getPeriodById(Integer.parseInt(chosenPeriodId));
             } catch (PeriodException e) {
-                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while validating the chosen period");
             }
 
             float totalFee = chosenPeriodEntity.getMonthlyFee();
@@ -124,7 +124,7 @@ public class ConfirmationPageServlet extends HttpServlet {
                         totalFee += opt.getMonthlyFee() * chosenPeriodEntity.getValidityPeriod();
                     }
                 } catch (OptionalProductException e) {
-                    e.printStackTrace();
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while validating the chosen optional products");
                 }
             }
 
@@ -136,7 +136,7 @@ public class ConfirmationPageServlet extends HttpServlet {
             try {
                 parsedDate = dateFormat.parse(startDate);
             } catch (ParseException e) {
-                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while validating the chosen starting date");
             }
 
             // creating the starting time stamp

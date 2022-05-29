@@ -41,7 +41,6 @@ public class LoginServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doPost(request, response);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cannot perform a GET request");
     }
 
@@ -85,6 +84,7 @@ public class LoginServlet extends HttpServlet {
         request.getSession().setAttribute("user", user);	// Create a new session giving the user object as an attribute
         OrderEntity order = (OrderEntity) request.getSession().getAttribute("order");
         if(order != null){
+            // if an order exists in the current session, redirect the user to the confirmation page
             response.sendRedirect(request.getContextPath() + "/confirmation");
         }
         else {

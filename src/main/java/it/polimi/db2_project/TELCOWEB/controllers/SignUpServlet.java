@@ -37,7 +37,6 @@ public class SignUpServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doPost(request, response);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cannot perform a GET request");
     }
 

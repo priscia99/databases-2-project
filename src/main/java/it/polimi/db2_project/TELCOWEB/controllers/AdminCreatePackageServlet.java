@@ -61,7 +61,7 @@ public class AdminCreatePackageServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doPost(request, response);
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cannot perform a GET request");
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
@@ -104,7 +104,7 @@ public class AdminCreatePackageServlet extends HttpServlet {
             try {
                 optionalProductEntities = (ArrayList<OptionalProductEntity>) optionalProductService.getListOptionalProducts(Arrays.asList(optionalProducts));
             } catch (OptionalProductException e) {
-                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to load the optional products associated to the new package");
             }
         }
 
@@ -113,7 +113,7 @@ public class AdminCreatePackageServlet extends HttpServlet {
         try {
             serviceEntities = (ArrayList<ServiceEntity>) serviceService.getListServices(Arrays.asList(chosenServices));
         } catch (ServiceException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to load the list of services associated to the new package");
         }
 
         // Create the new service package entity
@@ -143,13 +143,13 @@ public class AdminCreatePackageServlet extends HttpServlet {
             // commit
             userTransaction.commit();
         } catch (Exception e) {
-            e.printStackTrace();
             try{
                 // in case of error, rollback the transaction
                 userTransaction.rollback();
             } catch (SystemException systemException) {
                 e.printStackTrace();
             }
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to create the service package");
         }
 
         // get servlet context and prepare the redirect path
@@ -165,14 +165,14 @@ public class AdminCreatePackageServlet extends HttpServlet {
         try {
             allServices = serviceService.getAllServices();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of services");
         }
 
         // retrieve the list of all optional products
         try {
             allOptionalProducts = optionalProductService.getAllOptionalProducts();
         } catch (OptionalProductException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of optional products");
         }
 
         // prepare the variables of the context

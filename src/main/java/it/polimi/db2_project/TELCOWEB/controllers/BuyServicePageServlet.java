@@ -71,7 +71,7 @@ public class BuyServicePageServlet extends HttpServlet {
         try {
             servicePackages = servicePackageService.getAllPackages();
         } catch (ServicePackageException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the list of service packages");
         }
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -86,7 +86,7 @@ public class BuyServicePageServlet extends HttpServlet {
                 // retrieve the chosen service package entity
                 sp = servicePackageService.getPackageById(Integer.parseInt(chosenPackageId));
             } catch (ServicePackageException e) {
-                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the chosen service package");
             }
         }
 

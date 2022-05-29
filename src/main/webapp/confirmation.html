@@ -118,7 +118,7 @@
             <tbody>
             <tr>
                 <td th:text="${orderInfo.getAssociatedPeriod().getServicePackage().getName()}"></td>
-                <td th:text="${orderInfo.getAssociatedPeriod().getMonthlyFee()}"></td>
+                <td th:text="${orderInfo.getAssociatedPeriod().getMonthlyFee()} + E."></td>
                 <td th:text="${orderInfo.getAssociatedPeriod().getValidityPeriod()}"></td>
                 <td th:text="${orderInfo.getAssociatedPeriod().getMonthlyFee() * orderInfo.getAssociatedPeriod().getValidityPeriod()}"></td>
             </tr>

@@ -94,7 +94,7 @@ public class AdminSalesServlet extends HttpServlet {
         try {
             totalPurchasesPerPackage = (ArrayList<TotalPurchasesPerPackageEntity>) totalPurchasesPerPackageService.getTotalPurchasesPerPackage();
         } catch (AdminViewsException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the list of total purchases per service package");
         }
 
         // Get total purchases per packages and validity period
@@ -102,7 +102,7 @@ public class AdminSalesServlet extends HttpServlet {
         try {
             totalPurchasesPerPackageValidityPeriod = (ArrayList<TotalPurchasesPerPackageValidityPeriodEntity>) totalPurchasesPerPackageValidityPeriodService.getTotalPurchasesPerPackageValidityPeriod();
         } catch (AdminViewsException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the list of total purchases per service package and validity period");
         }
 
         // Get total sales per package with and without optional products
@@ -110,7 +110,7 @@ public class AdminSalesServlet extends HttpServlet {
         try {
             totalSalesPerPackage = (ArrayList<TotalSalesPerPackageEntity>) totalSalesPerPackageService.getTotalSalesPerPackage();
         } catch (AdminViewsException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the list of total sales per service package");
         }
 
         // Get average sales of optional product per service package
@@ -118,7 +118,7 @@ public class AdminSalesServlet extends HttpServlet {
         try {
             averageSalesOptionalProductPerServicePackage = (ArrayList<AverageSalesOptionalProductPerServicePackageEntity>) averageSalesOptionalProductPerServicePackageService.getAverageSales();
         } catch (AdminViewsException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the list of average sales of optional products per service package");
         }
 
         // Get list of insolvent users
@@ -126,7 +126,7 @@ public class AdminSalesServlet extends HttpServlet {
         try {
             insolventUsers = (ArrayList<InsolventUsersEntity>) insolventUsersService.getInsolventUsers();
         } catch (AdminViewsException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the list of insolvent users");
         }
 
         // Get list of suspended orders
@@ -134,7 +134,7 @@ public class AdminSalesServlet extends HttpServlet {
         try {
             suspendedOrders = (ArrayList<SuspendedOrdersEntity>) suspendedOrdersService.getSuspendedOrders();
         } catch (AdminViewsException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the list of suspended orders");
         }
 
         // Get list of alerts
@@ -142,7 +142,7 @@ public class AdminSalesServlet extends HttpServlet {
         try {
             alerts = (ArrayList<AlertEntity>) alertService.getAlerts();
         } catch (AdminViewsException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the list of alerts");
         }
 
         // Get bestseller optional product
@@ -150,7 +150,7 @@ public class AdminSalesServlet extends HttpServlet {
         try {
             bestsellerOptionalProduct = bestsellerOptionalProductService.getBestsellerProduct();
         } catch (AdminViewsException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while loading the best-seller optional product");
         }
 
         context.setVariable("totalPurchasesPerPackage",totalPurchasesPerPackage);
