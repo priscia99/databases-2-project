@@ -113,7 +113,7 @@ public class ConfirmationPageServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while validating the chosen period");
             }
 
-            float totalFee = chosenPeriodEntity.getMonthlyFee();
+            float totalFee = chosenPeriodEntity.getMonthlyFee() * chosenPeriodEntity.getValidityPeriod();
 
             // Retrieve the list of optional products in case the user has selected at least one of them
             ArrayList<OptionalProductEntity> chosenOptionalProductsEntities = null;

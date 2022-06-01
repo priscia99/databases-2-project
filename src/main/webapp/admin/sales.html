@@ -69,6 +69,7 @@
         <th>Package name</th>
         <th>Period</th>
         <th>Monthly fee</th>
+        <th>Purchases</th>
         </thead>
         <tbody>
         <tr th:each="entry : ${totalPurchasesPerPackageValidityPeriod}">
@@ -77,6 +78,7 @@
             <td th:text="${entry.getAssociatedPeriod().getServicePackage().getName()}"></td>
             <td th:text="${entry.getAssociatedPeriod().getValidityPeriod()}"></td>
             <td th:text="${entry.getAssociatedPeriod().getMonthlyFee()}"></td>
+            <td th:text="${entry.getTotalPurchases()}"></td>
         </tr>
         </tbody>
     </table>
