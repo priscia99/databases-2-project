@@ -73,6 +73,9 @@ public class UserService {
      */
     public UserEntity findUserByUsername(String username) {
         UserEntity user = em.find(UserEntity.class,username);
+        if(user == null){
+            return null;
+        }
         em.refresh(user);
         for(int i=0; i<user.getOrderEntities().size(); i++){
             em.refresh(user.getOrderEntities().get(i));
