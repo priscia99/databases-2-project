@@ -100,7 +100,7 @@
         <div class="mt-4">
             <h5>4. Choose the starting date of your package</h5>
             <input type="date" name="startDate" class="date-selector"
-                   th:min="${today}" th:max="${tomorrow}">
+                   th:min="${today}" th:max="${tomorrow}" required="required">
         </div>
         <input type="submit" class="btn btn-dark mt-5" value="Confirm and proceed to confirmation page">
     </form>

@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.Order;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,7 +72,12 @@ public class UserService {
      * @return the user entity associated with the given username
      */
     public UserEntity findUserByUsername(String username) {
-        return em.find(UserEntity.class,username);
+        UserEntity user = em.find(UserEntity.class,username);
+        em.refresh(user);
+        for(int i=0; i<user.getOrderEntities().size(); i++){
+            em.refresh(user.getOrderEntities().get(i));
+        }
+        return user;
     }
 
     /**
