@@ -33,7 +33,9 @@ public class BestsellerOptionalProductService {
             e.printStackTrace();
             throw new AdminViewsException("An error occoured while trying to fetch sales report.");
         }
-
+        if(bestsellerOptionalProduct.getOptionalProduct() != null) {
+            em.refresh(bestsellerOptionalProduct.getOptionalProduct());
+        }
         return bestsellerOptionalProduct;
     }
 }
