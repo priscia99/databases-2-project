@@ -2,6 +2,7 @@ package it.polimi.db2_project.TELCOEJB.services;
 
 import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
+import it.polimi.db2_project.TELCOEJB.enums.OrderState;
 import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.OrderException;
 
@@ -46,6 +47,7 @@ public class OrderService {
         if (oldOrder == null) {
             throw new OrderException("Order not found");
         }
+        oldOrder.setOrderState(OrderState.CREATED);
         oldOrder.setOrderState(order.getOrderState());
         em.persist(oldOrder);
         em.flush();
