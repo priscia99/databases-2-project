@@ -28,22 +28,4 @@ public class PeriodService {
         return res;
     }
 
-    /**
-     * Persists a validity period entity given in input
-     * @param period the period entity to be persisted
-     */
-    public void persistPeriod(PeriodEntity period){
-        em.persist(period);
-        em.flush();
-    }
-
-    /**
-     * Persists a list of validity periods given in input
-     * @param validityPeriods the list of validity periods to be persisted
-     */
-    public void persistPeriods(ArrayList<PeriodEntity> validityPeriods){
-        for(PeriodEntity p : validityPeriods){
-            this.persistPeriod(p);
-        }
-    }
 }
