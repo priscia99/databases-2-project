@@ -47,7 +47,6 @@ public class OrderService {
         if (oldOrder == null) {
             throw new OrderException("Order not found");
         }
-        oldOrder.setOrderState(OrderState.CREATED);
         oldOrder.setOrderState(order.getOrderState());
         em.persist(oldOrder);
         em.flush();

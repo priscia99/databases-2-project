@@ -45,5 +45,9 @@ public class AlertService {
         return new ArrayList<>(alerts);
     }
 
+    public void persistAlert(AlertEntity alert){
+        em.persist(alert);
+        em.flush();
+    }
 
 }

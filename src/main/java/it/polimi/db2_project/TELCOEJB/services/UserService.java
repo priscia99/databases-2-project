@@ -122,4 +122,10 @@ public class UserService {
         em.flush();
         return newUser;
     }
+
+    public void addFailedAttempt(UserEntity user) {
+        user.setFailedAttempts(user.getFailedAttempts()+1);
+        em.persist(user);
+        em.flush();
+    }
 }

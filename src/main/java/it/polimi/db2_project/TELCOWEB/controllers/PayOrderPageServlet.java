@@ -1,5 +1,6 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
+import it.polimi.db2_project.TELCOEJB.entities.AlertEntity;
 import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.enums.OrderState;
@@ -14,11 +15,14 @@ import java.sql.Connection;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 import it.polimi.db2_project.TELCOEJB.utils.Utils;
 import org.thymeleaf.TemplateEngine;
@@ -38,6 +42,10 @@ public class PayOrderPageServlet extends HttpServlet {
     private UserService userService;
     @EJB(name = "it.polimi.db2_project.TELCOEJB.services/AlertService")
     private AlertService alertService;
+
+    @Resource
+    private UserTransaction userTransaction;
+
     public void init() throws UnavailableException {
         connection = ConnectionHandler.getConnection(getServletContext());
         ServletContext servletContext = getServletContext();
@@ -83,22 +91,44 @@ public class PayOrderPageServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }else{
-            if (Utils.pay()) {
+            // call the external service and try to pay the order
+            if(Utils.pay()){
+                // the payment has been successful
                 order.setOrderState(OrderState.PAID);
                 try {
+                    // update the order state to the db
                     orderService.updateOrderOnState(order);
                 } catch (OrderException e) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
                     e.printStackTrace();
                 }
-            }else{
-                order.setOrderState(OrderState.REJECTED);
             }
-            try {
-                orderService.updateOrderOnState(order);
-            } catch (OrderException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-                e.printStackTrace();
+            else{
+                try {
+                    // begin of the transaction
+                    userTransaction.begin();
+                    // the payment has been rejected (failed)
+                    order.setOrderState(OrderState.REJECTED);
+                    // update the order state to the db
+                    orderService.updateOrderOnState(order);
+                    order = orderService.findOrderById(order.getOrderId());
+                    userService.addFailedAttempt(order.getUser());
+                    if(order.getUser().getFailedAttempts() == 3){
+                        // float amount, Timestamp lastRejectionDateTime, String email, UserEntity relatedUser
+                        AlertEntity alert = new AlertEntity(order.getTotalFee(), Utils.getNowTime(), order.getUser().getEmail(), order.getUser());
+                        alertService.persistAlert(alert);
+                    }
+                    // commit
+                    userTransaction.commit();
+                } catch (Exception e) {
+                    try{
+                        // in case of error, rollback the transaction
+                        userTransaction.rollback();
+                    } catch (SystemException systemException) {
+                        e.printStackTrace();
+                    }
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to create the service package");
+                }
             }
         }
 
