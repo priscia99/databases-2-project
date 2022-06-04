@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "suspended_orders")
 @NamedQueries({
-        @NamedQuery(name = "SuspendedOrdersEntity.getSuspendedOrders", query = "SELECT o FROM SuspendedOrdersEntity o"),
+        @NamedQuery(name = "SuspendedOrdersEntity.getSuspendedOrders", query = "SELECT DISTINCT o FROM SuspendedOrdersEntity o"),
 })
 public class SuspendedOrdersEntity {
 

@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "alert")
 @NamedQueries({
-        @NamedQuery(name = "AlertEntity.getAlerts", query = "SELECT a FROM AlertEntity a"),
+        @NamedQuery(name = "AlertEntity.getAlerts", query = "SELECT DISTINCT a FROM AlertEntity a"),
 })
 public class AlertEntity {
 
