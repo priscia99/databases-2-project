@@ -1,6 +1,5 @@
 package it.polimi.db2_project.TELCOEJB.entities;
 import javax.persistence.*;
-import java.time.Period;
 import java.util.List;
 
 

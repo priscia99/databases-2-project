@@ -12,9 +12,6 @@ import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
 import java.sql.Connection;
-import java.sql.Timestamp;
-import java.time.*;
-import java.util.*;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;

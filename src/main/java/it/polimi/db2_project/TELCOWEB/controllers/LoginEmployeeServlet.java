@@ -1,20 +1,13 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
 import it.polimi.db2_project.TELCOEJB.entities.EmployeeEntity;
-import it.polimi.db2_project.TELCOEJB.entities.OrderEntity;
-import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
 import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
 import it.polimi.db2_project.TELCOEJB.services.EmployeeService;
-import it.polimi.db2_project.TELCOEJB.services.UserService;
-import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.SQLException;
 import javax.ejb.EJB;
-import javax.persistence.criteria.Order;
 import javax.servlet.ServletContext;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.*;

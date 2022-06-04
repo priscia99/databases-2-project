@@ -12,7 +12,6 @@ import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 import java.io.*;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;

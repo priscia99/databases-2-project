@@ -1,34 +1,21 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
 import it.polimi.db2_project.TELCOEJB.entities.*;
-import it.polimi.db2_project.TELCOEJB.enums.OrderState;
-import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
-import it.polimi.db2_project.TELCOEJB.exceptions.ServiceException;
-import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
-import it.polimi.db2_project.TELCOEJB.services.PeriodService;
-import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
 import it.polimi.db2_project.TELCOEJB.services.ServiceService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
-import java.sql.Array;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 

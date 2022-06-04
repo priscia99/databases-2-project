@@ -1,7 +1,6 @@
 package it.polimi.db2_project.TELCOEJB.entities;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "employee")

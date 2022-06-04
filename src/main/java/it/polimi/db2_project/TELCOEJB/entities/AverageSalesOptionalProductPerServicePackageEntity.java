@@ -1,7 +1,6 @@
 package it.polimi.db2_project.TELCOEJB.entities;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "average_sales_optionalproduct_per_servicepackage")

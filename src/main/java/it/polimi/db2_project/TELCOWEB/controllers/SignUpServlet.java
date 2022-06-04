@@ -2,8 +2,6 @@ package it.polimi.db2_project.TELCOWEB.controllers;
 
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
-import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
-import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
 import it.polimi.db2_project.TELCOEJB.services.UserService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;

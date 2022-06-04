@@ -1,18 +1,14 @@
 package it.polimi.db2_project.TELCOWEB.controllers;
 
-import it.polimi.db2_project.TELCOEJB.entities.OptionalProductEntity;
 import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
 import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
-import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 import it.polimi.db2_project.TELCOEJB.services.OptionalProductService;
 import it.polimi.db2_project.TELCOEJB.services.ServicePackageService;
-import it.polimi.db2_project.TELCOEJB.services.UserService;
 import it.polimi.db2_project.TELCOEJB.utils.ConnectionHandler;
 
 import java.io.*;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;

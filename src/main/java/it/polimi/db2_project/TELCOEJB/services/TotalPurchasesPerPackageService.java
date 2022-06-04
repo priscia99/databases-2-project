@@ -1,9 +1,7 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
-import it.polimi.db2_project.TELCOEJB.entities.OptionalProductEntity;
 import it.polimi.db2_project.TELCOEJB.entities.TotalPurchasesPerPackageEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.AdminViewsException;
-import it.polimi.db2_project.TELCOEJB.exceptions.OptionalProductException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

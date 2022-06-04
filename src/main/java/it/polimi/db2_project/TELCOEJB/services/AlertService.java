@@ -1,14 +1,8 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
 import it.polimi.db2_project.TELCOEJB.entities.AlertEntity;
-import it.polimi.db2_project.TELCOEJB.entities.InsolventUsersEntity;
-import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.AdminViewsException;
-import it.polimi.db2_project.TELCOEJB.exceptions.CredentialsException;
-import it.polimi.db2_project.TELCOEJB.exceptions.InvalidCredentialsException;
-import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
 
-import java.sql.*;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

@@ -1,9 +1,6 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
-import it.polimi.db2_project.TELCOEJB.entities.OptionalProductEntity;
 import it.polimi.db2_project.TELCOEJB.entities.ServiceEntity;
-import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
-import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.*;
 
 import javax.ejb.Stateless;
@@ -11,11 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Stateless
 public class ServiceService {

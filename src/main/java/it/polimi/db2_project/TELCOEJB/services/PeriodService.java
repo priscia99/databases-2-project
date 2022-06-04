@@ -2,7 +2,6 @@ package it.polimi.db2_project.TELCOEJB.services;
 
 import it.polimi.db2_project.TELCOEJB.entities.PeriodEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.PeriodException;
-import it.polimi.db2_project.TELCOEJB.exceptions.ServicePackageException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

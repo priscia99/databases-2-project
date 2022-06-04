@@ -1,6 +1,5 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
-import it.polimi.db2_project.TELCOEJB.entities.InsolventUsersEntity;
 import it.polimi.db2_project.TELCOEJB.entities.SuspendedOrdersEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.AdminViewsException;
 

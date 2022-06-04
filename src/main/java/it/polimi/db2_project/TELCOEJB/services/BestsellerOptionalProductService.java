@@ -1,15 +1,12 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
 import it.polimi.db2_project.TELCOEJB.entities.BestsellerOptionalProductEntity;
-import it.polimi.db2_project.TELCOEJB.entities.InsolventUsersEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.AdminViewsException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Stateless
 public class BestsellerOptionalProductService {

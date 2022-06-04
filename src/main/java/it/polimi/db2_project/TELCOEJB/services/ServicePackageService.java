@@ -1,23 +1,12 @@
 package it.polimi.db2_project.TELCOEJB.services;
 
-import it.polimi.db2_project.TELCOEJB.entities.PeriodEntity;
 import it.polimi.db2_project.TELCOEJB.entities.ServicePackageEntity;
-import it.polimi.db2_project.TELCOEJB.entities.UserEntity;
 import it.polimi.db2_project.TELCOEJB.exceptions.*;
-import it.polimi.db2_project.TELCOEJB.exceptions.NonUniqueResultException;
 
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.*;
-import javax.transaction.*;
-import javax.transaction.RollbackException;
-import java.security.Provider;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Stateless
 public class ServicePackageService {
