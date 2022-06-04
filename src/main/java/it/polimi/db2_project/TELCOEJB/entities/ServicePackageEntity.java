@@ -86,4 +86,8 @@ public class ServicePackageEntity {
     public List<PeriodEntity> getPeriods() {
         return periods;
     }
+
+    public void setPeriods(List<PeriodEntity> periods) {
+        this.periods = periods;
+    }
 }

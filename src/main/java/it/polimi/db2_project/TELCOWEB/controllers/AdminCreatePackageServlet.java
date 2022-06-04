@@ -118,7 +118,6 @@ public class AdminCreatePackageServlet extends HttpServlet {
 
         // Create the new service package entity
         ServicePackageEntity newServicePackage = new ServicePackageEntity(packageName, serviceEntities, optionalProductEntities);
-        ArrayList<ServicePackageEntity> createdPackageWithPeriods = new ArrayList<>();
 
         // Create the new validity periods entities
         ArrayList<PeriodEntity> newPeriodEntities = new ArrayList<>();
@@ -132,25 +131,9 @@ public class AdminCreatePackageServlet extends HttpServlet {
             );
         }
 
-        // Single transaction that inserts the package service entity and the associated period entities
-        try {
-            // begin of the transaction
-            userTransaction.begin();
-            // persist all the new service packages
-            servicePackageService.persistServicePackage(newServicePackage);
-            // persist all the new periods
-            periodService.persistPeriods(newPeriodEntities);
-            // commit
-            userTransaction.commit();
-        } catch (Exception e) {
-            try{
-                // in case of error, rollback the transaction
-                userTransaction.rollback();
-            } catch (SystemException systemException) {
-                e.printStackTrace();
-            }
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to create the service package");
-        }
+        //setting the validity period and persisting the new service package
+        newServicePackage.setPeriods(newPeriodEntities);
+        servicePackageService.persistServicePackage(newServicePackage);
 
         response.sendRedirect("home");
     }
