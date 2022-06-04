@@ -69,7 +69,8 @@
     <form action="buyservice" method="post" class="mt-4">
         <h5>1. Select a Service Package</h5>
         <select name="chosenPackageId" class="selector-input" id="selectPackage" th:onchange="loadPeriods()">
-            <option th:each="package : ${servicePackages}" th:value="${package.getPackageId()}" th:text="${package.getName()}">
+            <option th:if="${chosenPackage != null}" th:value="${chosenPackage.getPackageId()}" th:text="${chosenPackage.getName()}" selected="selected">
+            <option th:each="package : ${servicePackages}" th:if="${chosenPackage == null || (chosenPackage != null && chosenPackage.getPackageId() != package.getPackageId())}" th:value="${package.getPackageId()}" th:text="${package.getName()}">
             </option>
         </select>
         <input type="submit" value="Select Package" class="submit-choice">
