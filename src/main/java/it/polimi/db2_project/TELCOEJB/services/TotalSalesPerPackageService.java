@@ -35,6 +35,7 @@ public class TotalSalesPerPackageService {
             throw new AdminViewsException("An error occoured while trying to fetch sales report.");
         }
         for (int i = 0; i < sales.size(); i++){
+            em.refresh(sales.get(i));
             em.refresh(sales.get(i).getAssociatedPackage());
         }
         return new ArrayList<>(sales);

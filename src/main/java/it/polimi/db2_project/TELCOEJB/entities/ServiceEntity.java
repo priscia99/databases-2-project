@@ -46,8 +46,7 @@ public class ServiceEntity {
 
     }
 
-    public ServiceEntity(int serviceId, ServiceType serviceType, int includedMinutes, int feeMinutes, int includedSMS, int feeSMS, int includedGB, int feeGB) {
-        this.serviceId = serviceId;
+    public ServiceEntity(ServiceType serviceType, int includedMinutes, int feeMinutes, int includedSMS, int feeSMS, int includedGB, int feeGB) {
         this.serviceType = serviceType;
         IncludedMinutes = includedMinutes;
         FeeMinutes = feeMinutes;

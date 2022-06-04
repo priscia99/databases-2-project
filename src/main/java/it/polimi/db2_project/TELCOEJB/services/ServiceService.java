@@ -48,16 +48,16 @@ public class ServiceService {
      * Retrieves a single service given its ID in input
      * @param serviceId ID of the service to be retrieved
      * @return the service entity associated with the given ID
-     * @throws OptionalProductException if an error occurs while trying to execute the query
+     * @throws ServiceException if an error occurs while trying to execute the query
      */
-    private ServiceEntity getService(String serviceId) throws OptionalProductException {
+    private ServiceEntity getService(String serviceId) throws ServiceException {
         ServiceEntity serviceEntity;
         try{
             serviceEntity = em.find(ServiceEntity.class,Integer.parseInt(serviceId));
         }
         catch (PersistenceException e){
             e.printStackTrace();
-            throw new OptionalProductException("An error occoured while trying to fetch service by id");
+            throw new ServiceException("An error occoured while trying to fetch service by id");
         }
         return serviceEntity;
     }
@@ -73,7 +73,7 @@ public class ServiceService {
         for(int i = 0; i < servicesList.size(); i++){
             try {
                 serviceEntities.add(getService(servicesList.get(i)));
-            } catch (PersistenceException | OptionalProductException e){
+            } catch (PersistenceException | ServiceException e){
                 e.printStackTrace();
                 throw new ServiceException("An error occoured while trying to fetch service list by id");
             }

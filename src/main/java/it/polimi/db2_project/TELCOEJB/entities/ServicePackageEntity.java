@@ -42,15 +42,6 @@ public class ServicePackageEntity {
             inverseJoinColumns = {@JoinColumn(name = "optionalproduct_productID", referencedColumnName = "productId")})
     List<OptionalProductEntity> optionalProducts;
 
-    @OneToMany(mappedBy = "associatedPackage", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
-    List<TotalPurchasesPerPackageEntity> associatedTotalPurchasesPerPackage;
-
-    @OneToMany(mappedBy = "associatedPackage", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
-    List<TotalSalesPerPackageEntity> associatedTotalSalesPerPackage;
-
-    @OneToMany(mappedBy = "associatedPackage", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST} )
-    List<AverageSalesOptionalProductPerServicePackageEntity> associatedAverageSalesOptionalProduct;
-
     public ServicePackageEntity() {
     }
 

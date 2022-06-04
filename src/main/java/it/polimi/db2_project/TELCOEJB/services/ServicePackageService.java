@@ -42,6 +42,13 @@ public class ServicePackageService {
             e.printStackTrace();
             throw new ServicePackageException("An error occoured while trying to fetch all service packages.");
         }
+        
+        for(int i=0; i<packages.size(); i++){
+            em.refresh(packages.get(i));
+            for(int j=0; j<packages.get(i).getPeriods().size(); j++){
+                em.refresh(packages.get(i).getPeriods().get(j));
+            }
+        }
 
         return new ArrayList<>(packages);
     }
@@ -56,6 +63,9 @@ public class ServicePackageService {
         ServicePackageEntity res = em.find(ServicePackageEntity.class, packageId);
         if(res == null){
             throw new ServicePackageException("Service package not found.");
+        }
+        for(int i=0; i<res.getPeriods().size(); i++){
+            em.refresh(res.getPeriods().get(i));
         }
         return res;
     }

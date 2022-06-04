@@ -82,7 +82,7 @@ public class AdminCreateOptionalServlet extends HttpServlet {
         try {
             optionalProductMonthlyFee = Integer.valueOf(request.getParameter("optionalProductMonthlyFee"));
         }catch (Exception e){
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Monthly fee is not an integer value.");
         }
         if(optionalProductName == null || optionalProductMonthlyFee == null || optionalProductName.length() == 0){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Some parameters are missing.");
@@ -92,35 +92,7 @@ public class AdminCreateOptionalServlet extends HttpServlet {
         // persist the new optional product created
         optionalProductService.persistOptionalProduct(new OptionalProductEntity(optionalProductName,optionalProductMonthlyFee));
 
-        // get servlet context and prepare the redirect path
-        ServletContext servletContext = getServletContext();
-        String path = "/admin/home.html";
-
-        final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
-        context.setVariable("employee", employee);
-        List <ServiceEntity> allServices = null;
-        List <OptionalProductEntity> allOptionalProducts = null;
-
-        // retrieve the list of all services
-        try {
-            allServices = serviceService.getAllServices();
-        } catch (ServiceException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of services");
-        }
-
-        // retrieve the list of all optional products
-        try {
-            allOptionalProducts = optionalProductService.getAllOptionalProducts();
-        } catch (OptionalProductException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of optional product");
-        }
-
-        // prepare the variables of the context
-        context.setVariable("allServices",allServices);
-        context.setVariable("allOptionalProducts",allOptionalProducts);
-
-        // process the page
-        templateEngine.process(path, context, response.getWriter());
+        response.sendRedirect("home");
     }
 
     public void destroy() {

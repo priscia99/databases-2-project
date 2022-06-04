@@ -152,35 +152,7 @@ public class AdminCreatePackageServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to create the service package");
         }
 
-        // get servlet context and prepare the redirect path
-        ServletContext servletContext = getServletContext();
-        String path = "/admin/home.html";
-
-        final WebContext context = new WebContext(request, response, servletContext, request.getLocale());
-        context.setVariable("employee", employee);
-        List <ServiceEntity> allServices = null;
-        List <OptionalProductEntity> allOptionalProducts = null;
-
-        // retrieve the list of all services
-        try {
-            allServices = serviceService.getAllServices();
-        } catch (ServiceException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of services");
-        }
-
-        // retrieve the list of all optional products
-        try {
-            allOptionalProducts = optionalProductService.getAllOptionalProducts();
-        } catch (OptionalProductException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while trying to retrieve the list of optional products");
-        }
-
-        // prepare the variables of the context
-        context.setVariable("allServices",allServices);
-        context.setVariable("allOptionalProducts",allOptionalProducts);
-
-        // process the page
-        templateEngine.process(path, context, response.getWriter());
+        response.sendRedirect("home");
     }
 
     public void destroy() {
