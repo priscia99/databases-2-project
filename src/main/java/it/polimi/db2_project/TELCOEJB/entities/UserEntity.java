@@ -7,8 +7,8 @@ import java.util.List;
 @Table(name = "users")
 
 @NamedQueries({
-        @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.username = :username AND u.password = :password"),
-        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email = :email")
+        @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT DISTINCT u FROM UserEntity u WHERE u.username = :username AND u.password = :password"),
+        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT DISTINCT u FROM UserEntity u WHERE u.email = :email")
 })
 public class UserEntity {
 
