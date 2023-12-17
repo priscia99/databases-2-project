@@ -14,4 +14,6 @@ This is a complementary project for the Master's Degree course **Data Bases 2**,
 - [Final Report](https://github.com/priscia99/databases-2-project/blob/master/Deliverables/Report/Report.pdf) (with functional analysis, diagrams, materialized views, triggers and sequence diagrams)
 - [Project Specifications](https://github.com/priscia99/databases-2-project/blob/master/Deliverables/NEW_DB2-develproject-21-22-finalAfterComments-v2-published.pdf)
 
-
+## 👨🏼‍💻 Contributors
+- **Andrea Prisciantelli** ([@priscia99](https://github.com/priscia99))
+- **Gianluca Ruberto** ([@GianlucaRub](https://github.com/GianlucaRub))
