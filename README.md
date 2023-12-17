@@ -1,7 +1,7 @@
-# Data Bases 2 - Project
+# Data Bases 2 - Project [A.Y. 2021/2022]
+This is a complementary project for the Master's Degree course **Data Bases 2**, A.Y. 2021/2022.
 
-## Introduction
-This is a complementary project for the Master's Degree course **Data Bases 2**.
+## 💡 Introduction
 
 📞 This project aims to create a website for a *telco* company that enables users to look for available service packages the company offers and buy them.
 
