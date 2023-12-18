@@ -1,5 +1,5 @@
 # Data Bases 2 - Project [A.Y. 2021/2022]
-This is a complementary project for the Master's Degree course **Data Bases 2**, A.Y. 2021/2022.
+This is an integrative project for the Master's Degree course **Data Bases 2**, A.Y. 2021/2022.
 
 ## 💡 Introduction
 
